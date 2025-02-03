@@ -76,30 +76,25 @@ export default function NewCampaign() {
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="budget">Budget</Label>
+            <Label htmlFor="website">Website URL</Label>
             <Input
-              id="budget"
-              type="number"
-              placeholder="Enter campaign budget"
-              min="0"
-              step="100"
+              id="website"
+              type="url"
+              placeholder="Enter website URL"
+              pattern="https?://.+"
+              title="Please enter a valid URL starting with http:// or https://"
             />
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="target">Target Audience</Label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Select target audience" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Ages</SelectItem>
-                <SelectItem value="young">18-24</SelectItem>
-                <SelectItem value="adult">25-34</SelectItem>
-                <SelectItem value="middle">35-44</SelectItem>
-                <SelectItem value="senior">45+</SelectItem>
-              </SelectContent>
-            </Select>
+            <Label htmlFor="offer">Offer URL</Label>
+            <Input
+              id="offer"
+              type="url"
+              placeholder="Enter offer URL"
+              pattern="https?://.+"
+              title="Please enter a valid URL starting with http:// or https://"
+            />
           </div>
         </div>
 
