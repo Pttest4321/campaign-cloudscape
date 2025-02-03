@@ -9,6 +9,98 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      campaign_statistics: {
+        Row: {
+          browser: string | null
+          campaign_id: string
+          clicks: number | null
+          country: string | null
+          created_at: string
+          device_type: string | null
+          id: string
+          ip_address: string | null
+          language: string | null
+          platform: string | null
+          users: number | null
+        }
+        Insert: {
+          browser?: string | null
+          campaign_id: string
+          clicks?: number | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          id?: string
+          ip_address?: string | null
+          language?: string | null
+          platform?: string | null
+          users?: number | null
+        }
+        Update: {
+          browser?: string | null
+          campaign_id?: string
+          clicks?: number | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          id?: string
+          ip_address?: string | null
+          language?: string | null
+          platform?: string | null
+          users?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_statistics_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaigns: {
+        Row: {
+          country: string
+          created_at: string
+          description: string | null
+          id: string
+          language: string
+          name: string
+          offer_url: string | null
+          status: string | null
+          updated_at: string
+          user_id: string
+          website_url: string | null
+        }
+        Insert: {
+          country: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          language: string
+          name: string
+          offer_url?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
+          website_url?: string | null
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          language?: string
+          name?: string
+          offer_url?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           bio: string | null
