@@ -3,27 +3,96 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Profile() {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
-    name: "John Doe",
-    email: "john@example.com",
-    bio: "Marketing specialist with 5+ years of experience",
-    company: "Tech Corp",
-    role: "Marketing Manager",
-    location: "New York, USA"
+    name: "",
+    email: "",
+    bio: "",
+    company: "",
+    role: "",
+    location: ""
   });
+  const [loading, setLoading] = useState(true);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  async function getProfile() {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) throw new Error('No user logged in');
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (error) throw error;
+      
+      if (data) {
+        setFormData({
+          name: data.name || "",
+          email: data.email || "",
+          bio: data.bio || "",
+          company: data.company || "",
+          role: data.role || "",
+          location: data.location || ""
+        });
+      }
+    } catch (error) {
+      console.error('Error loading profile:', error);
+      toast({
+        title: "Error loading profile",
+        description: "There was a problem loading your profile.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Profile updated",
-      description: "Your profile has been successfully updated.",
-    });
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) throw new Error('No user logged in');
+
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          ...formData,
+          updated_at: new Date().toISOString(),
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Profile updated",
+        description: "Your profile has been successfully updated.",
+      });
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast({
+        title: "Error updating profile",
+        description: "There was a problem updating your profile.",
+        variant: "destructive"
+      });
+    }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="space-y-6 fade-in">
