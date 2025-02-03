@@ -9,6 +9,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
@@ -18,7 +25,6 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-// Temporary mock data - replace with actual data in future
 const mockCampaigns = Array.from({ length: 20 }, (_, i) => ({
   id: i + 1,
   name: `Campaign ${i + 1}`,
@@ -28,16 +34,17 @@ const mockCampaigns = Array.from({ length: 20 }, (_, i) => ({
   uniqueIds: Array.from({ length: 5 }, (_, j) => `ID-${i}-${j}`),
 }));
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE_OPTIONS = [4, 8, 12, 16];
 
 export default function Campaigns() {
   const [selectedCampaign, setSelectedCampaign] = useState<null | typeof mockCampaigns[0]>(null);
   const [showUniqueIds, setShowUniqueIds] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
 
-  const totalPages = Math.ceil(mockCampaigns.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const totalPages = Math.ceil(mockCampaigns.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
   const currentCampaigns = mockCampaigns.slice(startIndex, endIndex);
 
   const handleDownload = (campaign: typeof mockCampaigns[0]) => {
@@ -66,6 +73,27 @@ export default function Campaigns() {
       </div>
 
       <div className="glass-card glass-card-dark p-6">
+        <div className="flex justify-end mb-4">
+          <Select
+            value={itemsPerPage.toString()}
+            onValueChange={(value) => {
+              setItemsPerPage(Number(value));
+              setCurrentPage(1);
+            }}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Results per page" />
+            </SelectTrigger>
+            <SelectContent>
+              {ITEMS_PER_PAGE_OPTIONS.map((option) => (
+                <SelectItem key={option} value={option.toString()}>
+                  {option} results per page
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           {currentCampaigns.map((campaign) => (
             <div
