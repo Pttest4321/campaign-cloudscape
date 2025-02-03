@@ -2,8 +2,9 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
 import { AppHeader } from "./AppHeader";
 import { ThemeToggle } from "./ThemeToggle";
+import { Outlet } from "react-router-dom";
 
-export function AppLayout({ children }: { children: React.ReactNode }) {
+export function AppLayout() {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
@@ -14,7 +15,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <AppHeader />
               <ThemeToggle />
             </div>
-            {children}
+            <Outlet />
           </div>
         </main>
       </div>
