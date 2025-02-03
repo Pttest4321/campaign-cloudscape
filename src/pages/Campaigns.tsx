@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Download, Eye } from "lucide-react";
+import { Plus, Download, Eye, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -28,9 +28,17 @@ const mockCampaigns = Array.from({ length: 20 }, (_, i) => ({
   uniqueIds: Array.from({ length: 5 }, (_, j) => `ID-${i}-${j}`),
 }));
 
+const ITEMS_PER_PAGE = 8;
+
 export default function Campaigns() {
   const [selectedCampaign, setSelectedCampaign] = useState<null | typeof mockCampaigns[0]>(null);
   const [showUniqueIds, setShowUniqueIds] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(mockCampaigns.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentCampaigns = mockCampaigns.slice(startIndex, endIndex);
 
   const handleDownload = (campaign: typeof mockCampaigns[0]) => {
     const content = campaign.uniqueIds.join('\n');
@@ -59,7 +67,7 @@ export default function Campaigns() {
 
       <div className="glass-card glass-card-dark p-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          {mockCampaigns.slice(0, 8).map((campaign) => (
+          {currentCampaigns.map((campaign) => (
             <div
               key={campaign.id}
               className="p-4 rounded-lg border bg-card text-card-foreground shadow-sm"
@@ -89,6 +97,15 @@ export default function Campaigns() {
                   >
                     <Eye className="w-4 h-4" />
                   </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                  >
+                    <Link to={`/campaigns/${campaign.id}/edit`}>
+                      <Pencil className="w-4 h-4" />
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -98,22 +115,27 @@ export default function Campaigns() {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious 
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              />
             </PaginationItem>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <PaginationItem key={page}>
+                <PaginationLink
+                  onClick={() => setCurrentPage(page)}
+                  isActive={currentPage === page}
+                  className="cursor-pointer"
+                >
+                  {page}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
             <PaginationItem>
-              <PaginationLink href="#" isActive>1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">2</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext 
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
