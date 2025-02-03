@@ -32,6 +32,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useToast } from "@/components/ui/use-toast";
 
 const lineData = [
   { date: "27/01", clicks: 15, users: 2 },
@@ -70,6 +71,48 @@ export default function Statistics() {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [selectedCampaign, setSelectedCampaign] = useState("");
+  const { toast } = useToast();
+
+  const handleApply = () => {
+    if (!selectedCampaign) {
+      toast({
+        title: "Campaign Required",
+        description: "Please select a campaign before applying filters",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!startDate || !endDate) {
+      toast({
+        title: "Date Range Required",
+        description: "Please select both start and end dates",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (startDate > endDate) {
+      toast({
+        title: "Invalid Date Range",
+        description: "Start date must be before end date",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Here you would typically make an API call with the filters
+    console.log("Applying filters:", {
+      campaign: selectedCampaign,
+      startDate: format(startDate, "yyyy-MM-dd"),
+      endDate: format(endDate, "yyyy-MM-dd"),
+    });
+
+    toast({
+      title: "Filters Applied",
+      description: "The statistics have been updated",
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -142,7 +185,7 @@ export default function Statistics() {
             </div>
           </div>
           
-          <Button className="self-end">Apply</Button>
+          <Button className="self-end" onClick={handleApply}>Apply</Button>
         </div>
 
         {/* Stats Cards */}
