@@ -1,6 +1,13 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Plus, Download, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Pagination,
   PaginationContent,
@@ -18,9 +25,26 @@ const mockCampaigns = Array.from({ length: 20 }, (_, i) => ({
   country: "United States",
   language: "English",
   status: i % 2 === 0 ? "Active" : "Inactive",
+  uniqueIds: Array.from({ length: 5 }, (_, j) => `ID-${i}-${j}`),
 }));
 
 export default function Campaigns() {
+  const [selectedCampaign, setSelectedCampaign] = useState<null | typeof mockCampaigns[0]>(null);
+  const [showUniqueIds, setShowUniqueIds] = useState(false);
+
+  const handleDownload = (campaign: typeof mockCampaigns[0]) => {
+    const content = campaign.uniqueIds.join('\n');
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${campaign.name}-unique-ids.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-6 fade-in">
       <div className="flex justify-between items-center">
@@ -41,12 +65,31 @@ export default function Campaigns() {
               className="p-4 rounded-lg border bg-card text-card-foreground shadow-sm"
             >
               <h3 className="font-semibold mb-2">{campaign.name}</h3>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-muted-foreground space-y-1">
                 <p>{campaign.country}</p>
                 <p>{campaign.language}</p>
                 <p className={campaign.status === "Active" ? "text-green-500" : "text-red-500"}>
                   {campaign.status}
                 </p>
+                <div className="flex gap-2 mt-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDownload(campaign)}
+                  >
+                    <Download className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedCampaign(campaign);
+                      setShowUniqueIds(true);
+                    }}
+                  >
+                    <Eye className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
@@ -75,6 +118,21 @@ export default function Campaigns() {
           </PaginationContent>
         </Pagination>
       </div>
+
+      <Dialog open={showUniqueIds} onOpenChange={setShowUniqueIds}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{selectedCampaign?.name} - Unique IDs</DialogTitle>
+          </DialogHeader>
+          <div className="mt-4 space-y-2">
+            {selectedCampaign?.uniqueIds.map((id, index) => (
+              <div key={index} className="p-2 bg-muted rounded-md">
+                {id}
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

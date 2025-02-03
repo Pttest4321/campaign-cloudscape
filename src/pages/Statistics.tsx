@@ -8,7 +8,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { DatePicker } from "@/components/ui/date-picker";
 import {
   BarChart,
   Bar,
@@ -18,6 +17,12 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const data = [
   { name: "Jan", value: 400 },
@@ -29,6 +34,8 @@ const data = [
 
 export default function Statistics() {
   const [selectedCampaign, setSelectedCampaign] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   return (
     <div className="space-y-6 fade-in">
@@ -65,6 +72,21 @@ export default function Statistics() {
               <SelectItem value="es">Spanish</SelectItem>
             </SelectContent>
           </Select>
+
+          <div className="flex gap-2">
+            <Input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              placeholder="Start Date"
+            />
+            <Input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              placeholder="End Date"
+            />
+          </div>
 
           <Input placeholder="Browser" />
           <Input placeholder="IP Address" />
