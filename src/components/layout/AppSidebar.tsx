@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const menuItems = [
   { icon: Home, label: "Dashboard", path: "/" },
@@ -27,6 +28,16 @@ export function AppSidebar() {
       <SidebarContent>
         <div className="p-4">
           <h1 className="text-2xl font-bold text-primary">Campaign Hub</h1>
+          <div className="mt-4 flex items-center space-x-3 px-1">
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>JD</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm font-medium">John Doe</p>
+              <p className="text-xs text-muted-foreground">john@example.com</p>
+            </div>
+          </div>
         </div>
         <SidebarGroup>
           <SidebarGroupContent>
