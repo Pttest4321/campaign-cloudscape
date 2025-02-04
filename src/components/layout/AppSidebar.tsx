@@ -20,7 +20,8 @@ const menuItems = [
   { icon: Layout, label: "Campaigns", path: "/campaigns" },
   { icon: PlusCircle, label: "New Campaign", path: "/campaigns/new" },
   { icon: BarChart2, label: "Statistics", path: "/statistics" },
-  { icon: Users, label: "Profile", path: "/profile" },
+  { icon: Users, label: "Team Users", path: "/team-users" },
+  { icon: Settings, label: "Profile", path: "/profile" },
 ];
 
 export function AppSidebar() {
