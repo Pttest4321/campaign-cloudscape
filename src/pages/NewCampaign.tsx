@@ -14,6 +14,7 @@ import { Globe, Link, Target, Users } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { TablesInsert } from "@/integrations/supabase/types";
 
 export default function NewCampaign() {
   const { toast } = useToast();
@@ -31,15 +32,19 @@ export default function NewCampaign() {
       
       if (!user) throw new Error("User not authenticated");
 
-      const { error } = await supabase.from('campaigns').insert({
+      const campaignData: TablesInsert<'campaigns'> = {
         user_id: user.id,
-        name: formData.get('name'),
-        country: formData.get('country'),
-        language: formData.get('language'),
-        website_url: formData.get('target_url'),
-        offer_url: formData.get('bot_url'),
+        name: formData.get('name') as string,
+        country: formData.get('country') as string,
+        language: formData.get('language') as string,
+        website_url: formData.get('target_url') as string,
+        offer_url: formData.get('bot_url') as string,
         status: 'active'
-      });
+      };
+
+      const { error } = await supabase
+        .from('campaigns')
+        .insert(campaignData);
 
       if (error) throw error;
 
