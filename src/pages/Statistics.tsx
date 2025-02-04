@@ -148,79 +148,81 @@ export default function Statistics() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Statistics</h1>
+        <h1 className="text-2xl md:text-3xl font-bold">Statistics</h1>
       </div>
 
       <div className="grid gap-6">
         {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <label className="text-sm font-medium mb-1 block">Campaign Name</label>
-            <Select value={selectedCampaign} onValueChange={setSelectedCampaign}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select Campaign" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="campaign1">Campaign 1</SelectItem>
-                <SelectItem value="campaign2">Campaign 2</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="flex-1">
-            <label className="text-sm font-medium mb-1 block">Period</label>
-            <div className="flex gap-2 items-center">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={`w-full justify-start text-left font-normal ${
-                      !startDate && "text-muted-foreground"
-                    }`}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {startDate ? format(startDate, "PPP") : "Pick start date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={startDate}
-                    onSelect={setStartDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <span>—</span>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={`w-full justify-start text-left font-normal ${
-                      !endDate && "text-muted-foreground"
-                    }`}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {endDate ? format(endDate, "PPP") : "Pick end date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={endDate}
-                    onSelect={setEndDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+        <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex-1">
+              <label className="text-sm font-medium mb-1 block">Campaign Name</label>
+              <Select value={selectedCampaign} onValueChange={setSelectedCampaign}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Campaign" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="campaign1">Campaign 1</SelectItem>
+                  <SelectItem value="campaign2">Campaign 2</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
+            
+            <div className="flex-1">
+              <label className="text-sm font-medium mb-1 block">Period</label>
+              <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={`w-full justify-start text-left font-normal ${
+                        !startDate && "text-muted-foreground"
+                      }`}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {startDate ? format(startDate, "PPP") : "Pick start date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={startDate}
+                      onSelect={setStartDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <span className="hidden sm:block">—</span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={`w-full justify-start text-left font-normal ${
+                        !endDate && "text-muted-foreground"
+                      }`}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {endDate ? format(endDate, "PPP") : "Pick end date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={endDate}
+                      onSelect={setEndDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>
+            
+            <Button className="w-full md:w-auto self-end" onClick={handleApply}>Apply</Button>
           </div>
-          
-          <Button className="self-end" onClick={handleApply}>Apply</Button>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <div className="p-6 rounded-lg border bg-card">
             <div className="flex justify-between items-center">
               <div>
@@ -253,8 +255,8 @@ export default function Statistics() {
         </div>
 
         {/* Charts */}
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="md:col-span-2 h-[300px] p-6 rounded-lg border bg-card">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="md:col-span-2 h-[300px] p-4 sm:p-6 rounded-lg border bg-card">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={lineData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -279,7 +281,7 @@ export default function Statistics() {
             </ResponsiveContainer>
           </div>
           
-          <div className="h-[300px] p-6 rounded-lg border bg-card">
+          <div className="h-[300px] p-4 sm:p-6 rounded-lg border bg-card">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -318,9 +320,9 @@ export default function Statistics() {
           onOpenChange={setIsFiltersOpen}
           className="w-full space-y-4"
         >
-          <div className="p-6 rounded-lg border bg-card">
+          <div className="p-4 sm:p-6 rounded-lg border bg-card">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium">Filter traffic by the necessary parameters</h3>
+              <h3 className="text-base sm:text-lg font-medium">Filter traffic by the necessary parameters</h3>
               <CollapsibleTrigger asChild>
                 <Button variant="ghost" size="sm" className="w-9 p-0">
                   {isFiltersOpen ? (
@@ -333,7 +335,7 @@ export default function Statistics() {
             </div>
 
             <CollapsibleContent className="space-y-4 pt-4">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <Select
                   value={filters.country}
                   onValueChange={(value) => setFilters({ ...filters, country: value })}
@@ -438,7 +440,7 @@ export default function Statistics() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <Input
                   placeholder="Version"
                   value={filters.version}
@@ -460,8 +462,8 @@ export default function Statistics() {
                 </div>
 
                 <div className="flex justify-end space-x-2">
-                  <Button variant="outline" onClick={handleReset}>Reset</Button>
-                  <Button onClick={handleApply}>Apply</Button>
+                  <Button variant="outline" onClick={handleReset} className="flex-1 sm:flex-none">Reset</Button>
+                  <Button onClick={handleApply} className="flex-1 sm:flex-none">Apply</Button>
                 </div>
               </div>
             </CollapsibleContent>
@@ -469,32 +471,32 @@ export default function Statistics() {
         </Collapsible>
 
         {/* Data Table */}
-        <div className="rounded-lg border bg-card">
+        <div className="rounded-lg border bg-card overflow-hidden">
           <div className="p-4 border-b">
-            <h3 className="text-lg font-medium">Filter traffic by the necessary parameters</h3>
+            <h3 className="text-base sm:text-lg font-medium">Traffic Data</h3>
           </div>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Time</TableHead>
-                  <TableHead>Answer</TableHead>
-                  <TableHead>Split Group</TableHead>
-                  <TableHead>Conversion</TableHead>
-                  <TableHead>IP Address</TableHead>
-                  <TableHead>Country</TableHead>
-                  <TableHead>Language</TableHead>
-                  <TableHead>Browser</TableHead>
-                  <TableHead>Version</TableHead>
-                  <TableHead>Platform</TableHead>
-                  <TableHead>Usage Type</TableHead>
-                  <TableHead>Domain</TableHead>
+                  <TableHead className="min-w-[150px]">Time</TableHead>
+                  <TableHead className="min-w-[100px]">Answer</TableHead>
+                  <TableHead className="min-w-[100px]">Split Group</TableHead>
+                  <TableHead className="min-w-[100px]">Conversion</TableHead>
+                  <TableHead className="min-w-[120px]">IP Address</TableHead>
+                  <TableHead className="min-w-[100px]">Country</TableHead>
+                  <TableHead className="min-w-[100px]">Language</TableHead>
+                  <TableHead className="min-w-[100px]">Browser</TableHead>
+                  <TableHead className="min-w-[100px]">Version</TableHead>
+                  <TableHead className="min-w-[100px]">Platform</TableHead>
+                  <TableHead className="min-w-[100px]">Usage Type</TableHead>
+                  <TableHead className="min-w-[150px]">Domain</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {tableData.map((row, index) => (
                   <TableRow key={index}>
-                    <TableCell>{row.time}</TableCell>
+                    <TableCell className="whitespace-nowrap">{row.time}</TableCell>
                     <TableCell>{row.answer}</TableCell>
                     <TableCell>{row.splitGroup}</TableCell>
                     <TableCell>{row.conversion}</TableCell>
