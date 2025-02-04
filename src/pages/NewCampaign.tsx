@@ -154,11 +154,12 @@ export default function NewCampaign() {
           </div>
 
           <div className="space-y-2">
-            <div className="flex gap-2">
+            <div className="grid grid-cols-3 gap-2">
               <Button
                 type="button"
                 variant={selectedLogic === 'default' ? 'default' : 'outline'}
                 onClick={() => setSelectedLogic('default')}
+                className="w-full"
               >
                 Default Logic
               </Button>
@@ -166,6 +167,7 @@ export default function NewCampaign() {
                 type="button"
                 variant={selectedLogic === 'split' ? 'default' : 'outline'}
                 onClick={() => setSelectedLogic('split')}
+                className="w-full"
               >
                 Split logic
               </Button>
@@ -173,6 +175,7 @@ export default function NewCampaign() {
                 type="button"
                 variant={selectedLogic === 'multi' ? 'default' : 'outline'}
                 onClick={() => setSelectedLogic('multi')}
+                className="w-full"
               >
                 Split multi logic
               </Button>
