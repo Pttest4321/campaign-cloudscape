@@ -318,20 +318,20 @@ export default function Statistics() {
           onOpenChange={setIsFiltersOpen}
           className="w-full space-y-4"
         >
-          <div className="flex items-center justify-between px-4">
-            <h3 className="text-lg font-medium">Filter traffic by the necessary parameters</h3>
-            <CollapsibleTrigger asChild>
-              <Button variant="ghost" size="sm" className="w-9 p-0">
-                {isFiltersOpen ? (
-                  <ChevronUp className="h-4 w-4" />
-                ) : (
-                  <ChevronDown className="h-4 w-4" />
-                )}
-              </Button>
-            </CollapsibleTrigger>
-          </div>
+          <div className="p-6 rounded-lg border bg-card">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-medium">Filter traffic by the necessary parameters</h3>
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" size="sm" className="w-9 p-0">
+                  {isFiltersOpen ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                </Button>
+              </CollapsibleTrigger>
+            </div>
 
-          <CollapsibleContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Select
                 value={filters.country}
@@ -463,7 +463,7 @@ export default function Statistics() {
                 <Button onClick={handleApply}>Apply</Button>
               </div>
             </div>
-          </CollapsibleContent>
+          </div>
         </Collapsible>
 
         {/* Data Table */}
