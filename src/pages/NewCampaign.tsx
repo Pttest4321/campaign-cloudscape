@@ -33,11 +33,11 @@ export default function NewCampaign() {
 
       const { error } = await supabase.from('campaigns').insert({
         user_id: user.id,
-        name: formData.get('name') as string,
-        country: formData.get('country') as string,
-        language: formData.get('language') as string,
-        website_url: formData.get('target_url') as string,
-        offer_url: formData.get('bot_url') as string,
+        name: formData.get('name'),
+        country: formData.get('country'),
+        language: formData.get('language'),
+        website_url: formData.get('target_url'),
+        offer_url: formData.get('bot_url'),
         status: 'active'
       });
 
