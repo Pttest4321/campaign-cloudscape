@@ -1,4 +1,4 @@
-import { Home, BarChart2, Users, Settings, PlusCircle, Layout } from "lucide-react";
+import { Home, BarChart2, Users, Settings, PlusCircle, Layout, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -9,8 +9,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const menuItems = [
   { icon: Home, label: "Dashboard", path: "/" },
@@ -22,11 +25,25 @@ const menuItems = [
 
 export function AppSidebar() {
   const location = useLocation();
+  const isMobile = useIsMobile();
+  const { setOpenMobile } = useSidebar();
 
   return (
     <Sidebar>
-      <SidebarContent>
+      <SidebarContent className="bg-background dark:bg-background">
         <div className="p-4">
+          {isMobile && (
+            <div className="flex justify-end mb-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setOpenMobile(false)}
+                className="md:hidden"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+          )}
           <h1 className="text-2xl font-bold text-primary">Campaign Hub</h1>
           <div className="mt-4 flex items-center space-x-3 px-1">
             <Avatar>
