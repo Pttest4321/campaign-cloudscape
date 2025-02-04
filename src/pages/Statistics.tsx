@@ -30,9 +30,11 @@ import {
 } from "recharts";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, ChevronDown, ChevronUp } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
+import { Switch } from "@/components/ui/switch";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const lineData = [
   { date: "27/01", clicks: 15, users: 2 },
@@ -64,13 +66,26 @@ const tableData = [
     usageType: "DCH",
     domain: "ny4free.net",
   },
-  // ... Add more table data as needed
 ];
 
 export default function Statistics() {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [selectedCampaign, setSelectedCampaign] = useState("");
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    country: "",
+    language: "",
+    answer: "",
+    splitGroup: "",
+    browser: "",
+    platform: "",
+    usageType: "",
+    ipAddress: "",
+    version: "",
+    domain: "",
+    gcid: false
+  });
   const { toast } = useToast();
 
   const handleApply = () => {
@@ -101,16 +116,32 @@ export default function Statistics() {
       return;
     }
 
-    // Here you would typically make an API call with the filters
     console.log("Applying filters:", {
       campaign: selectedCampaign,
       startDate: format(startDate, "yyyy-MM-dd"),
       endDate: format(endDate, "yyyy-MM-dd"),
+      ...filters
     });
 
     toast({
       title: "Filters Applied",
       description: "The statistics have been updated",
+    });
+  };
+
+  const handleReset = () => {
+    setFilters({
+      country: "",
+      language: "",
+      answer: "",
+      splitGroup: "",
+      browser: "",
+      platform: "",
+      usageType: "",
+      ipAddress: "",
+      version: "",
+      domain: "",
+      gcid: false
     });
   };
 
@@ -280,6 +311,160 @@ export default function Statistics() {
             </ResponsiveContainer>
           </div>
         </div>
+
+        {/* Advanced Filters */}
+        <Collapsible
+          open={isFiltersOpen}
+          onOpenChange={setIsFiltersOpen}
+          className="w-full space-y-4"
+        >
+          <div className="flex items-center justify-between px-4">
+            <h3 className="text-lg font-medium">Filter traffic by the necessary parameters</h3>
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" size="sm" className="w-9 p-0">
+                {isFiltersOpen ? (
+                  <ChevronUp className="h-4 w-4" />
+                ) : (
+                  <ChevronDown className="h-4 w-4" />
+                )}
+              </Button>
+            </CollapsibleTrigger>
+          </div>
+
+          <CollapsibleContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Select
+                value={filters.country}
+                onValueChange={(value) => setFilters({ ...filters, country: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Country" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="us">United States</SelectItem>
+                  <SelectItem value="cn">China</SelectItem>
+                  <SelectItem value="uk">United Kingdom</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={filters.language}
+                onValueChange={(value) => setFilters({ ...filters, language: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Language" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="zh">Chinese</SelectItem>
+                  <SelectItem value="es">Spanish</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={filters.answer}
+                onValueChange={(value) => setFilters({ ...filters, answer: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Answer" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="yes">Yes</SelectItem>
+                  <SelectItem value="no">No</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={filters.splitGroup}
+                onValueChange={(value) => setFilters({ ...filters, splitGroup: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Split Group" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="a">Group A</SelectItem>
+                  <SelectItem value="b">Group B</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={filters.browser}
+                onValueChange={(value) => setFilters({ ...filters, browser: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Browser" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="chrome">Chrome</SelectItem>
+                  <SelectItem value="firefox">Firefox</SelectItem>
+                  <SelectItem value="safari">Safari</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={filters.platform}
+                onValueChange={(value) => setFilters({ ...filters, platform: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Platform" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="windows">Windows</SelectItem>
+                  <SelectItem value="mac">macOS</SelectItem>
+                  <SelectItem value="ios">iOS</SelectItem>
+                  <SelectItem value="android">Android</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={filters.usageType}
+                onValueChange={(value) => setFilters({ ...filters, usageType: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Usage Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dch">DCH</SelectItem>
+                  <SelectItem value="residential">Residential</SelectItem>
+                  <SelectItem value="commercial">Commercial</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Input
+                placeholder="IP Address"
+                value={filters.ipAddress}
+                onChange={(e) => setFilters({ ...filters, ipAddress: e.target.value })}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Input
+                placeholder="Version"
+                value={filters.version}
+                onChange={(e) => setFilters({ ...filters, version: e.target.value })}
+              />
+
+              <Input
+                placeholder="Domain"
+                value={filters.domain}
+                onChange={(e) => setFilters({ ...filters, domain: e.target.value })}
+              />
+
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={filters.gcid}
+                  onCheckedChange={(checked) => setFilters({ ...filters, gcid: checked })}
+                />
+                <span>GCID</span>
+              </div>
+
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={handleReset}>Reset</Button>
+                <Button onClick={handleApply}>Apply</Button>
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
 
         {/* Data Table */}
         <div className="rounded-lg border bg-card">
