@@ -332,137 +332,139 @@ export default function Statistics() {
               </CollapsibleTrigger>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Select
-                value={filters.country}
-                onValueChange={(value) => setFilters({ ...filters, country: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Country" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="us">United States</SelectItem>
-                  <SelectItem value="cn">China</SelectItem>
-                  <SelectItem value="uk">United Kingdom</SelectItem>
-                </SelectContent>
-              </Select>
+            <CollapsibleContent className="space-y-4 pt-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Select
+                  value={filters.country}
+                  onValueChange={(value) => setFilters({ ...filters, country: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="us">United States</SelectItem>
+                    <SelectItem value="cn">China</SelectItem>
+                    <SelectItem value="uk">United Kingdom</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Select
-                value={filters.language}
-                onValueChange={(value) => setFilters({ ...filters, language: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Language" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="zh">Chinese</SelectItem>
-                  <SelectItem value="es">Spanish</SelectItem>
-                </SelectContent>
-              </Select>
+                <Select
+                  value={filters.language}
+                  onValueChange={(value) => setFilters({ ...filters, language: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="zh">Chinese</SelectItem>
+                    <SelectItem value="es">Spanish</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Select
-                value={filters.answer}
-                onValueChange={(value) => setFilters({ ...filters, answer: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Answer" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="yes">Yes</SelectItem>
-                  <SelectItem value="no">No</SelectItem>
-                </SelectContent>
-              </Select>
+                <Select
+                  value={filters.answer}
+                  onValueChange={(value) => setFilters({ ...filters, answer: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Answer" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="yes">Yes</SelectItem>
+                    <SelectItem value="no">No</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Select
-                value={filters.splitGroup}
-                onValueChange={(value) => setFilters({ ...filters, splitGroup: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Split Group" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="a">Group A</SelectItem>
-                  <SelectItem value="b">Group B</SelectItem>
-                </SelectContent>
-              </Select>
+                <Select
+                  value={filters.splitGroup}
+                  onValueChange={(value) => setFilters({ ...filters, splitGroup: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Split Group" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="a">Group A</SelectItem>
+                    <SelectItem value="b">Group B</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Select
-                value={filters.browser}
-                onValueChange={(value) => setFilters({ ...filters, browser: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Browser" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="chrome">Chrome</SelectItem>
-                  <SelectItem value="firefox">Firefox</SelectItem>
-                  <SelectItem value="safari">Safari</SelectItem>
-                </SelectContent>
-              </Select>
+                <Select
+                  value={filters.browser}
+                  onValueChange={(value) => setFilters({ ...filters, browser: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Browser" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="chrome">Chrome</SelectItem>
+                    <SelectItem value="firefox">Firefox</SelectItem>
+                    <SelectItem value="safari">Safari</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Select
-                value={filters.platform}
-                onValueChange={(value) => setFilters({ ...filters, platform: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Platform" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="windows">Windows</SelectItem>
-                  <SelectItem value="mac">macOS</SelectItem>
-                  <SelectItem value="ios">iOS</SelectItem>
-                  <SelectItem value="android">Android</SelectItem>
-                </SelectContent>
-              </Select>
+                <Select
+                  value={filters.platform}
+                  onValueChange={(value) => setFilters({ ...filters, platform: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Platform" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="windows">Windows</SelectItem>
+                    <SelectItem value="mac">macOS</SelectItem>
+                    <SelectItem value="ios">iOS</SelectItem>
+                    <SelectItem value="android">Android</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Select
-                value={filters.usageType}
-                onValueChange={(value) => setFilters({ ...filters, usageType: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Usage Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="dch">DCH</SelectItem>
-                  <SelectItem value="residential">Residential</SelectItem>
-                  <SelectItem value="commercial">Commercial</SelectItem>
-                </SelectContent>
-              </Select>
+                <Select
+                  value={filters.usageType}
+                  onValueChange={(value) => setFilters({ ...filters, usageType: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Usage Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="dch">DCH</SelectItem>
+                    <SelectItem value="residential">Residential</SelectItem>
+                    <SelectItem value="commercial">Commercial</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Input
-                placeholder="IP Address"
-                value={filters.ipAddress}
-                onChange={(e) => setFilters({ ...filters, ipAddress: e.target.value })}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Input
-                placeholder="Version"
-                value={filters.version}
-                onChange={(e) => setFilters({ ...filters, version: e.target.value })}
-              />
-
-              <Input
-                placeholder="Domain"
-                value={filters.domain}
-                onChange={(e) => setFilters({ ...filters, domain: e.target.value })}
-              />
-
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={filters.gcid}
-                  onCheckedChange={(checked) => setFilters({ ...filters, gcid: checked })}
+                <Input
+                  placeholder="IP Address"
+                  value={filters.ipAddress}
+                  onChange={(e) => setFilters({ ...filters, ipAddress: e.target.value })}
                 />
-                <span>GCID</span>
               </div>
 
-              <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={handleReset}>Reset</Button>
-                <Button onClick={handleApply}>Apply</Button>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Input
+                  placeholder="Version"
+                  value={filters.version}
+                  onChange={(e) => setFilters({ ...filters, version: e.target.value })}
+                />
+
+                <Input
+                  placeholder="Domain"
+                  value={filters.domain}
+                  onChange={(e) => setFilters({ ...filters, domain: e.target.value })}
+                />
+
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    checked={filters.gcid}
+                    onCheckedChange={(checked) => setFilters({ ...filters, gcid: checked })}
+                  />
+                  <span>GCID</span>
+                </div>
+
+                <div className="flex justify-end space-x-2">
+                  <Button variant="outline" onClick={handleReset}>Reset</Button>
+                  <Button onClick={handleApply}>Apply</Button>
+                </div>
               </div>
-            </div>
+            </CollapsibleContent>
           </div>
         </Collapsible>
 
