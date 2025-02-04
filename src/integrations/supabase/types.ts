@@ -137,6 +137,42 @@ export type Database = {
         }
         Relationships: []
       }
+      team_users: {
+        Row: {
+          available: boolean | null
+          campaign_limit: number | null
+          created_at: string
+          id: string
+          login: string
+          name: string
+          telegram: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          available?: boolean | null
+          campaign_limit?: number | null
+          created_at?: string
+          id?: string
+          login: string
+          name: string
+          telegram?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          available?: boolean | null
+          campaign_limit?: number | null
+          created_at?: string
+          id?: string
+          login?: string
+          name?: string
+          telegram?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
