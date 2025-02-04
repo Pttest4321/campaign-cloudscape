@@ -9,6 +9,7 @@ import Campaigns from "./pages/Campaigns";
 import NewCampaign from "./pages/NewCampaign";
 import Statistics from "./pages/Statistics";
 import Profile from "./pages/Profile";
+import TeamUsers from "./pages/TeamUsers";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/campaigns" element={<Campaigns />} />
             <Route path="/campaigns/new" element={<NewCampaign />} />
             <Route path="/statistics" element={<Statistics />} />
+            <Route path="/team-users" element={<TeamUsers />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<NotFound />} />
           </Route>
