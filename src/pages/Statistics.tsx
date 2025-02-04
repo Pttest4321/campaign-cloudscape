@@ -73,6 +73,19 @@ export default function Statistics() {
   const [selectedCampaign, setSelectedCampaign] = useState("");
   const { toast } = useToast();
 
+  // Add new state for filters
+  const [country, setCountry] = useState("");
+  const [language, setLanguage] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [splitGroup, setSplitGroup] = useState("");
+  const [browser, setBrowser] = useState("");
+  const [platform, setPlatform] = useState("");
+  const [usageType, setUsageType] = useState("");
+  const [ipAddress, setIpAddress] = useState("");
+  const [version, setVersion] = useState("");
+  const [domain, setDomain] = useState("");
+  const [gcid, setGcid] = useState(false);
+
   const handleApply = () => {
     if (!selectedCampaign) {
       toast({
@@ -106,6 +119,17 @@ export default function Statistics() {
       campaign: selectedCampaign,
       startDate: format(startDate, "yyyy-MM-dd"),
       endDate: format(endDate, "yyyy-MM-dd"),
+      country,
+      language,
+      answer,
+      splitGroup,
+      browser,
+      platform,
+      usageType,
+      ipAddress,
+      version,
+      domain,
+      gcid,
     });
 
     toast({
@@ -188,104 +212,180 @@ export default function Statistics() {
           <Button className="self-end" onClick={handleApply}>Apply</Button>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="p-6 rounded-lg border bg-card">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-lg font-medium">Total</h3>
-                <p className="text-2xl font-bold">76 clicks</p>
-                <p className="text-sm text-muted-foreground">75 users</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="p-6 rounded-lg border bg-card">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-lg font-medium">Target</h3>
-                <p className="text-2xl font-bold">1 clicks</p>
-                <p className="text-sm text-muted-foreground">1 users</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="p-6 rounded-lg border bg-card">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-lg font-medium">Block</h3>
-                <p className="text-2xl font-bold">75 clicks</p>
-                <p className="text-sm text-muted-foreground">74 users</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Charts */}
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="md:col-span-2 h-[300px] p-6 rounded-lg border bg-card">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={lineData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="clicks"
-                  stroke="#2563eb"
-                  strokeWidth={2}
-                  dot={false}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="users"
-                  stroke="#4ade80"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-          
-          <div className="h-[300px] p-6 rounded-lg border bg-card">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  dataKey="value"
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <text
-                  x="50%"
-                  y="50%"
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                >
-                  <tspan x="50%" dy="-0.5em" className="text-lg font-bold">
-                    Total
-                  </tspan>
-                  <tspan x="50%" dy="1.5em" className="text-2xl font-bold">
-                    76
-                  </tspan>
-                </text>
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Data Table */}
+        {/* Data Table with Filters */}
         <div className="rounded-lg border bg-card">
           <div className="p-4 border-b">
             <h3 className="text-lg font-medium">Filter traffic by the necessary parameters</h3>
           </div>
+          
+          <div className="p-4 space-y-4">
+            {/* First Row of Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Country</label>
+                <Select value={country} onValueChange={setCountry}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="us">United States</SelectItem>
+                    <SelectItem value="uk">United Kingdom</SelectItem>
+                    <SelectItem value="ca">Canada</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Language</label>
+                <Select value={language} onValueChange={setLanguage}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="es">Spanish</SelectItem>
+                    <SelectItem value="fr">French</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Answer</label>
+                <Select value={answer} onValueChange={setAnswer}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select answer" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="yes">Yes</SelectItem>
+                    <SelectItem value="no">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Split Group</label>
+                <Select value={splitGroup} onValueChange={setSplitGroup}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select split group" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="a">Group A</SelectItem>
+                    <SelectItem value="b">Group B</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Second Row of Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Browser</label>
+                <Select value={browser} onValueChange={setBrowser}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select browser" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="chrome">Chrome</SelectItem>
+                    <SelectItem value="firefox">Firefox</SelectItem>
+                    <SelectItem value="safari">Safari</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Platform</label>
+                <Select value={platform} onValueChange={setPlatform}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select platform" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="windows">Windows</SelectItem>
+                    <SelectItem value="mac">MacOS</SelectItem>
+                    <SelectItem value="linux">Linux</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Usage Type</label>
+                <Select value={usageType} onValueChange={setUsageType}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select usage type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="residential">Residential</SelectItem>
+                    <SelectItem value="commercial">Commercial</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">IP Address</label>
+                <Input 
+                  type="text" 
+                  value={ipAddress} 
+                  onChange={(e) => setIpAddress(e.target.value)}
+                  placeholder="Enter IP address"
+                />
+              </div>
+            </div>
+
+            {/* Third Row of Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Version</label>
+                <Input 
+                  type="text" 
+                  value={version} 
+                  onChange={(e) => setVersion(e.target.value)}
+                  placeholder="Enter version"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Domain</label>
+                <Input 
+                  type="text" 
+                  value={domain} 
+                  onChange={(e) => setDomain(e.target.value)}
+                  placeholder="Enter domain"
+                />
+              </div>
+
+              <div className="space-y-2 flex items-center">
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <Switch 
+                    checked={gcid} 
+                    onCheckedChange={setGcid} 
+                  />
+                  <span className="text-sm font-medium">GCID</span>
+                </label>
+              </div>
+
+              <div className="space-y-2 flex items-center justify-end gap-2">
+                <Button variant="outline" onClick={() => {
+                  setCountry("");
+                  setLanguage("");
+                  setAnswer("");
+                  setSplitGroup("");
+                  setBrowser("");
+                  setPlatform("");
+                  setUsageType("");
+                  setIpAddress("");
+                  setVersion("");
+                  setDomain("");
+                  setGcid(false);
+                }}>
+                  Reset
+                </Button>
+                <Button onClick={handleApply}>
+                  Apply
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Table content */}
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
