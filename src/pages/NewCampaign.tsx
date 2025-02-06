@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -288,7 +287,7 @@ export default function NewCampaign() {
                       />
                     </div>
                     <div className="w-8 text-sm">%</div>
-                    {splitUrls.length > 1 && (
+                    {index !== 0 && (  // Only show delete button for non-first entries
                       <Button
                         type="button"
                         variant="outline"
