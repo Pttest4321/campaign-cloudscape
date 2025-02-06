@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
-import { Globe, Link, Plus, Target, Users } from "lucide-react";
+import { Globe, Link, Plus, Target, Users, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
@@ -33,8 +33,7 @@ export default function NewCampaign() {
 
   const handleAddSplitUrl = () => {
     if (splitUrls.length >= 10) return; // Limit to 10 splits
-    const currentTotal = splitUrls.reduce((sum, url) => sum + url.percentage, 0);
-    const newPercentage = Math.floor(currentTotal / (splitUrls.length + 1));
+    const newPercentage = Math.floor(100 / (splitUrls.length + 1));
     
     // Redistribute percentages
     const updatedUrls = splitUrls.map(url => ({
@@ -42,9 +41,31 @@ export default function NewCampaign() {
       percentage: newPercentage
     }));
     
-    // Add new URL with remaining percentage
-    const remaining = 100 - (newPercentage * splitUrls.length);
-    updatedUrls.push({ url: '', percentage: remaining });
+    // Add new URL with same percentage
+    updatedUrls.push({ url: '', percentage: newPercentage });
+    
+    // Adjust percentages to ensure they sum to 100
+    const totalPercentage = updatedUrls.reduce((sum, url) => sum + url.percentage, 0);
+    if (totalPercentage < 100) {
+      updatedUrls[updatedUrls.length - 1].percentage += (100 - totalPercentage);
+    }
+    
+    setSplitUrls(updatedUrls);
+  };
+
+  const handleDeleteSplitUrl = (index: number) => {
+    if (splitUrls.length <= 1) return; // Keep at least one entry
+    
+    const newUrls = splitUrls.filter((_, i) => i !== index);
+    const evenPercentage = Math.floor(100 / newUrls.length);
+    
+    // Redistribute percentages evenly
+    const updatedUrls = newUrls.map((url, i) => ({
+      ...url,
+      percentage: i === newUrls.length - 1 
+        ? 100 - (evenPercentage * (newUrls.length - 1)) // Last entry gets remaining percentage
+        : evenPercentage
+    }));
     
     setSplitUrls(updatedUrls);
   };
@@ -267,6 +288,17 @@ export default function NewCampaign() {
                       />
                     </div>
                     <div className="w-8 text-sm">%</div>
+                    {splitUrls.length > 1 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => handleDeleteSplitUrl(index)}
+                        className="flex-shrink-0"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    )}
                     {index === splitUrls.length - 1 && (
                       <Button
                         type="button"
