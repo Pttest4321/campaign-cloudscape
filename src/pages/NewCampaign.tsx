@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +17,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { TablesInsert } from "@/integrations/supabase/types";
 
-interface SplitUrl {
+type SplitUrl = {
+  [key: string]: string | number;
   url: string;
   percentage: number;
 }
@@ -89,7 +91,7 @@ export default function NewCampaign() {
         website_url: selectedLogic === 'split' ? null : formData.get('target_url') as string,
         offer_url: formData.get('bot_url') as string,
         status: 'active',
-        split_urls: selectedLogic === 'split' ? splitUrls : []
+        split_urls: selectedLogic === 'split' ? splitUrls as unknown as Json : []
       };
 
       const { error } = await supabase
