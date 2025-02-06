@@ -68,6 +68,7 @@ export type Database = {
           language: string
           name: string
           offer_url: string | null
+          split_urls: Json | null
           status: string | null
           updated_at: string
           user_id: string
@@ -81,6 +82,7 @@ export type Database = {
           language: string
           name: string
           offer_url?: string | null
+          split_urls?: Json | null
           status?: string | null
           updated_at?: string
           user_id: string
@@ -94,6 +96,7 @@ export type Database = {
           language?: string
           name?: string
           offer_url?: string | null
+          split_urls?: Json | null
           status?: string | null
           updated_at?: string
           user_id?: string

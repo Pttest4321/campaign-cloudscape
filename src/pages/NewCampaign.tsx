@@ -10,11 +10,16 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
-import { Globe, Link, Target, Users } from "lucide-react";
+import { Globe, Link, Plus, Target, Users } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { TablesInsert } from "@/integrations/supabase/types";
+
+interface SplitUrl {
+  url: string;
+  percentage: number;
+}
 
 export default function NewCampaign() {
   const { toast } = useToast();
@@ -22,6 +27,50 @@ export default function NewCampaign() {
   const [isReverseIntegration, setIsReverseIntegration] = useState(false);
   const [isBlockIntegration, setIsBlockIntegration] = useState(false);
   const [selectedLogic, setSelectedLogic] = useState<'default' | 'split' | 'multi'>('default');
+  const [splitUrls, setSplitUrls] = useState<SplitUrl[]>([{ url: '', percentage: 100 }]);
+
+  const handleAddSplitUrl = () => {
+    if (splitUrls.length >= 10) return; // Limit to 10 splits
+    const currentTotal = splitUrls.reduce((sum, url) => sum + url.percentage, 0);
+    const newPercentage = Math.floor(currentTotal / (splitUrls.length + 1));
+    
+    // Redistribute percentages
+    const updatedUrls = splitUrls.map(url => ({
+      ...url,
+      percentage: newPercentage
+    }));
+    
+    // Add new URL with remaining percentage
+    const remaining = 100 - (newPercentage * splitUrls.length);
+    updatedUrls.push({ url: '', percentage: remaining });
+    
+    setSplitUrls(updatedUrls);
+  };
+
+  const handleSplitUrlChange = (index: number, value: string) => {
+    const newUrls = [...splitUrls];
+    newUrls[index].url = value;
+    setSplitUrls(newUrls);
+  };
+
+  const handleSplitPercentageChange = (index: number, value: string) => {
+    const percentage = Math.min(100, Math.max(0, parseInt(value) || 0));
+    const newUrls = [...splitUrls];
+    newUrls[index].percentage = percentage;
+    
+    // Adjust other percentages proportionally
+    const total = newUrls.reduce((sum, url, i) => i === index ? sum : sum + url.percentage, 0);
+    if (total + percentage > 100) {
+      const factor = (100 - percentage) / total;
+      newUrls.forEach((url, i) => {
+        if (i !== index) {
+          url.percentage = Math.floor(url.percentage * factor);
+        }
+      });
+    }
+    
+    setSplitUrls(newUrls);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,9 +86,10 @@ export default function NewCampaign() {
         name: formData.get('name') as string,
         country: formData.get('country') as string,
         language: formData.get('language') as string,
-        website_url: formData.get('target_url') as string,
+        website_url: selectedLogic === 'split' ? null : formData.get('target_url') as string,
         offer_url: formData.get('bot_url') as string,
-        status: 'active'
+        status: 'active',
+        split_urls: selectedLogic === 'split' ? splitUrls : []
       };
 
       const { error } = await supabase
@@ -190,15 +240,54 @@ export default function NewCampaign() {
           <div className="space-y-2">
             <Label htmlFor="target_url" className="flex items-center gap-2">
               <Link className="h-4 w-4" />
-              Link to the target page
+              {selectedLogic === 'split' ? 'Split URLs' : 'Link to the target page'}
             </Label>
-            <Input
-              id="target_url"
-              name="target_url"
-              type="url"
-              placeholder="Enter target URL (e.g. https://offer.com/)"
-              pattern="https?://.+"
-            />
+            {selectedLogic === 'split' ? (
+              <div className="space-y-4">
+                {splitUrls.map((splitUrl, index) => (
+                  <div key={index} className="flex gap-4 items-center">
+                    <div className="flex-1">
+                      <Input
+                        value={splitUrl.url}
+                        onChange={(e) => handleSplitUrlChange(index, e.target.value)}
+                        placeholder="Enter target URL"
+                        type="url"
+                        pattern="https?://.+"
+                      />
+                    </div>
+                    <div className="w-24">
+                      <Input
+                        value={splitUrl.percentage}
+                        onChange={(e) => handleSplitPercentageChange(index, e.target.value)}
+                        type="number"
+                        min="0"
+                        max="100"
+                      />
+                    </div>
+                    <div className="w-8 text-sm">%</div>
+                    {index === splitUrls.length - 1 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={handleAddSplitUrl}
+                        className="flex-shrink-0"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <Input
+                id="target_url"
+                name="target_url"
+                type="url"
+                placeholder="Enter target URL (e.g. https://offer.com/)"
+                pattern="https?://.+"
+              />
+            )}
           </div>
 
           <div className="space-y-2">
