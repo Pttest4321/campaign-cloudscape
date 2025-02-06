@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campaigns - Campaign Manager</title>
+    <meta name="description" content="Campaign Management System" />
+    <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9fafb;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      .nav {
+        display: flex;
+        gap: 1rem;
+      }
+      .nav a {
+        text-decoration: none;
+        color: #1f2937;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+      }
+      .nav a:hover {
+        background-color: #f3f4f6;
+      }
+      .campaign-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+      .campaign-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      .button {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background-color: #2563eb;
+        color: white;
+        text-decoration: none;
+        border-radius: 0.375rem;
+        font-weight: 500;
+      }
+      .button:hover {
+        background-color: #1d4ed8;
+      }
+      .button-group {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+      .button-secondary {
+        background-color: #f3f4f6;
+        color: #1f2937;
+      }
+      .button-secondary:hover {
+        background-color: #e5e7eb;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <h1>Campaign Manager</h1>
+      </div>
+      <nav class="nav">
+        <a href="/">Dashboard</a>
+        <a href="/campaigns.html">Campaigns</a>
+        <a href="/statistics.html">Statistics</a>
+        <a href="/team.html">Team</a>
+        <a href="/profile.html">Profile</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Campaigns</h1>
+        <a href="/new-campaign.html" class="button">New Campaign</a>
+      </div>
+
+      <div class="campaign-grid">
+        <div class="campaign-card">
+          <h3>Summer Sale 2024</h3>
+          <p>Country: United States</p>
+          <p>Language: English</p>
+          <p style="color: #10b981;">Status: Active</p>
+          <div class="button-group">
+            <a href="#" class="button button-secondary">View Stats</a>
+            <a href="#" class="button button-secondary">Edit</a>
+          </div>
+        </div>
+
+        <div class="campaign-card">
+          <h3>Spring Collection</h3>
+          <p>Country: Canada</p>
+          <p>Language: English</p>
+          <p style="color: #ef4444;">Status: Inactive</p>
+          <div class="button-group">
+            <a href="#" class="button button-secondary">View Stats</a>
+            <a href="#" class="button button-secondary">Edit</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="container" style="text-align: center; padding: 2rem; color: #6b7280;">
+      <p>&copy; 2024 Campaign Manager. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
