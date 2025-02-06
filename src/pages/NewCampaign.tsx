@@ -15,7 +15,7 @@ import { Globe, Link, Plus, Target, Users } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import { TablesInsert } from "@/integrations/supabase/types";
+import { TablesInsert, Json } from "@/integrations/supabase/types";
 
 type SplitUrl = {
   [key: string]: string | number;
