@@ -30,8 +30,8 @@ export function AppSidebar() {
   const { setOpenMobile } = useSidebar();
 
   return (
-    <Sidebar>
-      <SidebarContent className="bg-background dark:bg-background">
+    <Sidebar className="border-r border-border">
+      <SidebarContent className="bg-background">
         <div className="p-4">
           {isMobile && (
             <div className="flex justify-end mb-2">
@@ -70,6 +70,7 @@ export function AppSidebar() {
                           ? "bg-primary text-primary-foreground"
                           : "hover:bg-secondary"
                       }`}
+                      onClick={() => isMobile && setOpenMobile(false)}
                     >
                       <item.icon className="w-5 h-5" />
                       <span>{item.label}</span>

@@ -15,7 +15,7 @@ export function AppLayout() {
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         <main className="flex-1 p-4 md:p-6 overflow-auto w-full">
-          <div className="w-full">
+          <div className="w-full max-w-7xl mx-auto">
             <div className="flex justify-between items-center gap-4 mb-6">
               {isMobile && (
                 <Button variant="ghost" size="icon" className="md:hidden" asChild>

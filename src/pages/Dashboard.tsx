@@ -33,9 +33,9 @@ export default function Dashboard() {
     <div className="space-y-6 fade-in">
       <h1 className="text-3xl font-bold">Dashboard</h1>
       
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
-          <Card key={stat.title} className="glass-card glass-card-dark">
+          <Card key={stat.title} className="glass-card">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">
                 {stat.title}
