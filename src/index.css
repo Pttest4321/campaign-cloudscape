@@ -29,7 +29,7 @@
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --card: 217.2 32.6% 17.5%;
+    --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
@@ -54,7 +54,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased transition-colors duration-200;
+    @apply bg-background text-foreground antialiased;
   }
 }
 
@@ -62,8 +62,8 @@
   @apply bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg;
 }
 
-.dark .glass-card {
-  @apply bg-gray-900/50 backdrop-blur-lg border-gray-700/30;
+.glass-card-dark {
+  @apply dark:bg-gray-900/50 dark:backdrop-blur-lg dark:border-gray-700/30;
 }
 
 .fade-in {
