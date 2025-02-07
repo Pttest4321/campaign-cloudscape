@@ -147,12 +147,17 @@
               </button>
               <div id="notificationsDropdown" class="dropdown-content">
                 <div class="py-2">
-                  <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                  <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                     <p class="font-semibold">Notifications</p>
+                    <button onclick="clearNotifications()" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                      Clear all
+                    </button>
                   </div>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">New campaign created</a>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Campaign statistics updated</a>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Weekly report available</a>
+                  <div id="notificationsList">
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">New campaign created</a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Campaign statistics updated</a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Weekly report available</a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -237,6 +242,12 @@
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme === 'dark') {
         document.body.classList.add('dark');
+      }
+
+      // Add clear notifications function
+      function clearNotifications() {
+        const notificationsList = document.getElementById('notificationsList');
+        notificationsList.innerHTML = '<div class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">No new notifications</div>';
       }
     </script>
   </body>
