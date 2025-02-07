@@ -37,10 +37,10 @@ export default function Dashboard() {
         {stats.map((stat) => (
           <Card key={stat.title} className="glass-card glass-card-dark">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <stat.icon className="h-4 w-4" />
                 {stat.title}
               </CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stat.value}</div>
