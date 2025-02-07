@@ -52,6 +52,28 @@
           transform: translateY(0);
         }
       }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        min-width: 200px;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        z-index: 50;
+      }
+
+      .dropdown.active .dropdown-content {
+        display: block;
+      }
+
+      .dark .dropdown-content {
+        background: #1f2937;
+        border-color: #374151;
+      }
     </style>
   </head>
 
@@ -116,29 +138,47 @@
         <div class="flex justify-between items-center mb-6">
           <div></div>
           <div class="flex items-center gap-4">
-            <!-- Notifications -->
-            <div class="relative">
-              <button class="p-2 text-gray-600 hover:text-gray-900">
+            <!-- Notifications Dropdown -->
+            <div class="dropdown relative">
+              <button class="p-2 text-gray-600 hover:text-gray-900" onclick="toggleDropdown('notificationsDropdown')">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                 </svg>
               </button>
+              <div id="notificationsDropdown" class="dropdown-content">
+                <div class="py-2">
+                  <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                    <p class="font-semibold">Notifications</p>
+                  </div>
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">New campaign created</a>
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Campaign statistics updated</a>
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Weekly report available</a>
+                </div>
+              </div>
             </div>
 
             <!-- Theme Toggle -->
-            <button class="p-2 text-gray-600 hover:text-gray-900">
+            <button class="p-2 text-gray-600 hover:text-gray-900" onclick="toggleTheme()">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
               </svg>
             </button>
 
-            <!-- Profile Menu -->
-            <div class="relative">
-              <button class="p-2 text-gray-600 hover:text-gray-900">
+            <!-- Profile Dropdown -->
+            <div class="dropdown relative">
+              <button class="p-2 text-gray-600 hover:text-gray-900" onclick="toggleDropdown('profileDropdown')">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                 </svg>
               </button>
+              <div id="profileDropdown" class="dropdown-content">
+                <div class="py-2">
+                  <a href="/profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Profile</a>
+                  <a href="/settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Settings</a>
+                  <div class="border-t border-gray-200 dark:border-gray-700"></div>
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Sign out</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -162,11 +202,42 @@
     </div>
 
     <script>
-      // Basic theme toggle functionality
-      const themeToggle = document.querySelector('button:has(svg[d*="M20.354"])');
-      themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark');
+      // Dropdown functionality
+      function toggleDropdown(dropdownId) {
+        const dropdowns = document.querySelectorAll('.dropdown-content');
+        dropdowns.forEach(dropdown => {
+          if (dropdown.id !== dropdownId) {
+            dropdown.parentElement.classList.remove('active');
+          }
+        });
+        
+        const dropdown = document.getElementById(dropdownId);
+        dropdown.parentElement.classList.toggle('active');
+      }
+
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', function(event) {
+        const dropdowns = document.querySelectorAll('.dropdown');
+        dropdowns.forEach(dropdown => {
+          if (!dropdown.contains(event.target)) {
+            dropdown.classList.remove('active');
+          }
+        });
       });
+
+      // Theme toggle functionality
+      function toggleTheme() {
+        const body = document.body;
+        body.classList.toggle('dark');
+        const isDark = body.classList.contains('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      }
+
+      // Initialize theme from localStorage
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark');
+      }
     </script>
   </body>
 </html>
