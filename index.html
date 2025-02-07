@@ -30,39 +30,12 @@
         --radius: 0.75rem;
       }
 
-      .dark {
-        --background: 240 10% 3.9%;
-        --foreground: 0 0% 98%;
-        --card: 240 10% 3.9%;
-        --card-foreground: 0 0% 98%;
-        --popover: 240 10% 3.9%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 240 5.9% 10%;
-        --secondary: 240 3.7% 15.9%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 240 3.7% 15.9%;
-        --muted-foreground: 240 5% 64.9%;
-        --accent: 240 3.7% 15.9%;
-        --accent-foreground: 0 0% 98%;
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 240 3.7% 15.9%;
-        --input: 240 3.7% 15.9%;
-        --ring: 240 4.9% 83.9%;
-      }
-
       .glass-card {
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(8px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 1rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-
-      .dark .glass-card {
-        background: rgba(0, 0, 0, 0.2);
-        border-color: rgba(255, 255, 255, 0.1);
       }
 
       .fade-in {
@@ -79,79 +52,10 @@
           transform: translateY(0);
         }
       }
-
-      /* Top buttons styles */
-      .top-buttons {
-        position: fixed;
-        top: 1rem;
-        right: 1rem;
-        z-index: 50;
-        display: flex;
-        gap: 0.5rem;
-      }
-
-      .top-button {
-        padding: 0.5rem;
-        border-radius: 0.5rem;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        transition: all 0.2s ease;
-      }
-
-      .dark .top-button {
-        background: rgba(0, 0, 0, 0.2);
-        border-color: rgba(255, 255, 255, 0.1);
-      }
-
-      .top-button:hover {
-        background: rgba(255, 255, 255, 0.2);
-      }
-
-      .dark .top-button:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
     </style>
   </head>
 
-  <body class="bg-gray-50 min-h-screen transition-colors duration-200">
-    <!-- Top Buttons -->
-    <div class="top-buttons">
-      <!-- Settings Button -->
-      <button class="top-button" id="settingsButton" title="Settings">
-        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-        </svg>
-      </button>
-
-      <!-- Notifications Button -->
-      <button class="top-button" id="notificationsButton" title="Notifications">
-        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-        </svg>
-      </button>
-
-      <!-- Theme Toggle Button -->
-      <button class="top-button" id="themeToggle" title="Toggle Theme">
-        <!-- Sun icon for dark mode -->
-        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-        </svg>
-        <!-- Moon icon for light mode -->
-        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-        </svg>
-      </button>
-
-      <!-- Profile Button -->
-      <button class="top-button" id="profileButton" title="Profile">
-        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-        </svg>
-      </button>
-    </div>
-
+  <body class="bg-gray-50 min-h-screen">
     <div class="flex min-h-screen">
       <!-- Sidebar -->
       <aside class="w-64 bg-white shadow-lg fixed h-full">
@@ -257,45 +161,11 @@
       </main>
     </div>
 
-    <!-- Required Lovable script -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    
     <script>
-      // Theme toggle functionality
-      const themeToggle = document.getElementById('themeToggle');
-      const html = document.documentElement;
-      
-      // Check for saved theme preference or system preference
-      const savedTheme = localStorage.getItem('theme');
-      const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;if (savedTheme === 'dark' || (!savedTheme && systemDarkMode)) {
-        html.classList.add('dark');
-      }
-
-      // Toggle theme
+      // Basic theme toggle functionality
+      const themeToggle = document.querySelector('button:has(svg[d*="M20.354"])');
       themeToggle.addEventListener('click', () => {
-        html.classList.toggle('dark');
-        localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
-      });
-
-      // Notification button functionality
-      const notificationsButton = document.getElementById('notificationsButton');
-      notificationsButton.addEventListener('click', () => {
-        // Add your notification logic here
-        console.log('Notifications clicked');
-      });
-
-      // Settings button functionality
-      const settingsButton = document.getElementById('settingsButton');
-      settingsButton.addEventListener('click', () => {
-        // Add your settings logic here
-        console.log('Settings clicked');
-      });
-
-      // Profile button functionality
-      const profileButton = document.getElementById('profileButton');
-      profileButton.addEventListener('click', () => {
-        // Add your profile logic here
-        console.log('Profile clicked');
+        document.body.classList.toggle('dark');
       });
     </script>
   </body>
