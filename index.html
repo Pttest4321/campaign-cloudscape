@@ -141,6 +141,12 @@
 
         .mobile-menu {
           display: block;
+          transition: opacity 0.3s ease-in-out;
+        }
+
+        .mobile-menu.hidden-menu {
+          opacity: 0;
+          pointer-events: none;
         }
 
         .main-content {
@@ -354,12 +360,21 @@
       mobileMenuBtn?.addEventListener('click', () => {
         sidebar?.classList.toggle('active');
         overlay?.classList.toggle('active');
+        mobileMenuBtn?.classList.add('hidden-menu');
       });
 
       // Close sidebar when clicking overlay
       overlay?.addEventListener('click', () => {
         sidebar?.classList.remove('active');
         overlay?.classList.remove('active');
+        mobileMenuBtn?.classList.remove('hidden-menu');
+      });
+
+      // Close sidebar when clicking X button
+      document.querySelector('.sidebar button')?.addEventListener('click', () => {
+        sidebar?.classList.remove('active');
+        overlay?.classList.remove('active');
+        mobileMenuBtn?.classList.remove('hidden-menu');
       });
 
       // Close sidebar when clicking outside on mobile
@@ -371,6 +386,7 @@
             !target.closest('.dropdown-content')) {
           sidebar?.classList.remove('active');
           overlay?.classList.remove('active');
+          mobileMenuBtn?.classList.remove('hidden-menu');
         }
       });
 
