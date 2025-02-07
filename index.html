@@ -77,7 +77,7 @@
     </style>
   </head>
 
-  <body class="bg-gray-50 min-h-screen">
+  <body class="bg-gray-50 min-h-screen transition-colors duration-200">
     <div class="flex min-h-screen">
       <!-- Sidebar -->
       <aside class="w-64 bg-white shadow-lg fixed h-full">
@@ -163,9 +163,12 @@
             </div>
 
             <!-- Theme Toggle -->
-            <button class="p-2 text-gray-600 hover:text-gray-900" onclick="toggleTheme()">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button class="p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100" onclick="toggleTheme()">
+              <svg id="theme-toggle-dark-icon" class="hidden w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+              </svg>
+              <svg id="theme-toggle-light-icon" class="hidden w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
               </svg>
             </button>
 
@@ -233,9 +236,23 @@
       // Theme toggle functionality
       function toggleTheme() {
         const body = document.body;
-        body.classList.toggle('dark');
-        const isDark = body.classList.contains('dark');
+        const isDark = body.classList.toggle('dark');
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateThemeIcon(isDark);
+      }
+
+      // Update theme icon based on current theme
+      function updateThemeIcon(isDark) {
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+        
+        if (isDark) {
+          darkIcon.classList.add('hidden');
+          lightIcon.classList.remove('hidden');
+        } else {
+          lightIcon.classList.add('hidden');
+          darkIcon.classList.remove('hidden');
+        }
       }
 
       // Initialize theme from localStorage
@@ -243,6 +260,7 @@
       if (savedTheme === 'dark') {
         document.body.classList.add('dark');
       }
+      updateThemeIcon(document.body.classList.contains('dark'));
 
       // Add clear notifications function
       function clearNotifications() {
