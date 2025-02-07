@@ -10,12 +10,12 @@ export function ThemeToggle() {
       variant="outline"
       size="icon"
       onClick={toggleTheme}
-      className="rounded-full transition-colors duration-200"
+      className="rounded-full"
     >
       {theme === "dark" ? (
-        <Sun className="h-5 w-5 transition-transform duration-200" />
+        <Sun className="h-5 w-5" />
       ) : (
-        <Moon className="h-5 w-5 transition-transform duration-200" />
+        <Moon className="h-5 w-5" />
       )}
     </Button>
   );
