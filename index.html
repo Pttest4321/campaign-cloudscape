@@ -368,7 +368,7 @@
                 </div>
 
                 <!-- Theme Toggle -->
-                <button class="icon-button" onclick="toggleTheme()">
+                <button class="icon-button" id="themeToggle">
                   <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                   </svg>
@@ -486,7 +486,7 @@
 
       // Close dropdowns when clicking outside
       document.addEventListener('click', (event) => {
-        const target = event.target as HTMLElement;
+        const target = event.target;
         if (!target.closest('.navbar-actions')) {
           Object.values(dropdownButtons).forEach((dropdownId) => {
             document.getElementById(dropdownId)?.classList.add('hidden');
@@ -523,10 +523,15 @@
       }
       updateThemeIcon(document.body.classList.contains('dark'));
 
+      // Add theme toggle event listener
+      document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+
       // Add clear notifications function
       function clearNotifications() {
         const notificationsList = document.getElementById('notificationsList');
-        notificationsList.innerHTML = '<div class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">No new notifications</div>';
+        if (notificationsList) {
+          notificationsList.innerHTML = '<div class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">No new notifications</div>';
+        }
       }
     </script>
   </body>
