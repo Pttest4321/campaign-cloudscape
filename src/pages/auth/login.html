@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Campaign Manager</title>
+    <title>Login - Campaign Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/lucide-icons@0.309.0/dist/umd/lucide-icons.min.js" rel="stylesheet">
     <style>
@@ -49,42 +49,16 @@
             </div>
         </div>
 
-        <!-- Right Side - Registration Form -->
+        <!-- Right Side - Login Form -->
         <div class="lg:p-8">
             <div class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                 <div class="rounded-lg border bg-white p-6 shadow-sm dark:bg-gray-800 dark:border-gray-700">
                     <div class="space-y-2 text-center">
-                        <h1 class="text-2xl font-semibold tracking-tight dark:text-white">Create an Account</h1>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Enter your information to create your account</p>
+                        <h1 class="text-2xl font-semibold tracking-tight dark:text-white">Login</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Enter your credentials to access your account</p>
                     </div>
 
-                    <form id="registerForm" class="space-y-4 mt-4">
-                        <!-- Name Fields (side by side) -->
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label for="firstName" class="block text-sm font-medium text-gray-700 dark:text-gray-200">First Name</label>
-                                <input
-                                    type="text"
-                                    id="firstName"
-                                    name="firstName"
-                                    required
-                                    class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                                    placeholder="John"
-                                />
-                            </div>
-                            <div>
-                                <label for="lastName" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Last Name</label>
-                                <input
-                                    type="text"
-                                    id="lastName"
-                                    name="lastName"
-                                    required
-                                    class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                                    placeholder="Doe"
-                                />
-                            </div>
-                        </div>
-
+                    <form id="loginForm" class="space-y-4 mt-4">
                         <!-- Email Field -->
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Email</label>
@@ -114,11 +88,11 @@
                                     onclick="togglePassword('password')"
                                     class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                                 >
-                                    <svg id="eyeIcon-password" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                         <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
-                                    <svg id="eyeOffIcon-password" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
+                                    <svg id="eyeOffIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
                                         <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                                         <line x1="1" y1="1" x2="23" y2="23"></line>
                                     </svg>
@@ -126,66 +100,40 @@
                             </div>
                         </div>
 
-                        <!-- Confirm Password Field -->
-                        <div>
-                            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Confirm Password</label>
-                            <div class="relative">
-                                <input
-                                    type="password"
-                                    id="confirmPassword"
-                                    name="confirmPassword"
-                                    required
-                                    class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                                />
-                                <button
-                                    type="button"
-                                    onclick="togglePassword('confirmPassword')"
-                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                                >
-                                    <svg id="eyeIcon-confirmPassword" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                    <svg id="eyeOffIcon-confirmPassword" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
-                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                        <line x1="1" y1="1" x2="23" y2="23"></line>
-                                    </svg>
-                                </button>
-                            </div>
+                        <!-- Remember Me Checkbox -->
+                        <div class="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="remember"
+                                name="remember"
+                                class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                            />
+                            <label for="remember" class="text-sm text-gray-700 dark:text-gray-200">
+                                Remember me
+                            </label>
                         </div>
 
                         <button
                             type="submit"
                             class="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-800"
                         >
-                            Create Account
+                            Login
                         </button>
 
-                        <p class="text-center text-sm text-gray-500 dark:text-gray-400">
-                            Already have an account?
-                            <a href="/auth/login" class="font-medium text-blue-600 hover:underline dark:text-blue-400">
-                                Login
+                        <div class="text-center text-sm text-gray-500 dark:text-gray-400">
+                            <a href="/auth/forgot-password" class="font-medium text-blue-600 hover:underline dark:text-blue-400">
+                                Forgot password?
                             </a>
-                        </p>
+                            <p class="mt-2">
+                                Don't have an account?
+                                <a href="/auth/register" class="font-medium text-blue-600 hover:underline dark:text-blue-400">
+                                    Sign up
+                                </a>
+                            </p>
+                        </div>
                     </form>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Email Verification Modal -->
-    <div id="verificationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg max-w-md w-full mx-4">
-            <h2 class="text-2xl font-bold mb-4 dark:text-white">Verify Your Email</h2>
-            <p class="text-gray-600 dark:text-gray-300 mb-6">
-                Please check your email to verify your account. We've sent you a verification link.
-            </p>
-            <button
-                onclick="closeVerificationModal()"
-                class="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-800"
-            >
-                Close
-            </button>
         </div>
     </div>
 
@@ -206,45 +154,18 @@
             }
         }
 
-        function showVerificationModal() {
-            const modal = document.getElementById('verificationModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeVerificationModal() {
-            const modal = document.getElementById('verificationModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        document.getElementById('registerForm').addEventListener('submit', function(event) {
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (password !== confirmPassword) {
-                alert('Passwords do not match!');
-                return;
-            }
-            
-            // Here you would typically make an API call to register the user
-            console.log('Form submitted:', {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
+            const formData = {
                 email: document.getElementById('email').value,
-                password: password
-            });
+                password: document.getElementById('password').value,
+                remember: document.getElementById('remember').checked
+            };
             
-            // Show verification modal
-            showVerificationModal();
+            console.log('Form submitted:', formData);
+            // TODO: Implement actual login logic
         });
-
-        // Check for dark mode preference
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-        }
     </script>
 </body>
 </html>
