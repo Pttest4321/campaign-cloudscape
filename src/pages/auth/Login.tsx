@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -30,14 +32,14 @@ export default function Login() {
 
   return (
     <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+      <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
             alt="Login background"
             className="object-cover w-full h-full"
           />
-          <div className="absolute inset-0 bg-zinc-900/70" />
+          <div className="absolute inset-0 bg-zinc-900/70 dark:bg-zinc-900/80" />
         </div>
         <div className="relative z-20 flex items-center text-lg font-medium">
           <svg
@@ -62,9 +64,12 @@ export default function Login() {
           </blockquote>
         </div>
       </div>
-      <div className="lg:p-8">
+      <div className="relative lg:p-8">
+        <div className="absolute right-4 top-4 md:right-8 md:top-8">
+          <ThemeToggle />
+        </div>
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <Card>
+          <Card className="border-0 shadow-none sm:border sm:shadow-sm dark:bg-gray-900/50 dark:backdrop-blur-lg dark:border-gray-700/30">
             <CardHeader>
               <CardTitle>Login</CardTitle>
               <CardDescription>Enter your credentials to access your account</CardDescription>
@@ -80,6 +85,7 @@ export default function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    className="dark:bg-gray-900/50"
                   />
                 </div>
                 <div className="space-y-2">
@@ -90,6 +96,7 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    className="dark:bg-gray-900/50"
                   />
                 </div>
               </CardContent>
