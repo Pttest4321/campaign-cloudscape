@@ -18,6 +18,17 @@ import { TablesInsert } from "@/integrations/supabase/types";
 import { SplitUrlInput } from "@/components/campaign/SplitUrlInput";
 import { CampaignSettingsForm } from "@/components/campaign/CampaignSettingsForm";
 import { CampaignLogicType, SplitUrl } from "@/types/campaign";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { campaignSchema, CampaignFormData } from "@/schemas/campaign";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 export default function NewCampaign() {
   const { toast } = useToast();
@@ -26,6 +37,18 @@ export default function NewCampaign() {
   const [isBlockIntegration, setIsBlockIntegration] = useState(false);
   const [selectedLogic, setSelectedLogic] = useState<CampaignLogicType>('default');
   const [splitUrls, setSplitUrls] = useState<SplitUrl[]>([{ url: '', percentage: 100 }]);
+
+  const form = useForm<CampaignFormData>({
+    resolver: zodResolver(campaignSchema),
+    defaultValues: {
+      name: "",
+      country: "",
+      language: "",
+      target_url: "",
+      bot_url: "",
+      team: "",
+    },
+  });
 
   const handleAddSplitUrl = () => {
     if (splitUrls.length >= 10) return;
@@ -86,10 +109,7 @@ export default function NewCampaign() {
     setSplitUrls(newUrls);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    
+  const onSubmit = async (data: CampaignFormData) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
@@ -97,11 +117,11 @@ export default function NewCampaign() {
 
       const campaignData: TablesInsert<'campaigns'> = {
         user_id: user.id,
-        name: formData.get('name') as string,
-        country: formData.get('country') as string,
-        language: formData.get('language') as string,
-        website_url: selectedLogic === 'split' ? null : formData.get('target_url') as string,
-        offer_url: formData.get('bot_url') as string,
+        name: data.name,
+        country: data.country,
+        language: data.language,
+        website_url: selectedLogic === 'split' ? null : data.target_url,
+        offer_url: data.bot_url,
         status: 'active',
         split_urls: selectedLogic === 'split' ? splitUrls : []
       };
@@ -133,102 +153,131 @@ export default function NewCampaign() {
         <h1 className="text-2xl font-semibold">Settings for campaign</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
-        <CampaignSettingsForm
-          isReverseIntegration={isReverseIntegration}
-          setIsReverseIntegration={setIsReverseIntegration}
-          isBlockIntegration={isBlockIntegration}
-          setIsBlockIntegration={setIsBlockIntegration}
-        />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <CampaignSettingsForm
+            isReverseIntegration={isReverseIntegration}
+            setIsReverseIntegration={setIsReverseIntegration}
+            isBlockIntegration={isBlockIntegration}
+            setIsBlockIntegration={setIsBlockIntegration}
+          />
 
-        <div className="space-y-2">
-          <div className="grid grid-cols-3 gap-2">
-            <Button
-              type="button"
-              variant={selectedLogic === 'default' ? 'default' : 'outline'}
-              onClick={() => setSelectedLogic('default')}
-              className="w-full"
-            >
-              Default Logic
-            </Button>
-            <Button
-              type="button"
-              variant={selectedLogic === 'split' ? 'default' : 'outline'}
-              onClick={() => setSelectedLogic('split')}
-              className="w-full"
-            >
-              Split logic
-            </Button>
-            <Button
-              type="button"
-              variant={selectedLogic === 'multi' ? 'default' : 'outline'}
-              onClick={() => setSelectedLogic('multi')}
-              className="w-full"
-            >
-              Split multi logic
+          <div className="space-y-2">
+            <div className="grid grid-cols-3 gap-2">
+              <Button
+                type="button"
+                variant={selectedLogic === 'default' ? 'default' : 'outline'}
+                onClick={() => setSelectedLogic('default')}
+                className="w-full"
+              >
+                Default Logic
+              </Button>
+              <Button
+                type="button"
+                variant={selectedLogic === 'split' ? 'default' : 'outline'}
+                onClick={() => setSelectedLogic('split')}
+                className="w-full"
+              >
+                Split logic
+              </Button>
+              <Button
+                type="button"
+                variant={selectedLogic === 'multi' ? 'default' : 'outline'}
+                onClick={() => setSelectedLogic('multi')}
+                className="w-full"
+              >
+                Split multi logic
+              </Button>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <FormField
+              control={form.control}
+              name="target_url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-2">
+                    <Link className="h-4 w-4" />
+                    {selectedLogic === 'split' ? 'Split URLs' : 'Link to the target page'}
+                  </FormLabel>
+                  {selectedLogic === 'split' ? (
+                    <SplitUrlInput
+                      splitUrls={splitUrls}
+                      onSplitUrlChange={handleSplitUrlChange}
+                      onSplitPercentageChange={handleSplitPercentageChange}
+                      onAddSplitUrl={handleAddSplitUrl}
+                      onDeleteSplitUrl={handleDeleteSplitUrl}
+                    />
+                  ) : (
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="url"
+                        placeholder="Enter target URL (e.g. https://offer.com/)"
+                      />
+                    </FormControl>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <FormField
+              control={form.control}
+              name="bot_url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-2">
+                    <Link className="h-4 w-4" />
+                    Link for bots
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="redirect.php" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <FormField
+              control={form.control}
+              name="team"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    Team Users
+                  </FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select team members" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="team1">Team 1</SelectItem>
+                      <SelectItem value="team2">Team 2</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="flex gap-4">
+            <Button type="submit">Save</Button>
+            <Button type="button" variant="outline" onClick={() => navigate('/campaigns')}>
+              Cancel
             </Button>
           </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="target_url" className="flex items-center gap-2">
-            <Link className="h-4 w-4" />
-            {selectedLogic === 'split' ? 'Split URLs' : 'Link to the target page'}
-          </Label>
-          {selectedLogic === 'split' ? (
-            <SplitUrlInput
-              splitUrls={splitUrls}
-              onSplitUrlChange={handleSplitUrlChange}
-              onSplitPercentageChange={handleSplitPercentageChange}
-              onAddSplitUrl={handleAddSplitUrl}
-              onDeleteSplitUrl={handleDeleteSplitUrl}
-            />
-          ) : (
-            <Input
-              id="target_url"
-              name="target_url"
-              type="url"
-              placeholder="Enter target URL (e.g. https://offer.com/)"
-              pattern="https?://.+"
-            />
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="bot_url" className="flex items-center gap-2">
-            <Link className="h-4 w-4" />
-            Link for bots
-          </Label>
-          <Input
-            id="bot_url"
-            name="bot_url"
-            placeholder="redirect.php"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="team" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            Team Users
-          </Label>
-          <Select name="team">
-            <SelectTrigger>
-              <SelectValue placeholder="Select team members" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="team1">Team 1</SelectItem>
-              <SelectItem value="team2">Team 2</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex gap-4">
-          <Button type="submit">Save</Button>
-          <Button type="button" variant="outline" onClick={() => navigate('/campaigns')}>
-            Cancel
-          </Button>
-        </div>
-      </form>
+        </form>
+      </Form>
     </div>
   );
 }
