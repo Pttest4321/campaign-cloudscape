@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,6 +13,7 @@ import Profile from "./pages/Profile";
 import TeamUsers from "./pages/TeamUsers";
 import Error404 from "./pages/errors/Error404";
 import Error403 from "./pages/errors/Error403";
+import Error401 from "./pages/errors/Error401";
 import Error500 from "./pages/errors/Error500";
 import ErrorBoundary from "./pages/errors/ErrorBoundary";
 import Login from "./pages/auth/Login";
@@ -33,6 +35,7 @@ const App = () => (
             <Route path="/auth/register" element={<Register />} />
             <Route path="/auth/forgot-password" element={<ForgotPassword />} />
             <Route path="/auth/reset-password" element={<ResetPassword />} />
+            <Route path="/401" element={<Error401 />} />
             <Route path="/403" element={<Error403 />} />
             <Route path="/500" element={<Error500 />} />
             <Route element={<AppLayout />}>
