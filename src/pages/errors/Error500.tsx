@@ -4,19 +4,21 @@ import { Link } from "react-router-dom";
 
 const Error500 = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center space-y-6 max-w-md mx-auto p-6 glass-card glass-card-dark fade-in">
-        <div className="flex justify-center">
+    <main className="min-h-screen flex items-center justify-center bg-background">
+      <article className="text-center space-y-6 max-w-md mx-auto p-6 glass-card glass-card-dark fade-in">
+        <header className="flex justify-center">
           <div className="p-4 rounded-full bg-destructive/10">
-            <ServerCrash className="h-12 w-12 text-destructive" />
+            <ServerCrash className="h-12 w-12 text-destructive" aria-hidden="true" />
           </div>
-        </div>
-        <h1 className="text-4xl font-bold text-foreground">500</h1>
-        <h2 className="text-2xl font-semibold text-foreground">Server Error</h2>
-        <p className="text-muted-foreground">
-          Something went wrong on our servers. We're working to fix it.
-        </p>
-        <div className="flex justify-center gap-4">
+        </header>
+        <section>
+          <h1 className="text-4xl font-bold text-foreground">500</h1>
+          <h2 className="text-2xl font-semibold text-foreground">Server Error</h2>
+          <p className="text-muted-foreground">
+            Something went wrong on our servers. We're working to fix it.
+          </p>
+        </section>
+        <footer className="flex justify-center gap-4">
           <Button asChild variant="default">
             <Link to="/">Go Home</Link>
           </Button>
@@ -27,9 +29,9 @@ const Error500 = () => {
           >
             Go Back
           </Button>
-        </div>
-      </div>
-    </div>
+        </footer>
+      </article>
+    </main>
   );
 };
 

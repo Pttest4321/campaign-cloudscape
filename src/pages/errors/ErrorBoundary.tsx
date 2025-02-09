@@ -28,20 +28,22 @@ class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-background">
-          <div className="text-center space-y-6 max-w-md mx-auto p-6 glass-card glass-card-dark fade-in">
-            <div className="flex justify-center">
+        <main className="min-h-screen flex items-center justify-center bg-background">
+          <article className="text-center space-y-6 max-w-md mx-auto p-6 glass-card glass-card-dark fade-in">
+            <header className="flex justify-center">
               <div className="p-4 rounded-full bg-destructive/10">
-                <AlertTriangle className="h-12 w-12 text-destructive" />
+                <AlertTriangle className="h-12 w-12 text-destructive" aria-hidden="true" />
               </div>
-            </div>
-            <h1 className="text-2xl font-semibold text-foreground">
-              Something Went Wrong
-            </h1>
-            <p className="text-muted-foreground">
-              An unexpected error has occurred. Our team has been notified.
-            </p>
-            <div className="flex justify-center gap-4">
+            </header>
+            <section>
+              <h1 className="text-2xl font-semibold text-foreground">
+                Something Went Wrong
+              </h1>
+              <p className="text-muted-foreground">
+                An unexpected error has occurred. Our team has been notified.
+              </p>
+            </section>
+            <footer className="flex justify-center gap-4">
               <Button asChild variant="default">
                 <Link to="/">Go Home</Link>
               </Button>
@@ -52,9 +54,9 @@ class ErrorBoundary extends Component<Props, State> {
               >
                 Try Again
               </Button>
-            </div>
-          </div>
-        </div>
+            </footer>
+          </article>
+        </main>
       );
     }
 
