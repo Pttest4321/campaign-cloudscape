@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +11,11 @@
         .glass-effect {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
+        }
+        .error {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
         }
     </style>
 </head>
@@ -70,6 +76,7 @@
                                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                                 placeholder="name@example.com"
                             />
+                            <div id="emailError" class="error hidden"></div>
                         </div>
 
                         <!-- Password Field -->
@@ -98,6 +105,7 @@
                                     </svg>
                                 </button>
                             </div>
+                            <div id="passwordError" class="error hidden"></div>
                         </div>
 
                         <!-- Remember Me Checkbox -->
@@ -140,8 +148,8 @@
     <script>
         function togglePassword(inputId) {
             const passwordInput = document.getElementById(inputId);
-            const eyeIcon = document.getElementById(`eyeIcon-${inputId}`);
-            const eyeOffIcon = document.getElementById(`eyeOffIcon-${inputId}`);
+            const eyeIcon = document.getElementById('eyeIcon');
+            const eyeOffIcon = document.getElementById('eyeOffIcon');
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
@@ -154,17 +162,47 @@
             }
         }
 
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
+            let isValid = true;
             
-            const formData = {
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value,
-                remember: document.getElementById('remember').checked
-            };
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
             
-            console.log('Form submitted:', formData);
-            // TODO: Implement actual login logic
+            // Email validation
+            const emailError = document.getElementById('emailError');
+            if (!validateEmail(email)) {
+                emailError.textContent = 'Please enter a valid email address';
+                emailError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                emailError.classList.add('hidden');
+            }
+
+            // Password validation
+            const passwordError = document.getElementById('passwordError');
+            if (!validatePassword(password)) {
+                passwordError.textContent = 'Password must be at least 8 characters';
+                passwordError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                passwordError.classList.add('hidden');
+            }
+
+            if (isValid) {
+                console.log('Form submitted:', { email, password, remember });
+                // TODO: Implement actual login logic
+            }
         });
     </script>
 </body>
