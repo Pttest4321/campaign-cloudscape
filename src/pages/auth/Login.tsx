@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -149,7 +150,7 @@ export default function Login() {
                     control={form.control}
                     name="rememberMe"
                     render={({ field }) => (
-                      <FormItem className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2">
                         <FormControl>
                           <Checkbox
                             checked={field.value}
@@ -159,7 +160,7 @@ export default function Login() {
                         <Label htmlFor="remember" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                           Remember me
                         </Label>
-                      </FormItem>
+                      </div>
                     )}
                   />
                 </CardContent>
