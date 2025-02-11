@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaigns</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 0.5rem;
+        }
+
+        .glass-card-dark {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .grid-cols-4 {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen p-4">
+    <div class="space-y-6 fade-in max-w-7xl mx-auto">
+        <div class="flex justify-between items-center">
+            <h1 class="text-3xl font-bold">Campaigns</h1>
+            <a href="/campaigns/new" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                New Campaign
+            </a>
+        </div>
+
+        <div class="glass-card glass-card-dark p-6">
+            <div class="flex justify-end mb-4">
+                <select class="px-4 py-2 rounded-md border bg-white dark:bg-gray-800" onchange="changeItemsPerPage(this.value)">
+                    <option value="4">4 results per page</option>
+                    <option value="8" selected>8 results per page</option>
+                    <option value="12">12 results per page</option>
+                    <option value="16">16 results per page</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6" id="campaigns-grid">
+                <!-- Campaign cards will be inserted here by JavaScript -->
+            </div>
+
+            <nav class="flex justify-center" aria-label="Pagination">
+                <div class="flex items-center gap-1" id="pagination">
+                    <!-- Pagination will be inserted here by JavaScript -->
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <script>
+        const mockCampaigns = Array.from({ length: 20 }, (_, i) => ({
+            id: i + 1,
+            name: `Campaign ${i + 1}`,
+            country: "United States",
+            language: "English",
+            status: i % 2 === 0 ? "Active" : "Inactive",
+            uniqueIds: Array.from({ length: 5 }, (_, j) => `ID-${i}-${j}`),
+        }));
+
+        let currentPage = 1;
+        let itemsPerPage = 8;
+
+        function renderCampaigns() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentCampaigns = mockCampaigns.slice(startIndex, endIndex);
+            
+            const grid = document.getElementById('campaigns-grid');
+            grid.innerHTML = currentCampaigns.map(campaign => `
+                <div class="p-4 rounded-lg border bg-white dark:bg-gray-800 shadow-sm">
+                    <h3 class="font-semibold mb-2">${campaign.name}</h3>
+                    <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                        <p>${campaign.country}</p>
+                        <p>${campaign.language}</p>
+                        <p class="${campaign.status === "Active" ? "text-green-500" : "text-red-500"}">
+                            ${campaign.status}
+                        </p>
+                        <div class="flex gap-2 mt-2">
+                            <button onclick="downloadIds(${campaign.id})" class="p-2 rounded-md border hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                </svg>
+                            </button>
+                            <button onclick="viewIds(${campaign.id})" class="p-2 rounded-md border hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                            </button>
+                            <a href="/campaigns/${campaign.id}/edit" class="p-2 rounded-md border hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(mockCampaigns.length / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            let paginationHTML = `
+                <button 
+                    onclick="changePage(${currentPage - 1})"
+                    class="px-4 py-2 gap-1 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} flex items-center"
+                    ${currentPage === 1 ? 'disabled' : ''}
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Previous
+                </button>
+            `;
+
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHTML += `
+                    <button 
+                        onclick="changePage(${i})"
+                        class="h-9 w-9 rounded-md flex items-center justify-center ${currentPage === i ? 'border-2 border-blue-600' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}"
+                    >
+                        ${i}
+                    </button>
+                `;
+            }
+
+            paginationHTML += `
+                <button 
+                    onclick="changePage(${currentPage + 1})"
+                    class="px-4 py-2 gap-1 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} flex items-center"
+                    ${currentPage === totalPages ? 'disabled' : ''}
+                >
+                    Next
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            `;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function changePage(page) {
+            const totalPages = Math.ceil(mockCampaigns.length / itemsPerPage);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                renderCampaigns();
+            }
+        }
+
+        function changeItemsPerPage(value) {
+            itemsPerPage = parseInt(value);
+            currentPage = 1;
+            renderCampaigns();
+        }
+
+        function downloadIds(campaignId) {
+            const campaign = mockCampaigns.find(c => c.id === campaignId);
+            if (!campaign) return;
+
+            const content = campaign.uniqueIds.join('\n');
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${campaign.name}-unique-ids.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function viewIds(campaignId) {
+            const campaign = mockCampaigns.find(c => c.id === campaignId);
+            if (!campaign) return;
+            
+            alert(`Unique IDs for ${campaign.name}:\n\n${campaign.uniqueIds.join('\n')}`);
+        }
+
+        // Initial render
+        renderCampaigns();
+    </script>
+</body>
+</html>
