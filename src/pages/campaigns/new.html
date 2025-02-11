@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Campaign</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/lucide-icons@0.309.0/dist/umd/lucide-icons.min.js" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: ["class"],
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))"
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))"
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-foreground">
+    <div class="max-w-4xl mx-auto p-6 space-y-6 fade-in">
+        <div>
+            <h1 class="text-2xl font-semibold">Settings for campaign</h1>
+        </div>
+
+        <form id="campaignForm" class="space-y-8">
+            <!-- Campaign Settings -->
+            <div class="grid gap-6">
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium">
+                        Campaign Name <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        required
+                        placeholder="Enter campaign name"
+                        class="w-full px-3 py-2 border rounded-md"
+                    >
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Country Selection -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium">
+                            <i data-lucide="target"></i>
+                            Target geolocation <span class="text-red-500">*</span>
+                        </label>
+                        <select 
+                            name="country" 
+                            required
+                            class="w-full px-3 py-2 border rounded-md"
+                        >
+                            <option value="">Select country</option>
+                            <option value="all">All Countries</option>
+                            <option value="us">United States</option>
+                            <option value="uk">United Kingdom</option>
+                            <option value="ca">Canada</option>
+                        </select>
+                    </div>
+
+                    <!-- Language Selection -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium">
+                            <i data-lucide="globe"></i>
+                            Language (optional)
+                        </label>
+                        <select 
+                            name="language"
+                            class="w-full px-3 py-2 border rounded-md"
+                        >
+                            <option value="">Select language</option>
+                            <option value="en">English</option>
+                            <option value="es">Spanish</option>
+                            <option value="fr">French</option>
+                        </select>
+                    </div>
+
+                    <!-- Tag Selection -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium">Tag Select</label>
+                        <select class="w-full px-3 py-2 border rounded-md">
+                            <option value="">Select tag</option>
+                            <option value="tag1">Tag 1</option>
+                            <option value="tag2">Tag 2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Integration Options -->
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="flex items-center justify-between">
+                        <label class="text-sm font-medium">Reverse Integration</label>
+                        <input type="checkbox" name="reverseIntegration" class="h-4 w-4">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <label class="text-sm font-medium">Block Integration</label>
+                        <input type="checkbox" name="blockIntegration" class="h-4 w-4">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <label class="text-sm font-medium">Passing labels</label>
+                        <input type="checkbox" name="passingLabels" class="h-4 w-4">
+                    </div>
+                </div>
+            </div>
+
+            <!-- URL Settings -->
+            <div id="urlContainer" class="space-y-4">
+                <div class="flex gap-4 items-center">
+                    <div class="flex-1">
+                        <input 
+                            type="url" 
+                            name="targetUrl" 
+                            placeholder="Enter target URL"
+                            pattern="https?://.+"
+                            class="w-full px-3 py-2 border rounded-md"
+                        >
+                    </div>
+                    <div class="w-24">
+                        <input 
+                            type="number" 
+                            name="percentage" 
+                            value="100"
+                            min="0" 
+                            max="100"
+                            class="w-full px-3 py-2 border rounded-md"
+                        >
+                    </div>
+                    <div class="w-8 text-sm">%</div>
+                </div>
+            </div>
+
+            <!-- Bot URL -->
+            <div class="space-y-2">
+                <label class="block text-sm font-medium">
+                    <i data-lucide="link"></i>
+                    Link for bots
+                </label>
+                <input 
+                    type="text" 
+                    name="botUrl" 
+                    placeholder="redirect.php"
+                    class="w-full px-3 py-2 border rounded-md"
+                >
+            </div>
+
+            <!-- Team Selection -->
+            <div class="space-y-2">
+                <label class="block text-sm font-medium">
+                    <i data-lucide="users"></i>
+                    Team Users
+                </label>
+                <select 
+                    name="team"
+                    class="w-full px-3 py-2 border rounded-md"
+                >
+                    <option value="">Select team members</option>
+                    <option value="team1">Team 1</option>
+                    <option value="team2">Team 2</option>
+                </select>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex gap-4">
+                <button 
+                    type="submit"
+                    class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+                >
+                    Save
+                </button>
+                <button 
+                    type="button"
+                    onclick="window.location.href='/campaigns'"
+                    class="px-4 py-2 border bg-background text-foreground rounded-md hover:bg-accent"
+                >
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Form submission handler
+        document.getElementById('campaignForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {
+                name: formData.get('name'),
+                country: formData.get('country'),
+                language: formData.get('language'),
+                reverseIntegration: formData.get('reverseIntegration') === 'on',
+                blockIntegration: formData.get('blockIntegration') === 'on',
+                passingLabels: formData.get('passingLabels') === 'on',
+                targetUrl: formData.get('targetUrl'),
+                botUrl: formData.get('botUrl'),
+                team: formData.get('team')
+            };
+
+            try {
+                const response = await fetch('/api/campaigns', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to create campaign');
+                }
+
+                // Show success message
+                alert('Campaign created successfully');
+                window.location.href = '/campaigns';
+            } catch (error) {
+                // Show error message
+                alert('Error creating campaign: ' + error.message);
+            }
+        });
+
+        // Split URL handling
+        let splitUrls = [{ url: '', percentage: 100 }];
+        
+        function updateSplitUrls() {
+            const container = document.getElementById('urlContainer');
+            container.innerHTML = splitUrls.map((url, index) => `
+                <div class="flex gap-4 items-center">
+                    <div class="flex-1">
+                        <input 
+                            type="url" 
+                            name="targetUrl${index}" 
+                            value="${url.url}"
+                            placeholder="Enter target URL"
+                            pattern="https?://.+"
+                            class="w-full px-3 py-2 border rounded-md"
+                            onchange="handleSplitUrlChange(${index}, this.value)"
+                        >
+                    </div>
+                    <div class="w-24">
+                        <input 
+                            type="number" 
+                            name="percentage${index}" 
+                            value="${url.percentage}"
+                            min="0" 
+                            max="100"
+                            class="w-full px-3 py-2 border rounded-md"
+                            onchange="handleSplitPercentageChange(${index}, this.value)"
+                        >
+                    </div>
+                    <div class="w-8 text-sm">%</div>
+                    ${index !== 0 ? `
+                        <button 
+                            type="button"
+                            onclick="handleDeleteSplitUrl(${index})"
+                            class="p-2 border rounded-md hover:bg-accent"
+                        >
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    ` : ''}
+                    ${index === splitUrls.length - 1 ? `
+                        <button 
+                            type="button"
+                            onclick="handleAddSplitUrl()"
+                            class="p-2 border rounded-md hover:bg-accent"
+                        >
+                            <i data-lucide="plus"></i>
+                        </button>
+                    ` : ''}
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        function handleSplitUrlChange(index, value) {
+            splitUrls[index].url = value;
+        }
+
+        function handleSplitPercentageChange(index, value) {
+            const percentage = Math.min(100, Math.max(0, parseInt(value) || 0));
+            splitUrls[index].percentage = percentage;
+            
+            const total = splitUrls.reduce((sum, url, i) => 
+                i === index ? sum : sum + url.percentage, 0
+            );
+            
+            if (total + percentage > 100) {
+                const factor = (100 - percentage) / total;
+                splitUrls.forEach((url, i) => {
+                    if (i !== index) {
+                        url.percentage = Math.floor(url.percentage * factor);
+                    }
+                });
+            }
+            
+            updateSplitUrls();
+        }
+
+        function handleAddSplitUrl() {
+            if (splitUrls.length >= 10) return;
+            
+            const newPercentage = Math.floor(100 / (splitUrls.length + 1));
+            splitUrls = splitUrls.map(url => ({
+                ...url,
+                percentage: newPercentage
+            }));
+            
+            splitUrls.push({ url: '', percentage: newPercentage });
+            
+            const totalPercentage = splitUrls.reduce((sum, url) => sum + url.percentage, 0);
+            if (totalPercentage < 100) {
+                splitUrls[splitUrls.length - 1].percentage += (100 - totalPercentage);
+            }
+            
+            updateSplitUrls();
+        }
+
+        function handleDeleteSplitUrl(index) {
+            if (splitUrls.length <= 1) return;
+            
+            splitUrls = splitUrls.filter((_, i) => i !== index);
+            const evenPercentage = Math.floor(100 / splitUrls.length);
+            
+            splitUrls = splitUrls.map((url, i) => ({
+                ...url,
+                percentage: i === splitUrls.length - 1 
+                    ? 100 - (evenPercentage * (splitUrls.length - 1))
+                    : evenPercentage
+            }));
+            
+            updateSplitUrls();
+        }
+    </script>
+</body>
+</html>
