@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.date-fns.org/date-fns.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/lucide-icons/dist/umd/lucide.min.css" rel="stylesheet">
+</head>
+<body class="bg-background text-foreground">
+    <div class="space-y-6 p-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl md:text-3xl font-bold">Statistics</h1>
+        </div>
+
+        <!-- Filters -->
+        <div class="grid gap-6">
+            <div class="flex flex-col gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Campaign Select -->
+                    <div class="flex-1">
+                        <label class="text-sm font-medium mb-1 block">Campaign Name</label>
+                        <select id="campaignSelect" class="w-full rounded-md border border-input bg-background px-3 py-2">
+                            <option value="">Select Campaign</option>
+                            <option value="campaign1">Campaign 1</option>
+                            <option value="campaign2">Campaign 2</option>
+                        </select>
+                    </div>
+
+                    <!-- Date Range -->
+                    <div class="flex-1">
+                        <label class="text-sm font-medium mb-1 block">Period</label>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="date" id="startDate" class="rounded-md border border-input bg-background px-3 py-2">
+                            <span class="hidden sm:block">—</span>
+                            <input type="date" id="endDate" class="rounded-md border border-input bg-background px-3 py-2">
+                        </div>
+                    </div>
+
+                    <!-- Apply Button -->
+                    <button id="applyButton" class="bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md self-end">
+                        Apply
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <div class="p-6 rounded-lg border bg-card">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-medium">Total</h3>
+                            <p id="totalClicks" class="text-2xl font-bold">76 clicks</p>
+                            <p id="totalUsers" class="text-sm text-muted-foreground">75 users</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 rounded-lg border bg-card">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-medium">Target</h3>
+                            <p id="targetClicks" class="text-2xl font-bold">1 clicks</p>
+                            <p id="targetUsers" class="text-sm text-muted-foreground">1 users</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 rounded-lg border bg-card">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-medium">Block</h3>
+                            <p id="blockClicks" class="text-2xl font-bold">75 clicks</p>
+                            <p id="blockUsers" class="text-sm text-muted-foreground">74 users</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div id="lineChart" class="md:col-span-2 h-[300px] p-4 sm:p-6 rounded-lg border bg-card"></div>
+                <div id="pieChart" class="h-[300px] p-4 sm:p-6 rounded-lg border bg-card"></div>
+            </div>
+
+            <!-- Advanced Filters -->
+            <div class="rounded-lg border bg-card">
+                <div class="p-4 flex items-center justify-between border-b">
+                    <h3 class="text-base sm:text-lg font-medium">Filter traffic by the necessary parameters</h3>
+                    <button id="toggleFilters" class="p-2">
+                        <i data-lucide="chevron-down"></i>
+                    </button>
+                </div>
+
+                <div id="advancedFilters" class="p-4 hidden">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        <!-- Country -->
+                        <select id="countryFilter" class="rounded-md border border-input bg-background px-3 py-2">
+                            <option value="">Country</option>
+                            <option value="us">United States</option>
+                            <option value="cn">China</option>
+                            <option value="uk">United Kingdom</option>
+                        </select>
+
+                        <!-- Language -->
+                        <select id="languageFilter" class="rounded-md border border-input bg-background px-3 py-2">
+                            <option value="">Language</option>
+                            <option value="en">English</option>
+                            <option value="zh">Chinese</option>
+                            <option value="es">Spanish</option>
+                        </select>
+
+                        <!-- Browser -->
+                        <select id="browserFilter" class="rounded-md border border-input bg-background px-3 py-2">
+                            <option value="">Browser</option>
+                            <option value="chrome">Chrome</option>
+                            <option value="firefox">Firefox</option>
+                            <option value="safari">Safari</option>
+                        </select>
+
+                        <!-- Platform -->
+                        <select id="platformFilter" class="rounded-md border border-input bg-background px-3 py-2">
+                            <option value="">Platform</option>
+                            <option value="windows">Windows</option>
+                            <option value="mac">macOS</option>
+                            <option value="ios">iOS</option>
+                            <option value="android">Android</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="rounded-lg border bg-card overflow-hidden">
+                <div class="p-4 border-b">
+                    <h3 class="text-base sm:text-lg font-medium">Traffic Data</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="px-4 py-3 text-left min-w-[150px]">Time</th>
+                                <th class="px-4 py-3 text-left min-w-[100px]">Answer</th>
+                                <th class="px-4 py-3 text-left min-w-[100px]">Split Group</th>
+                                <th class="px-4 py-3 text-left min-w-[100px]">Conversion</th>
+                                <th class="px-4 py-3 text-left min-w-[120px]">IP Address</th>
+                                <th class="px-4 py-3 text-left min-w-[100px]">Country</th>
+                                <th class="px-4 py-3 text-left min-w-[100px]">Language</th>
+                                <th class="px-4 py-3 text-left min-w-[100px]">Browser</th>
+                                <th class="px-4 py-3 text-left min-w-[100px]">Version</th>
+                                <th class="px-4 py-3 text-left min-w-[100px]">Platform</th>
+                                <th class="px-4 py-3 text-left min-w-[100px]">Usage Type</th>
+                                <th class="px-4 py-3 text-left min-w-[150px]">Domain</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trafficData"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase client
+        const SUPABASE_URL = "https://upipcvzcphqidobkhqyc.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwaXBjdnpjcGhxaWRvYmtocXljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg2MTAyNjgsImV4cCI6MjA1NDE4NjI2OH0.Sl2XMQPI0cYqXCEaAu1HzC2rVmcC0wp9TIkRZN46ElQ";
+        const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Chart Data
+        const lineData = [
+            { date: "27/01", clicks: 15, users: 2 },
+            { date: "28/01", clicks: 18, users: 3 },
+            { date: "29/01", clicks: 12, users: 2 },
+            { date: "30/01", clicks: 21, users: 4 },
+            { date: "31/01", clicks: 15, users: 3 },
+            { date: "01/02", clicks: 8, users: 1 },
+            { date: "02/02", clicks: 5, users: 1 },
+        ];
+
+        const pieData = [
+            { name: "Desktop", value: 45, color: "#2563eb" },
+            { name: "Mobile", value: 31, color: "#4ade80" },
+        ];
+
+        // Initialize charts
+        function initializeCharts() {
+            // Line Chart
+            const lineChart = Recharts.LineChart({
+                width: document.getElementById('lineChart').offsetWidth,
+                height: 300,
+                data: lineData
+            });
+
+            // Pie Chart
+            const pieChart = Recharts.PieChart({
+                width: document.getElementById('pieChart').offsetWidth,
+                height: 300,
+                data: pieData
+            });
+
+            // Render charts
+            document.getElementById('lineChart').appendChild(lineChart);
+            document.getElementById('pieChart').appendChild(pieChart);
+        }
+
+        // Toggle advanced filters
+        document.getElementById('toggleFilters').addEventListener('click', () => {
+            const filtersDiv = document.getElementById('advancedFilters');
+            const isHidden = filtersDiv.classList.contains('hidden');
+            filtersDiv.classList.toggle('hidden', !isHidden);
+            
+            const icon = document.querySelector('[data-lucide="chevron-down"]');
+            icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+        });
+
+        // Apply filters
+        document.getElementById('applyButton').addEventListener('click', async () => {
+            const campaign = document.getElementById('campaignSelect').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (!campaign) {
+                alert('Please select a campaign');
+                return;
+            }
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates');
+                return;
+            }
+
+            if (new Date(startDate) > new Date(endDate)) {
+                alert('Start date must be before end date');
+                return;
+            }
+
+            // Collect filter values
+            const filters = {
+                country: document.getElementById('countryFilter').value,
+                language: document.getElementById('languageFilter').value,
+                browser: document.getElementById('browserFilter').value,
+                platform: document.getElementById('platformFilter').value
+            };
+
+            try {
+                // Fetch data from Supabase
+                const { data, error } = await supabase
+                    .from('campaign_statistics')
+                    .select('*')
+                    .eq('campaign_id', campaign)
+                    .gte('created_at', startDate)
+                    .lte('created_at', endDate);
+
+                if (error) throw error;
+
+                // Update table
+                updateTable(data);
+                // Update charts
+                updateCharts(data);
+                // Update stats cards
+                updateStats(data);
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                alert('Error fetching data. Please try again.');
+            }
+        });
+
+        // Update table with data
+        function updateTable(data) {
+            const tbody = document.getElementById('trafficData');
+            tbody.innerHTML = '';
+
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b';
+                tr.innerHTML = `
+                    <td class="px-4 py-3">${row.created_at}</td>
+                    <td class="px-4 py-3">${row.answer || '-'}</td>
+                    <td class="px-4 py-3">${row.split_group || '-'}</td>
+                    <td class="px-4 py-3">${row.conversion || '-'}</td>
+                    <td class="px-4 py-3">${row.ip_address}</td>
+                    <td class="px-4 py-3">${row.country}</td>
+                    <td class="px-4 py-3">${row.language}</td>
+                    <td class="px-4 py-3">${row.browser}</td>
+                    <td class="px-4 py-3">${row.version || '-'}</td>
+                    <td class="px-4 py-3">${row.platform}</td>
+                    <td class="px-4 py-3">${row.usage_type || '-'}</td>
+                    <td class="px-4 py-3">${row.domain || '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Update charts with new data
+        function updateCharts(data) {
+            // Process data for charts
+            const processedData = processDataForCharts(data);
+            
+            // Update line chart
+            document.getElementById('lineChart').innerHTML = '';
+            const lineChart = Recharts.LineChart({
+                width: document.getElementById('lineChart').offsetWidth,
+                height: 300,
+                data: processedData.lineData
+            });
+            document.getElementById('lineChart').appendChild(lineChart);
+
+            // Update pie chart
+            document.getElementById('pieChart').innerHTML = '';
+            const pieChart = Recharts.PieChart({
+                width: document.getElementById('pieChart').offsetWidth,
+                height: 300,
+                data: processedData.pieData
+            });
+            document.getElementById('pieChart').appendChild(pieChart);
+        }
+
+        // Process data for charts
+        function processDataForCharts(data) {
+            // Process data for line chart
+            const lineData = data.reduce((acc, curr) => {
+                const date = new Date(curr.created_at).toLocaleDateString();
+                const existing = acc.find(item => item.date === date);
+                if (existing) {
+                    existing.clicks += curr.clicks || 0;
+                    existing.users += curr.users || 0;
+                } else {
+                    acc.push({
+                        date,
+                        clicks: curr.clicks || 0,
+                        users: curr.users || 0
+                    });
+                }
+                return acc;
+            }, []);
+
+            // Process data for pie chart
+            const deviceCounts = data.reduce((acc, curr) => {
+                const device = curr.device_type || 'Unknown';
+                acc[device] = (acc[device] || 0) + 1;
+                return acc;
+            }, {});
+
+            const pieData = Object.entries(deviceCounts).map(([name, value]) => ({
+                name,
+                value,
+                color: name === 'Desktop' ? '#2563eb' : '#4ade80'
+            }));
+
+            return { lineData, pieData };
+        }
+
+        // Update stats cards
+        function updateStats(data) {
+            const total = data.reduce((acc, curr) => ({
+                clicks: acc.clicks + (curr.clicks || 0),
+                users: acc.users + (curr.users || 0)
+            }), { clicks: 0, users: 0 });
+
+            document.getElementById('totalClicks').textContent = `${total.clicks} clicks`;
+            document.getElementById('totalUsers').textContent = `${total.users} users`;
+
+            // Update other stats cards similarly
+            // ... Implementation for target and block stats
+        }
+
+        // Initialize charts on load
+        window.addEventListener('load', initializeCharts);
+
+        // Handle window resize for responsive charts
+        window.addEventListener('resize', () => {
+            // Debounce the resize event
+            clearTimeout(window.resizeTimer);
+            window.resizeTimer = setTimeout(() => {
+                initializeCharts();
+            }, 250);
+        });
+    </script>
+</body>
+</html>
