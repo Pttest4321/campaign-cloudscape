@@ -249,8 +249,156 @@ export default function Statistics() {
           </div>
         </div>
 
+        {/* Advanced Filters */}
+        <div className="rounded-lg border bg-card">
+          <div className="p-4 flex items-center justify-between border-b">
+            <h3 className="text-base sm:text-lg font-medium">Filter traffic by the necessary parameters</h3>
+            <Button variant="ghost" size="icon" onClick={() => setIsFiltersOpen(!isFiltersOpen)}>
+              {isFiltersOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </Button>
+          </div>
+
+          {isFiltersOpen && (
+            <div className="p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <Label>Country</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="us">United States</SelectItem>
+                      <SelectItem value="uk">United Kingdom</SelectItem>
+                      <SelectItem value="ca">Canada</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Language</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="es">Spanish</SelectItem>
+                      <SelectItem value="fr">French</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Answer</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select answer" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">Yes</SelectItem>
+                      <SelectItem value="0">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Split Group</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select group" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="a">Group A</SelectItem>
+                      <SelectItem value="b">Group B</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Browser</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select browser" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="chrome">Chrome</SelectItem>
+                      <SelectItem value="firefox">Firefox</SelectItem>
+                      <SelectItem value="safari">Safari</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Platform</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select platform" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="windows">Windows</SelectItem>
+                      <SelectItem value="mac">macOS</SelectItem>
+                      <SelectItem value="ios">iOS</SelectItem>
+                      <SelectItem value="android">Android</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Usage Type</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="residential">Residential</SelectItem>
+                      <SelectItem value="commercial">Commercial</SelectItem>
+                      <SelectItem value="hosting">Hosting</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>IP Address</Label>
+                  <Input placeholder="Enter IP address" />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Version</Label>
+                  <Input placeholder="Enter version" />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Domain</Label>
+                  <Input placeholder="Enter domain" />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>GCID</Label>
+                  <Switch />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Conversions</Label>
+                  <Button variant="secondary" className="w-full">
+                    Download
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 mt-4">
+                <Button variant="outline" onClick={handleReset}>
+                  Reset
+                </Button>
+                <Button onClick={handleApply}>
+                  Apply
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* Stats Cards and Charts */}
-        {/* Stats Cards and Charts - Reorganized Layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Left Column - Stats Cards */}
           <div className="space-y-4">
