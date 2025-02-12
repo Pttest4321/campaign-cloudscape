@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Eye, EyeOff } from "lucide-react";
 
 interface AddTeamUserDialogProps {
   open: boolean;
@@ -21,16 +23,31 @@ export function AddTeamUserDialog({ open, onOpenChange }: AddTeamUserDialogProps
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    login: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
     telegram: "",
-    campaign_limit: "0",
+    campaign_limit: "",
+    editing_allowed: false,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
+    if (formData.password !== formData.confirmPassword) {
+      toast({
+        title: "Error",
+        description: "Passwords do not match",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -38,8 +55,11 @@ export function AddTeamUserDialog({ open, onOpenChange }: AddTeamUserDialogProps
       if (!user) throw new Error("No user logged in");
 
       const { error } = await supabase.from("team_users").insert({
-        ...formData,
-        campaign_limit: parseInt(formData.campaign_limit),
+        name: formData.name,
+        email: formData.email,
+        telegram: formData.telegram,
+        campaign_limit: parseInt(formData.campaign_limit) || 0,
+        editing_allowed: formData.editing_allowed,
         user_id: user.id,
       });
 
@@ -54,9 +74,12 @@ export function AddTeamUserDialog({ open, onOpenChange }: AddTeamUserDialogProps
       onOpenChange(false);
       setFormData({
         name: "",
-        login: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
         telegram: "",
-        campaign_limit: "0",
+        campaign_limit: "",
+        editing_allowed: false,
       });
     } catch (error) {
       console.error("Error adding team member:", error);
@@ -78,7 +101,9 @@ export function AddTeamUserDialog({ open, onOpenChange }: AddTeamUserDialogProps
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
+            <Label htmlFor="name" className="text-sm">
+              <span className="text-red-500">*</span> Name:
+            </Label>
             <Input
               id="name"
               value={formData.name}
@@ -89,28 +114,86 @@ export function AddTeamUserDialog({ open, onOpenChange }: AddTeamUserDialogProps
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="login">Login</Label>
+            <Label htmlFor="email" className="text-sm">
+              <span className="text-red-500">*</span> E-Mail:
+            </Label>
             <Input
-              id="login"
-              value={formData.login}
+              id="email"
+              type="email"
+              value={formData.email}
               onChange={(e) =>
-                setFormData({ ...formData, login: e.target.value })
+                setFormData({ ...formData, email: e.target.value })
               }
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="telegram">Telegram</Label>
+            <Label htmlFor="password" className="text-sm">
+              <span className="text-red-500">*</span> Password:
+            </Label>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                required
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword" className="text-sm">
+              <span className="text-red-500">*</span> Confirm Password:
+            </Label>
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                value={formData.confirmPassword}
+                onChange={(e) =>
+                  setFormData({ ...formData, confirmPassword: e.target.value })
+                }
+                required
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="telegram" className="text-sm">
+              <span className="text-red-500">*</span> Telegram:
+            </Label>
             <Input
               id="telegram"
               value={formData.telegram}
               onChange={(e) =>
                 setFormData({ ...formData, telegram: e.target.value })
               }
+              required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="campaign_limit">Campaign Limit</Label>
+            <Label htmlFor="campaign_limit" className="text-sm">
+              <span className="text-red-500">*</span> Campaign limit:
+            </Label>
             <Input
               id="campaign_limit"
               type="number"
@@ -122,7 +205,19 @@ export function AddTeamUserDialog({ open, onOpenChange }: AddTeamUserDialogProps
               required
             />
           </div>
-          <div className="flex justify-end gap-2">
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="editing_allowed"
+              checked={formData.editing_allowed}
+              onCheckedChange={(checked) =>
+                setFormData({ ...formData, editing_allowed: checked as boolean })
+              }
+            />
+            <Label htmlFor="editing_allowed" className="text-sm">
+              Editing allowed
+            </Label>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
             <Button
               type="button"
               variant="outline"
@@ -130,8 +225,8 @@ export function AddTeamUserDialog({ open, onOpenChange }: AddTeamUserDialogProps
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Adding..." : "Add Member"}
+            <Button type="submit" disabled={isLoading} className="bg-blue-100 hover:bg-blue-200 text-black">
+              Create
             </Button>
           </div>
         </form>

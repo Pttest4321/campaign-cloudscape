@@ -18,9 +18,49 @@ export default function TeamUsers() {
   const { toast } = useToast();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
+  // Add example team users if none exist
+  const addExampleUsers = async () => {
+    const exampleUsers = [
+      {
+        name: "John Smith",
+        email: "john@example.com",
+        telegram: "@johnsmith",
+        campaign_limit: 5,
+        editing_allowed: true,
+        user_id: "example-1",
+      },
+      {
+        name: "Sarah Johnson",
+        email: "sarah@example.com",
+        telegram: "@sarahj",
+        campaign_limit: 3,
+        editing_allowed: false,
+        user_id: "example-2",
+      },
+    ];
+
+    try {
+      const { data: existingUsers } = await supabase
+        .from("team_users")
+        .select("*");
+
+      if (!existingUsers || existingUsers.length === 0) {
+        const { error } = await supabase
+          .from("team_users")
+          .insert(exampleUsers);
+
+        if (error) throw error;
+      }
+    } catch (error) {
+      console.error("Error adding example users:", error);
+    }
+  };
+
   const { data: teamUsers, isLoading } = useQuery({
     queryKey: ["team-users"],
     queryFn: async () => {
+      await addExampleUsers();
+
       const { data, error } = await supabase
         .from("team_users")
         .select("*")
@@ -63,21 +103,21 @@ export default function TeamUsers() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Login</TableHead>
+              <TableHead>Email</TableHead>
               <TableHead>Telegram</TableHead>
               <TableHead className="text-center">Campaign Limit</TableHead>
-              <TableHead className="text-center">Available</TableHead>
+              <TableHead className="text-center">Editing Allowed</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {teamUsers?.map((user) => (
               <TableRow key={user.id}>
                 <TableCell className="font-medium">{user.name}</TableCell>
-                <TableCell>{user.login}</TableCell>
+                <TableCell>{user.email}</TableCell>
                 <TableCell>{user.telegram || "-"}</TableCell>
                 <TableCell className="text-center">{user.campaign_limit}</TableCell>
                 <TableCell className="text-center">
-                  {user.available ? (
+                  {user.editing_allowed ? (
                     <Check className="h-4 w-4 text-green-500 mx-auto" />
                   ) : (
                     <X className="h-4 w-4 text-red-500 mx-auto" />
