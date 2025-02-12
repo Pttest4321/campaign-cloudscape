@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -14,10 +13,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SplitUrlInput } from "@/components/campaign/SplitUrlInput";
 import { CampaignSettingsForm } from "@/components/campaign/CampaignSettingsForm";
-import { CampaignLogicType, SplitUrl } from "@/types/campaign";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { campaignSchema, CampaignFormData } from "@/schemas/campaign";
+import { campaignSchema } from "@/schemas/campaign";
 import {
   Form,
   FormControl,
@@ -109,9 +107,7 @@ export default function NewCampaign() {
   const onSubmit = async (data: CampaignFormData) => {
     try {
       const userId = localStorage.getItem('userId');
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
+      if (!userId) throw new Error("User not authenticated");
 
       const campaignData = {
         id: crypto.randomUUID(),
