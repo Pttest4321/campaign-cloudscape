@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -16,10 +15,6 @@ import Error403 from "./pages/errors/Error403";
 import Error401 from "./pages/errors/Error401";
 import Error500 from "./pages/errors/Error500";
 import ErrorBoundary from "./pages/errors/ErrorBoundary";
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import ForgotPassword from "./pages/auth/ForgotPassword";
-import ResetPassword from "./pages/auth/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -31,10 +26,6 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/auth/login" element={<Login />} />
-            <Route path="/auth/register" element={<Register />} />
-            <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-            <Route path="/auth/reset-password" element={<ResetPassword />} />
             <Route path="/401" element={<Error401 />} />
             <Route path="/403" element={<Error403 />} />
             <Route path="/500" element={<Error500 />} />
