@@ -32,7 +32,6 @@
                     </div>
 
                     <!-- Date Range -->
-
                     <div class="flex-1">
                         <label class="text-sm font-medium mb-1 block">Period</label>
                         <div class="flex flex-col sm:flex-row gap-2 w-full">
@@ -99,8 +98,8 @@
 
             <!-- Charts -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div id="lineChart" class="md:col-span-2 h-[300px] p-4 sm:p-6 rounded-lg border bg-card"></div>
-                <div id="pieChart" class="h-[300px] p-4 sm:p-6 rounded-lg border bg-card"></div>
+                <div id="lineChart" class="md:col-span-2 h-[400px] p-4 sm:p-6 rounded-lg border bg-card"></div>
+                <div id="pieChart" class="h-[400px] p-4 sm:p-6 rounded-lg border bg-card"></div>
             </div>
 
             <!-- Advanced Filters -->
@@ -205,22 +204,68 @@
         // Initialize charts
         function initializeCharts() {
             // Line Chart
-            const lineChart = Recharts.LineChart({
+            const lineChart = new Recharts.LineChart({
                 width: document.getElementById('lineChart').offsetWidth,
-                height: 300,
-                data: lineData
+                height: 400,
+                data: lineData,
+                margin: { top: 20, right: 30, left: 20, bottom: 5 }
             });
+
+            const lineChartContainer = document.getElementById('lineChart');
+            lineChartContainer.innerHTML = '';
+            
+            const CartesianGrid = new Recharts.CartesianGrid({ strokeDasharray: "3 3" });
+            const XAxis = new Recharts.XAxis({ dataKey: "date" });
+            const YAxis = new Recharts.YAxis();
+            const Tooltip = new Recharts.Tooltip();
+            
+            const clicksLine = new Recharts.Line({
+                type: "monotone",
+                dataKey: "clicks",
+                stroke: "#2563eb",
+                strokeWidth: 2
+            });
+
+            const usersLine = new Recharts.Line({
+                type: "monotone",
+                dataKey: "users",
+                stroke: "#4ade80",
+                strokeWidth: 2
+            });
+
+            lineChart.append(CartesianGrid);
+            lineChart.append(XAxis);
+            lineChart.append(YAxis);
+            lineChart.append(Tooltip);
+            lineChart.append(clicksLine);
+            lineChart.append(usersLine);
+
+            lineChartContainer.appendChild(lineChart);
 
             // Pie Chart
-            const pieChart = Recharts.PieChart({
+            const pieChart = new Recharts.PieChart({
                 width: document.getElementById('pieChart').offsetWidth,
-                height: 300,
-                data: pieData
+                height: 400,
+                data: pieData,
+                margin: { top: 20, right: 30, left: 20, bottom: 5 }
             });
 
-            // Render charts
-            document.getElementById('lineChart').appendChild(lineChart);
-            document.getElementById('pieChart').appendChild(pieChart);
+            const pieChartContainer = document.getElementById('pieChart');
+            pieChartContainer.innerHTML = '';
+
+            const pie = new Recharts.Pie({
+                data: pieData,
+                dataKey: "value",
+                nameKey: "name",
+                cx: "50%",
+                cy: "50%",
+                innerRadius: 60,
+                outerRadius: 80,
+                fill: "#8884d8"
+            });
+
+            pieChart.append(pie);
+            pieChartContainer.appendChild(pieChart);
         }
 
         // Toggle advanced filters
@@ -296,7 +341,15 @@
                 tr.className = 'border-b';
                 tr.innerHTML = `
                     <td class="px-4 py-3">${row.created_at}</td>
-                    <td class="px-4 py-3">${row.answer || '-'}</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${
+                            row.answer === "1" 
+                                ? "bg-green-100 text-green-800" 
+                                : "bg-red-100 text-red-800"
+                        }">
+                            ${row.answer || '0'}
+                        </span>
+                    </td>
                     <td class="px-4 py-3">${row.split_group || '-'}</td>
                     <td class="px-4 py-3">${row.conversion || '-'}</td>
                     <td class="px-4 py-3">${row.ip_address}</td>
@@ -317,23 +370,16 @@
             // Process data for charts
             const processedData = processDataForCharts(data);
             
-            // Update line chart
-            document.getElementById('lineChart').innerHTML = '';
-            const lineChart = Recharts.LineChart({
-                width: document.getElementById('lineChart').offsetWidth,
-                height: 300,
-                data: processedData.lineData
-            });
-            document.getElementById('lineChart').appendChild(lineChart);
-
-            // Update pie chart
-            document.getElementById('pieChart').innerHTML = '';
-            const pieChart = Recharts.PieChart({
-                width: document.getElementById('pieChart').offsetWidth,
-                height: 300,
-                data: processedData.pieData
-            });
-            document.getElementById('pieChart').appendChild(pieChart);
+            // Update line chart data
+            lineData.length = 0;
+            lineData.push(...processedData.lineData);
+            
+            // Update pie chart data
+            pieData.length = 0;
+            pieData.push(...processedData.pieData);
+            
+            // Reinitialize charts with new data
+            initializeCharts();
         }
 
         // Process data for charts
@@ -381,8 +427,21 @@
             document.getElementById('totalClicks').textContent = `${total.clicks} clicks`;
             document.getElementById('totalUsers').textContent = `${total.users} users`;
 
-            // Update other stats cards similarly
-            // ... Implementation for target and block stats
+            // Calculate target and block stats
+            const targetStats = data.reduce((acc, curr) => ({
+                clicks: acc.clicks + (curr.answer === "1" ? 1 : 0),
+                users: acc.users + (curr.answer === "1" ? 1 : 0)
+            }), { clicks: 0, users: 0 });
+
+            const blockStats = data.reduce((acc, curr) => ({
+                clicks: acc.clicks + (curr.answer === "0" ? 1 : 0),
+                users: acc.users + (curr.answer === "0" ? 1 : 0)
+            }), { clicks: 0, users: 0 });
+
+            document.getElementById('targetClicks').textContent = `${targetStats.clicks} clicks`;
+            document.getElementById('targetUsers').textContent = `${targetStats.users} users`;
+            document.getElementById('blockClicks').textContent = `${blockStats.clicks} clicks`;
+            document.getElementById('blockUsers').textContent = `${blockStats.users} users`;
         }
 
         // Initialize charts on load
@@ -399,4 +458,3 @@
     </script>
 </body>
 </html>
-
