@@ -5,141 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Statistics</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.date-fns.org/date-fns.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/lucide-icons/dist/umd/lucide.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+    <script src="https://cdn.date-fns.org/date-fns.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-background text-foreground">
-    <div class="space-y-6 p-6">
+<body class="bg-background min-h-screen">
+    <div class="container mx-auto px-4 py-8">
         <!-- Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between mb-8">
             <h1 class="text-2xl md:text-3xl font-bold">Statistics</h1>
         </div>
 
-        <!-- Filters -->
-        <div class="grid gap-6">
-            <div class="flex flex-col gap-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Campaign Select -->
-                    <div class="flex-1">
-                        <label class="text-sm font-medium mb-1 block">Campaign Name</label>
-                        <select id="campaignSelect" class="w-full rounded-md border border-input bg-background px-3 py-2">
-                            <option value="">Select Campaign</option>
-                            <option value="campaign1">Campaign 1</option>
-                            <option value="campaign2">Campaign 2</option>
-                        </select>
-                    </div>
-
-                    <!-- Date Range -->
-                    <div class="flex-1">
-                        <label class="text-sm font-medium mb-1 block">Period</label>
-                        <div class="flex flex-col sm:flex-row gap-2 w-full">
-                            <div class="relative w-full">
-                                <input type="date" id="startDate" class="w-full rounded-md border border-input bg-background pl-10 pr-3 py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
-                                    <line x1="16" x2="16" y1="2" y2="6"></line>
-                                    <line x1="8" x2="8" y1="2" y2="6"></line>
-                                    <line x1="3" x2="21" y1="10" y2="10"></line>
-                                </svg>
-                            </div>
-                            <span class="hidden sm:flex items-center">—</span>
-                            <div class="relative w-full">
-                                <input type="date" id="endDate" class="w-full rounded-md border border-input bg-background pl-10 pr-3 py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
-                                    <line x1="16" x2="16" y1="2" y2="6"></line>
-                                    <line x1="8" x2="8" y1="2" y2="6"></line>
-                                    <line x1="3" x2="21" y1="10" y2="10"></line>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button id="applyButton" class="bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md self-end">
-                        Apply
-                    </button>
+        <!-- Main Filters -->
+        <div class="grid gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Campaign Select -->
+                <div>
+                    <label class="text-sm font-medium mb-1 block">Campaign Name</label>
+                    <select id="campaignSelect" class="w-full rounded-lg border bg-white px-3 py-2">
+                        <option value="">Select Campaign</option>
+                        <option value="campaign1">Campaign 1</option>
+                        <option value="campaign2">Campaign 2</option>
+                    </select>
                 </div>
+
+                <!-- Date Range -->
+                <div>
+                    <label class="text-sm font-medium mb-1 block">Period</label>
+                    <div class="flex gap-2">
+                        <input type="date" id="startDate" class="flex-1 rounded-lg border bg-white px-3 py-2">
+                        <span class="flex items-center">—</span>
+                        <input type="date" id="endDate" class="flex-1 rounded-lg border bg-white px-3 py-2">
+                    </div>
+                </div>
+
+                <!-- Apply Button -->
+                <button id="applyButton" class="h-10 px-4 py-2 bg-primary text-white rounded-lg self-end hover:bg-primary/90">
+                    Apply
+                </button>
+            </div>
+        </div>
+
+        <!-- Advanced Filters -->
+        <div class="rounded-lg border bg-card mb-8">
+            <div class="p-4 flex items-center justify-between border-b">
+                <h3 class="text-lg font-medium">Filter traffic by the necessary parameters</h3>
+                <button id="toggleFilters" class="p-2">
+                    <i data-lucide="chevron-down"></i>
+                </button>
             </div>
 
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                <div class="p-6 rounded-lg border bg-card">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h3 class="text-lg font-medium">Total</h3>
-                            <p id="totalClicks" class="text-2xl font-bold">76 clicks</p>
-                            <p id="totalUsers" class="text-sm text-muted-foreground">75 users</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-6 rounded-lg border bg-card">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h3 class="text-lg font-medium">Target</h3>
-                            <p id="targetClicks" class="text-2xl font-bold">1 clicks</p>
-                            <p id="targetUsers" class="text-sm text-muted-foreground">1 users</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-6 rounded-lg border bg-card">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h3 class="text-lg font-medium">Block</h3>
-                            <p id="blockClicks" class="text-2xl font-bold">75 clicks</p>
-                            <p id="blockUsers" class="text-sm text-muted-foreground">74 users</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Charts -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div id="lineChart" class="md:col-span-2 h-[400px] p-4 sm:p-6 rounded-lg border bg-card"></div>
-                <div id="pieChart" class="h-[400px] p-4 sm:p-6 rounded-lg border bg-card"></div>
-            </div>
-
-            <!-- Advanced Filters -->
-            <div class="rounded-lg border bg-card">
-                <div class="p-4 flex items-center justify-between border-b">
-                    <h3 class="text-base sm:text-lg font-medium">Filter traffic by the necessary parameters</h3>
-                    <button id="toggleFilters" class="p-2">
-                        <i data-lucide="chevron-down"></i>
-                    </button>
-                </div>
-
-                <div id="advancedFilters" class="p-4 hidden">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                        <!-- Country -->
-                        <select id="countryFilter" class="rounded-md border border-input bg-background px-3 py-2">
-                            <option value="">Country</option>
+            <div id="advancedFilters" class="p-4 hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Filter Fields -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium">Country</label>
+                        <select class="w-full rounded-lg border bg-white px-3 py-2">
+                            <option value="">Select country</option>
                             <option value="us">United States</option>
-                            <option value="cn">China</option>
                             <option value="uk">United Kingdom</option>
+                            <option value="ca">Canada</option>
                         </select>
+                    </div>
 
-                        <!-- Language -->
-                        <select id="languageFilter" class="rounded-md border border-input bg-background px-3 py-2">
-                            <option value="">Language</option>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium">Language</label>
+                        <select class="w-full rounded-lg border bg-white px-3 py-2">
+                            <option value="">Select language</option>
                             <option value="en">English</option>
-                            <option value="zh">Chinese</option>
                             <option value="es">Spanish</option>
+                            <option value="fr">French</option>
                         </select>
+                    </div>
 
-                        <!-- Browser -->
-                        <select id="browserFilter" class="rounded-md border border-input bg-background px-3 py-2">
-                            <option value="">Browser</option>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium">Browser</label>
+                        <select class="w-full rounded-lg border bg-white px-3 py-2">
+                            <option value="">Select browser</option>
                             <option value="chrome">Chrome</option>
                             <option value="firefox">Firefox</option>
                             <option value="safari">Safari</option>
                         </select>
+                    </div>
 
-                        <!-- Platform -->
-                        <select id="platformFilter" class="rounded-md border border-input bg-background px-3 py-2">
-                            <option value="">Platform</option>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium">Platform</label>
+                        <select class="w-full rounded-lg border bg-white px-3 py-2">
+                            <option value="">Select platform</option>
                             <option value="windows">Windows</option>
                             <option value="mac">macOS</option>
                             <option value="ios">iOS</option>
@@ -147,313 +100,165 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="flex justify-end gap-2 mt-4">
+                    <button class="px-4 py-2 border rounded-lg hover:bg-gray-50">Reset</button>
+                    <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="p-6 rounded-lg border bg-card">
+                <h3 class="text-lg font-medium mb-2">Total</h3>
+                <p class="text-2xl font-bold">76 clicks</p>
+                <p class="text-sm text-muted-foreground">75 users</p>
             </div>
 
-            <!-- Data Table -->
-            <div class="rounded-lg border bg-card overflow-hidden">
-                <div class="p-4 border-b">
-                    <h3 class="text-base sm:text-lg font-medium">Traffic Data</h3>
+            <div class="p-6 rounded-lg border bg-card">
+                <h3 class="text-lg font-medium mb-2">Target</h3>
+                <p class="text-2xl font-bold">1 clicks</p>
+                <p class="text-sm text-muted-foreground">1 users</p>
+            </div>
+
+            <div class="p-6 rounded-lg border bg-card">
+                <h3 class="text-lg font-medium mb-2">Block</h3>
+                <p class="text-2xl font-bold">75 clicks</p>
+                <p class="text-sm text-muted-foreground">74 users</p>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div id="lineChart" class="h-[400px] p-6 rounded-lg border bg-card"></div>
+            <div id="pieChart" class="h-[400px] p-6 rounded-lg border bg-card"></div>
+        </div>
+
+        <!-- Traffic Data Table -->
+        <div class="rounded-lg border bg-card overflow-hidden">
+            <div class="p-4 border-b">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="trending-up" class="h-5 w-5"></i>
+                    <h3 class="text-lg font-medium">Traffic Data</h3>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b">
-                                <th class="px-4 py-3 text-left min-w-[150px]">Time</th>
-                                <th class="px-4 py-3 text-left min-w-[100px]">Answer</th>
-                                <th class="px-4 py-3 text-left min-w-[100px]">Split Group</th>
-                                <th class="px-4 py-3 text-left min-w-[100px]">Conversion</th>
-                                <th class="px-4 py-3 text-left min-w-[120px]">IP Address</th>
-                                <th class="px-4 py-3 text-left min-w-[100px]">Country</th>
-                                <th class="px-4 py-3 text-left min-w-[100px]">Language</th>
-                                <th class="px-4 py-3 text-left min-w-[100px]">Browser</th>
-                                <th class="px-4 py-3 text-left min-w-[100px]">Version</th>
-                                <th class="px-4 py-3 text-left min-w-[100px]">Platform</th>
-                                <th class="px-4 py-3 text-left min-w-[100px]">Usage Type</th>
-                                <th class="px-4 py-3 text-left min-w-[150px]">Domain</th>
-                            </tr>
-                        </thead>
-                        <tbody id="trafficData"></tbody>
-                    </table>
-                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="px-4 py-3 text-left">Time</th>
+                            <th class="px-4 py-3 text-left">Answer</th>
+                            <th class="px-4 py-3 text-left">Split Group</th>
+                            <th class="px-4 py-3 text-left">Conversion</th>
+                            <th class="px-4 py-3 text-left">IP Address</th>
+                            <th class="px-4 py-3 text-left">Country</th>
+                            <th class="px-4 py-3 text-left">Language</th>
+                            <th class="px-4 py-3 text-left">Browser</th>
+                            <th class="px-4 py-3 text-left">Version</th>
+                            <th class="px-4 py-3 text-left">Platform</th>
+                            <th class="px-4 py-3 text-left">Usage Type</th>
+                            <th class="px-4 py-3 text-left">Domain</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trafficData"></tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
-        // Initialize Supabase client
-        const SUPABASE_URL = "https://upipcvzcphqidobkhqyc.supabase.co";
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwaXBjdnpjcGhxaWRvYmtocXljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg2MTAyNjgsImV4cCI6MjA1NDE4NjI2OH0.Sl2XMQPI0cYqXCEaAu1HzC2rVmcC0wp9TIkRZN46ElQ";
-        const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // Chart Data
-        const lineData = [
-            { date: "27/01", clicks: 15, users: 2 },
-            { date: "28/01", clicks: 18, users: 3 },
-            { date: "29/01", clicks: 12, users: 2 },
-            { date: "30/01", clicks: 21, users: 4 },
-            { date: "31/01", clicks: 15, users: 3 },
-            { date: "01/02", clicks: 8, users: 1 },
-            { date: "02/02", clicks: 5, users: 1 },
-        ];
-
-        const pieData = [
-            { name: "Desktop", value: 45, color: "#2563eb" },
-            { name: "Mobile", value: 31, color: "#4ade80" },
-        ];
-
         // Initialize charts
-        function initializeCharts() {
-            // Line Chart
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle advanced filters
+            const toggleButton = document.getElementById('toggleFilters');
+            const filtersPanel = document.getElementById('advancedFilters');
+            
+            toggleButton.addEventListener('click', () => {
+                filtersPanel.classList.toggle('hidden');
+                const icon = toggleButton.querySelector('i');
+                icon.style.transform = filtersPanel.classList.contains('hidden') 
+                    ? 'rotate(0deg)' 
+                    : 'rotate(180deg)';
+            });
+
+            // Sample data for charts
+            const lineData = [
+                { date: '27/01', clicks: 15, users: 2 },
+                { date: '28/01', clicks: 18, users: 3 },
+                { date: '29/01', clicks: 12, users: 2 },
+                { date: '30/01', clicks: 21, users: 4 },
+                { date: '31/01', clicks: 15, users: 3 },
+                { date: '01/02', clicks: 8, users: 1 },
+                { date: '02/02', clicks: 5, users: 1 }
+            ];
+
+            const pieData = [
+                { name: 'Desktop', value: 45, color: '#2563eb' },
+                { name: 'Mobile', value: 31, color: '#4ade80' }
+            ];
+
+            // Initialize Recharts
             const lineChart = new Recharts.LineChart({
                 width: document.getElementById('lineChart').offsetWidth,
                 height: 400,
-                data: lineData,
-                margin: { top: 20, right: 30, left: 20, bottom: 5 }
+                data: lineData
             });
 
-            const lineChartContainer = document.getElementById('lineChart');
-            lineChartContainer.innerHTML = '';
-            
-            const CartesianGrid = new Recharts.CartesianGrid({ strokeDasharray: "3 3" });
-            const XAxis = new Recharts.XAxis({ dataKey: "date" });
-            const YAxis = new Recharts.YAxis();
-            const Tooltip = new Recharts.Tooltip();
-            
-            const clicksLine = new Recharts.Line({
-                type: "monotone",
-                dataKey: "clicks",
-                stroke: "#2563eb",
-                strokeWidth: 2
-            });
-
-            const usersLine = new Recharts.Line({
-                type: "monotone",
-                dataKey: "users",
-                stroke: "#4ade80",
-                strokeWidth: 2
-            });
-
-            lineChart.append(CartesianGrid);
-            lineChart.append(XAxis);
-            lineChart.append(YAxis);
-            lineChart.append(Tooltip);
-            lineChart.append(clicksLine);
-            lineChart.append(usersLine);
-
-            lineChartContainer.appendChild(lineChart);
-
-            // Pie Chart
             const pieChart = new Recharts.PieChart({
                 width: document.getElementById('pieChart').offsetWidth,
                 height: 400,
-                data: pieData,
-                margin: { top: 20, right: 30, left: 20, bottom: 5 }
+                data: pieData
             });
 
-            const pieChartContainer = document.getElementById('pieChart');
-            pieChartContainer.innerHTML = '';
+            // Sample table data
+            const tableData = [
+                {
+                    time: '2025-01-31 20:40:35',
+                    answer: '0',
+                    splitGroup: '-',
+                    conversion: '-',
+                    ipAddress: '186.110.203.108',
+                    country: 'CN',
+                    language: 'zh',
+                    browser: 'Safari',
+                    version: '13.0.3',
+                    platform: 'iOS',
+                    usageType: 'DCH',
+                    domain: 'ny4free.net'
+                }
+                // Add more sample data as needed
+            ];
 
-            const pie = new Recharts.Pie({
-                data: pieData,
-                dataKey: "value",
-                nameKey: "name",
-                cx: "50%",
-                cy: "50%",
-                innerRadius: 60,
-                outerRadius: 80,
-                fill: "#8884d8"
-            });
-
-            pieChart.append(pie);
-            pieChartContainer.appendChild(pieChart);
-        }
-
-        // Toggle advanced filters
-        document.getElementById('toggleFilters').addEventListener('click', () => {
-            const filtersDiv = document.getElementById('advancedFilters');
-            const isHidden = filtersDiv.classList.contains('hidden');
-            filtersDiv.classList.toggle('hidden', !isHidden);
-            
-            const icon = document.querySelector('[data-lucide="chevron-down"]');
-            icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
-        });
-
-        // Apply filters
-        document.getElementById('applyButton').addEventListener('click', async () => {
-            const campaign = document.getElementById('campaignSelect').value;
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-
-            if (!campaign) {
-                alert('Please select a campaign');
-                return;
-            }
-
-            if (!startDate || !endDate) {
-                alert('Please select both start and end dates');
-                return;
-            }
-
-            if (new Date(startDate) > new Date(endDate)) {
-                alert('Start date must be before end date');
-                return;
-            }
-
-            // Collect filter values
-            const filters = {
-                country: document.getElementById('countryFilter').value,
-                language: document.getElementById('languageFilter').value,
-                browser: document.getElementById('browserFilter').value,
-                platform: document.getElementById('platformFilter').value
-            };
-
-            try {
-                // Fetch data from Supabase
-                const { data, error } = await supabase
-                    .from('campaign_statistics')
-                    .select('*')
-                    .eq('campaign_id', campaign)
-                    .gte('created_at', startDate)
-                    .lte('created_at', endDate);
-
-                if (error) throw error;
-
-                // Update table
-                updateTable(data);
-                // Update charts
-                updateCharts(data);
-                // Update stats cards
-                updateStats(data);
-
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                alert('Error fetching data. Please try again.');
-            }
-        });
-
-        // Update table with data
-        function updateTable(data) {
+            // Populate table
             const tbody = document.getElementById('trafficData');
-            tbody.innerHTML = '';
-
-            data.forEach(row => {
+            tableData.forEach(row => {
                 const tr = document.createElement('tr');
                 tr.className = 'border-b';
                 tr.innerHTML = `
-                    <td class="px-4 py-3">${row.created_at}</td>
+                    <td class="px-4 py-3">${row.time}</td>
                     <td class="px-4 py-3">
                         <span class="px-2 py-1 rounded-full text-xs font-medium ${
-                            row.answer === "1" 
-                                ? "bg-green-100 text-green-800" 
-                                : "bg-red-100 text-red-800"
+                            row.answer === '1' 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'bg-red-100 text-red-800'
                         }">
-                            ${row.answer || '0'}
+                            ${row.answer}
                         </span>
                     </td>
-                    <td class="px-4 py-3">${row.split_group || '-'}</td>
-                    <td class="px-4 py-3">${row.conversion || '-'}</td>
-                    <td class="px-4 py-3">${row.ip_address}</td>
+                    <td class="px-4 py-3">${row.splitGroup}</td>
+                    <td class="px-4 py-3">${row.conversion}</td>
+                    <td class="px-4 py-3">${row.ipAddress}</td>
                     <td class="px-4 py-3">${row.country}</td>
                     <td class="px-4 py-3">${row.language}</td>
                     <td class="px-4 py-3">${row.browser}</td>
-                    <td class="px-4 py-3">${row.version || '-'}</td>
+                    <td class="px-4 py-3">${row.version}</td>
                     <td class="px-4 py-3">${row.platform}</td>
-                    <td class="px-4 py-3">${row.usage_type || '-'}</td>
-                    <td class="px-4 py-3">${row.domain || '-'}</td>
+                    <td class="px-4 py-3">${row.usageType}</td>
+                    <td class="px-4 py-3">${row.domain}</td>
                 `;
                 tbody.appendChild(tr);
             });
-        }
-
-        // Update charts with new data
-        function updateCharts(data) {
-            // Process data for charts
-            const processedData = processDataForCharts(data);
-            
-            // Update line chart data
-            lineData.length = 0;
-            lineData.push(...processedData.lineData);
-            
-            // Update pie chart data
-            pieData.length = 0;
-            pieData.push(...processedData.pieData);
-            
-            // Reinitialize charts with new data
-            initializeCharts();
-        }
-
-        // Process data for charts
-        function processDataForCharts(data) {
-            // Process data for line chart
-            const lineData = data.reduce((acc, curr) => {
-                const date = new Date(curr.created_at).toLocaleDateString();
-                const existing = acc.find(item => item.date === date);
-                if (existing) {
-                    existing.clicks += curr.clicks || 0;
-                    existing.users += curr.users || 0;
-                } else {
-                    acc.push({
-                        date,
-                        clicks: curr.clicks || 0,
-                        users: curr.users || 0
-                    });
-                }
-                return acc;
-            }, []);
-
-            // Process data for pie chart
-            const deviceCounts = data.reduce((acc, curr) => {
-                const device = curr.device_type || 'Unknown';
-                acc[device] = (acc[device] || 0) + 1;
-                return acc;
-            }, {});
-
-            const pieData = Object.entries(deviceCounts).map(([name, value]) => ({
-                name,
-                value,
-                color: name === 'Desktop' ? '#2563eb' : '#4ade80'
-            }));
-
-            return { lineData, pieData };
-        }
-
-        // Update stats cards
-        function updateStats(data) {
-            const total = data.reduce((acc, curr) => ({
-                clicks: acc.clicks + (curr.clicks || 0),
-                users: acc.users + (curr.users || 0)
-            }), { clicks: 0, users: 0 });
-
-            document.getElementById('totalClicks').textContent = `${total.clicks} clicks`;
-            document.getElementById('totalUsers').textContent = `${total.users} users`;
-
-            // Calculate target and block stats
-            const targetStats = data.reduce((acc, curr) => ({
-                clicks: acc.clicks + (curr.answer === "1" ? 1 : 0),
-                users: acc.users + (curr.answer === "1" ? 1 : 0)
-            }), { clicks: 0, users: 0 });
-
-            const blockStats = data.reduce((acc, curr) => ({
-                clicks: acc.clicks + (curr.answer === "0" ? 1 : 0),
-                users: acc.users + (curr.answer === "0" ? 1 : 0)
-            }), { clicks: 0, users: 0 });
-
-            document.getElementById('targetClicks').textContent = `${targetStats.clicks} clicks`;
-            document.getElementById('targetUsers').textContent = `${targetStats.users} users`;
-            document.getElementById('blockClicks').textContent = `${blockStats.clicks} clicks`;
-            document.getElementById('blockUsers').textContent = `${blockStats.users} users`;
-        }
-
-        // Initialize charts on load
-        window.addEventListener('load', initializeCharts);
-
-        // Handle window resize for responsive charts
-        window.addEventListener('resize', () => {
-            // Debounce the resize event
-            clearTimeout(window.resizeTimer);
-            window.resizeTimer = setTimeout(() => {
-                initializeCharts();
-            }, 250);
         });
     </script>
 </body>
