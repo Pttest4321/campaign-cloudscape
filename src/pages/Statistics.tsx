@@ -30,7 +30,7 @@ import {
 } from "recharts";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { CalendarIcon, ChevronDown, ChevronUp, Filter } from "lucide-react";
+import { CalendarIcon, ChevronDown, ChevronUp, Filter, TrendingUp } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
 import { Switch } from "@/components/ui/switch";
@@ -66,6 +66,34 @@ const tableData = [
     usageType: "DCH",
     domain: "ny4free.net",
   },
+  {
+    time: "2025-01-31 21:15:22",
+    answer: "1",
+    splitGroup: "A",
+    conversion: "+",
+    ipAddress: "192.168.1.105",
+    country: "US",
+    language: "en",
+    browser: "Chrome",
+    version: "120.0.0",
+    platform: "Windows",
+    usageType: "Residential",
+    domain: "example.com",
+  },
+  {
+    time: "2025-01-31 22:30:45",
+    answer: "0",
+    splitGroup: "B",
+    conversion: "-",
+    ipAddress: "172.16.0.100",
+    country: "UK",
+    language: "en",
+    browser: "Firefox",
+    version: "115.0",
+    platform: "macOS",
+    usageType: "Commercial",
+    domain: "test.org",
+  }
 ];
 
 export default function Statistics() {
@@ -221,267 +249,109 @@ export default function Statistics() {
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          <div className="p-6 rounded-lg border bg-card">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-lg font-medium">Total</h3>
-                <p className="text-2xl font-bold">76 clicks</p>
-                <p className="text-sm text-muted-foreground">75 users</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="p-6 rounded-lg border bg-card">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-lg font-medium">Target</h3>
-                <p className="text-2xl font-bold">1 clicks</p>
-                <p className="text-sm text-muted-foreground">1 users</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="p-6 rounded-lg border bg-card">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-lg font-medium">Block</h3>
-                <p className="text-2xl font-bold">75 clicks</p>
-                <p className="text-sm text-muted-foreground">74 users</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Charts */}
+        {/* Stats Cards and Charts - Reorganized Layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 h-[300px] p-4 sm:p-6 rounded-lg border bg-card">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={lineData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="clicks"
-                  stroke="#2563eb"
-                  strokeWidth={2}
-                  dot={false}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="users"
-                  stroke="#4ade80"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+          {/* Left Column - Stats Cards */}
+          <div className="space-y-4">
+            <div className="p-6 rounded-lg border bg-card">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-medium">Total</h3>
+                  <p className="text-2xl font-bold">76 clicks</p>
+                  <p className="text-sm text-muted-foreground">75 users</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-6 rounded-lg border bg-card">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-medium">Target</h3>
+                  <p className="text-2xl font-bold">1 clicks</p>
+                  <p className="text-sm text-muted-foreground">1 users</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-6 rounded-lg border bg-card">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-medium">Block</h3>
+                  <p className="text-2xl font-bold">75 clicks</p>
+                  <p className="text-sm text-muted-foreground">74 users</p>
+                </div>
+              </div>
+            </div>
           </div>
-          
-          <div className="h-[300px] p-4 sm:p-6 rounded-lg border bg-card">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  dataKey="value"
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <text
-                  x="50%"
-                  y="50%"
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                >
-                  <tspan x="50%" dy="-0.5em" className="text-lg font-bold">
-                    Total
-                  </tspan>
-                  <tspan x="50%" dy="1.5em" className="text-2xl font-bold">
-                    76
-                  </tspan>
-                </text>
-              </PieChart>
-            </ResponsiveContainer>
+
+          {/* Right Column - Charts */}
+          <div className="md:col-span-2 space-y-6">
+            <div className="h-[300px] p-4 sm:p-6 rounded-lg border bg-card">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={lineData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="clicks"
+                    stroke="#2563eb"
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="users"
+                    stroke="#4ade80"
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            
+            <div className="h-[300px] p-4 sm:p-6 rounded-lg border bg-card">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    dataKey="value"
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <text
+                    x="50%"
+                    y="50%"
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                  >
+                    <tspan x="50%" dy="-0.5em" className="text-lg font-bold">
+                      Total
+                    </tspan>
+                    <tspan x="50%" dy="1.5em" className="text-2xl font-bold">
+                      76
+                    </tspan>
+                  </text>
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
-
-        {/* Advanced Filters */}
-        <Collapsible
-          open={isFiltersOpen}
-          onOpenChange={setIsFiltersOpen}
-          className="w-full space-y-4"
-        >
-          <div className="p-4 sm:p-6 rounded-lg border bg-card">
-            <div className="flex items-center justify-between">
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2">
-                  <Filter className="h-5 w-5" />
-                  <h3 className="text-base sm:text-lg font-medium">Filter</h3>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Filter traffic by the necessary parameters
-                </p>
-              </div>
-              <CollapsibleTrigger asChild>
-                <Button variant="ghost" size="sm" className="w-9 p-0">
-                  {isFiltersOpen ? (
-                    <ChevronUp className="h-4 w-4" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4" />
-                  )}
-                </Button>
-              </CollapsibleTrigger>
-            </div>
-
-            <CollapsibleContent className="space-y-4 pt-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <Select
-                  value={filters.country}
-                  onValueChange={(value) => setFilters({ ...filters, country: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Country" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="us">United States</SelectItem>
-                    <SelectItem value="cn">China</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={filters.language}
-                  onValueChange={(value) => setFilters({ ...filters, language: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Language" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="en">English</SelectItem>
-                    <SelectItem value="zh">Chinese</SelectItem>
-                    <SelectItem value="es">Spanish</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={filters.answer}
-                  onValueChange={(value) => setFilters({ ...filters, answer: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Answer" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="yes">Yes</SelectItem>
-                    <SelectItem value="no">No</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={filters.splitGroup}
-                  onValueChange={(value) => setFilters({ ...filters, splitGroup: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Split Group" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="a">Group A</SelectItem>
-                    <SelectItem value="b">Group B</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={filters.browser}
-                  onValueChange={(value) => setFilters({ ...filters, browser: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Browser" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="chrome">Chrome</SelectItem>
-                    <SelectItem value="firefox">Firefox</SelectItem>
-                    <SelectItem value="safari">Safari</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={filters.platform}
-                  onValueChange={(value) => setFilters({ ...filters, platform: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Platform" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="windows">Windows</SelectItem>
-                    <SelectItem value="mac">macOS</SelectItem>
-                    <SelectItem value="ios">iOS</SelectItem>
-                    <SelectItem value="android">Android</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={filters.usageType}
-                  onValueChange={(value) => setFilters({ ...filters, usageType: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Usage Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="dch">DCH</SelectItem>
-                    <SelectItem value="residential">Residential</SelectItem>
-                    <SelectItem value="commercial">Commercial</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Input
-                  placeholder="IP Address"
-                  value={filters.ipAddress}
-                  onChange={(e) => setFilters({ ...filters, ipAddress: e.target.value })}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <Input
-                  placeholder="Version"
-                  value={filters.version}
-                  onChange={(e) => setFilters({ ...filters, version: e.target.value })}
-                />
-
-                <Input
-                  placeholder="Domain"
-                  value={filters.domain}
-                  onChange={(e) => setFilters({ ...filters, domain: e.target.value })}
-                />
-
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    checked={filters.gcid}
-                    onCheckedChange={(checked) => setFilters({ ...filters, gcid: checked })}
-                  />
-                  <span>GCID</span>
-                </div>
-
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" onClick={handleReset} className="flex-1 sm:flex-none">Reset</Button>
-                  <Button onClick={handleApply} className="flex-1 sm:flex-none">Apply</Button>
-                </div>
-              </div>
-            </CollapsibleContent>
-          </div>
-        </Collapsible>
 
         {/* Data Table */}
         <div className="rounded-lg border bg-card overflow-hidden">
           <div className="p-4 border-b">
-            <h3 className="text-base sm:text-lg font-medium">Traffic Data</h3>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
+              <h3 className="text-base sm:text-lg font-medium">Traffic Data</h3>
+            </div>
           </div>
           <div className="overflow-x-auto">
             <Table>
@@ -505,7 +375,15 @@ export default function Statistics() {
                 {tableData.map((row, index) => (
                   <TableRow key={index}>
                     <TableCell className="whitespace-nowrap">{row.time}</TableCell>
-                    <TableCell>{row.answer}</TableCell>
+                    <TableCell>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        row.answer === "1" 
+                          ? "bg-green-100 text-green-800" 
+                          : "bg-red-100 text-red-800"
+                      }`}>
+                        {row.answer}
+                      </span>
+                    </TableCell>
                     <TableCell>{row.splitGroup}</TableCell>
                     <TableCell>{row.conversion}</TableCell>
                     <TableCell>{row.ipAddress}</TableCell>
