@@ -16,6 +16,7 @@ import { CampaignSettingsForm } from "@/components/campaign/CampaignSettingsForm
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { campaignSchema } from "@/schemas/campaign";
+import { CampaignLogicType, SplitUrl, CampaignFormData } from "@/types/campaign";
 import {
   Form,
   FormControl,

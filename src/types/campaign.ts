@@ -1,8 +1,15 @@
-
 export type SplitUrl = {
-  [key: string]: string | number;
   url: string;
   percentage: number;
 }
 
 export type CampaignLogicType = 'default' | 'split' | 'multi';
+
+export interface CampaignFormData {
+  name: string;
+  country: string;
+  language?: string;
+  target_url?: string;
+  bot_url: string;
+  team?: string;
+}
