@@ -249,6 +249,7 @@ export default function Statistics() {
           </div>
         </div>
 
+        {/* Stats Cards and Charts */}
         {/* Stats Cards and Charts - Reorganized Layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Left Column - Stats Cards */}
