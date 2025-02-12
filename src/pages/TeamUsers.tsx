@@ -10,9 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { UserPlus, Check, X } from "lucide-react";
+import { UserPlus } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { AddTeamUserDialog } from "@/components/team/AddTeamUserDialog";
+import { format } from "date-fns";
 
 export default function TeamUsers() {
   const { toast } = useToast();
@@ -23,18 +24,18 @@ export default function TeamUsers() {
     const exampleUsers = [
       {
         name: "John Smith",
-        email: "john@example.com",
+        login: "john.smith",
         telegram: "@johnsmith",
         campaign_limit: 5,
-        editing_allowed: true,
+        available: true,
         user_id: "example-1",
       },
       {
         name: "Sarah Johnson",
-        email: "sarah@example.com",
+        login: "sarah.j",
         telegram: "@sarahj",
         campaign_limit: 3,
-        editing_allowed: false,
+        available: false,
         user_id: "example-2",
       },
     ];
@@ -103,28 +104,51 @@ export default function TeamUsers() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
+              <TableHead>Login</TableHead>
               <TableHead>Telegram</TableHead>
               <TableHead className="text-center">Campaign Limit</TableHead>
-              <TableHead className="text-center">Editing Allowed</TableHead>
+              <TableHead>Created</TableHead>
+              <TableHead className="text-center">Available</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {teamUsers?.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.telegram || "-"}</TableCell>
-                <TableCell className="text-center">{user.campaign_limit}</TableCell>
-                <TableCell className="text-center">
-                  {user.editing_allowed ? (
-                    <Check className="h-4 w-4 text-green-500 mx-auto" />
-                  ) : (
-                    <X className="h-4 w-4 text-red-500 mx-auto" />
-                  )}
+            {teamUsers?.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-8">
+                  <div className="flex flex-col items-center justify-center text-muted-foreground">
+                    <img 
+                      src="/placeholder.svg" 
+                      alt="No data" 
+                      className="w-16 h-16 mb-4 opacity-50"
+                    />
+                    No data
+                  </div>
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              teamUsers?.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell className="font-medium">{user.name}</TableCell>
+                  <TableCell>{user.login}</TableCell>
+                  <TableCell>{user.telegram || "-"}</TableCell>
+                  <TableCell className="text-center">{user.campaign_limit}</TableCell>
+                  <TableCell>
+                    {format(new Date(user.created_at), "MMM d, yyyy")}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <span 
+                      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                        user.available 
+                          ? "bg-green-100 text-green-800" 
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {user.available ? "Yes" : "No"}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>
