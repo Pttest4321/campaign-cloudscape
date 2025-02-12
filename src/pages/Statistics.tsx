@@ -30,7 +30,7 @@ import {
 } from "recharts";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { CalendarIcon, ChevronDown, ChevronUp } from "lucide-react";
+import { CalendarIcon, ChevronDown, ChevronUp, Filter } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
 import { Switch } from "@/components/ui/switch";
@@ -322,7 +322,15 @@ export default function Statistics() {
         >
           <div className="p-4 sm:p-6 rounded-lg border bg-card">
             <div className="flex items-center justify-between">
-              <h3 className="text-base sm:text-lg font-medium">Filter traffic by the necessary parameters</h3>
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <Filter className="h-5 w-5" />
+                  <h3 className="text-base sm:text-lg font-medium">Filter</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Filter traffic by the necessary parameters
+                </p>
+              </div>
               <CollapsibleTrigger asChild>
                 <Button variant="ghost" size="sm" className="w-9 p-0">
                   {isFiltersOpen ? (
