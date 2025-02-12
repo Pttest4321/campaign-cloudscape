@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,9 +11,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Link, Users } from "lucide-react";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import { TablesInsert } from "@/integrations/supabase/types";
 import { SplitUrlInput } from "@/components/campaign/SplitUrlInput";
 import { CampaignSettingsForm } from "@/components/campaign/CampaignSettingsForm";
 import { CampaignLogicType, SplitUrl } from "@/types/campaign";
@@ -111,26 +108,27 @@ export default function NewCampaign() {
 
   const onSubmit = async (data: CampaignFormData) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) throw new Error("User not authenticated");
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
 
-      const campaignData: TablesInsert<'campaigns'> = {
-        user_id: user.id,
+      const campaignData = {
+        id: crypto.randomUUID(),
+        user_id: userId,
         name: data.name,
         country: data.country,
         language: data.language,
         website_url: selectedLogic === 'split' ? null : data.target_url,
         offer_url: data.bot_url,
         status: 'active',
-        split_urls: selectedLogic === 'split' ? splitUrls : []
+        split_urls: selectedLogic === 'split' ? splitUrls : [],
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
-      const { error } = await supabase
-        .from('campaigns')
-        .insert(campaignData);
-
-      if (error) throw error;
+      const existingCampaigns = JSON.parse(localStorage.getItem('campaigns') || '[]');
+      localStorage.setItem('campaigns', JSON.stringify([...existingCampaigns, campaignData]));
 
       toast({
         title: "Campaign created",

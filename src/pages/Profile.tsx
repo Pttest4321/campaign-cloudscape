@@ -5,11 +5,21 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+
+interface Profile {
+  id: string;
+  name: string;
+  email: string;
+  bio: string;
+  company: string;
+  role: string;
+  location: string;
+}
 
 export default function Profile() {
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Profile>({
+    id: '',
     name: "",
     email: "",
     bio: "",
@@ -23,29 +33,14 @@ export default function Profile() {
     getProfile();
   }, []);
 
-  async function getProfile() {
+  function getProfile() {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) throw new Error('No user logged in');
+      const userId = localStorage.getItem('userId');
+      if (!userId) throw new Error('No user logged in');
 
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      if (error) throw error;
-      
-      if (data) {
-        setFormData({
-          name: data.name || "",
-          email: data.email || "",
-          bio: data.bio || "",
-          company: data.company || "",
-          role: data.role || "",
-          location: data.location || ""
-        });
+      const profileData = localStorage.getItem(`profile_${userId}`);
+      if (profileData) {
+        setFormData(JSON.parse(profileData));
       }
     } catch (error) {
       console.error('Error loading profile:', error);
@@ -62,19 +57,16 @@ export default function Profile() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) throw new Error('No user logged in');
+      const userId = localStorage.getItem('userId');
+      if (!userId) throw new Error('No user logged in');
 
-      const { error } = await supabase
-        .from('profiles')
-        .upsert({
-          id: user.id,
-          ...formData,
-          updated_at: new Date().toISOString(),
-        });
+      const updatedProfile = {
+        ...formData,
+        id: userId,
+        updated_at: new Date().toISOString(),
+      };
 
-      if (error) throw error;
+      localStorage.setItem(`profile_${userId}`, JSON.stringify(updatedProfile));
 
       toast({
         title: "Profile updated",
