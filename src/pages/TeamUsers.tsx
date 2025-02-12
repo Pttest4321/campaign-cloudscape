@@ -13,10 +13,23 @@ import { useToast } from "@/components/ui/use-toast";
 import { AddTeamUserDialog } from "@/components/team/AddTeamUserDialog";
 import { format } from "date-fns";
 
+interface TeamUser {
+  id: string;
+  name: string;
+  email: string;
+  login: string;
+  telegram: string;
+  campaign_limit: number;
+  available: boolean;
+  created_at: string;
+  updated_at: string;
+  user_id: string;
+}
+
 export default function TeamUsers() {
   const { toast } = useToast();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [teamUsers, setTeamUsers] = useState<any[]>([]);
+  const [teamUsers, setTeamUsers] = useState<TeamUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

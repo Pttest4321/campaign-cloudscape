@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff } from "lucide-react";
 
 interface AddTeamUserDialogProps {
@@ -29,7 +28,6 @@ export function AddTeamUserDialog({ open, onOpenChange }: AddTeamUserDialogProps
     confirmPassword: "",
     telegram: "",
     campaign_limit: "",
-    editing_allowed: false,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -76,7 +74,6 @@ export function AddTeamUserDialog({ open, onOpenChange }: AddTeamUserDialogProps
         confirmPassword: "",
         telegram: "",
         campaign_limit: "",
-        editing_allowed: false,
       });
     } catch (error) {
       console.error("Error adding team member:", error);
@@ -201,18 +198,6 @@ export function AddTeamUserDialog({ open, onOpenChange }: AddTeamUserDialogProps
               }
               required
             />
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="editing_allowed"
-              checked={formData.editing_allowed}
-              onCheckedChange={(checked) =>
-                setFormData({ ...formData, editing_allowed: checked as boolean })
-              }
-            />
-            <Label htmlFor="editing_allowed" className="text-sm">
-              Editing allowed
-            </Label>
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button
