@@ -287,7 +287,7 @@ export default function Statistics() {
           {/* Right Column - Charts */}
           <div className="md:col-span-2 w-full">
             <div className="grid md:grid-cols-2 gap-6 w-full">
-              <div className="h-[300px] w-full p-4 sm:p-6 rounded-lg border bg-card">
+              <div className="h-[400px] w-full p-4 sm:p-6 rounded-lg border bg-card">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={lineData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -312,7 +312,7 @@ export default function Statistics() {
                 </ResponsiveContainer>
               </div>
               
-              <div className="h-[300px] w-full p-4 sm:p-6 rounded-lg border bg-card">
+              <div className="h-[400px] w-full p-4 sm:p-6 rounded-lg border bg-card">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
