@@ -24,6 +24,7 @@ export default function TeamUsers() {
     const exampleUsers = [
       {
         name: "John Smith",
+        email: "john@example.com",
         login: "john.smith",
         telegram: "@johnsmith",
         campaign_limit: 5,
@@ -32,6 +33,7 @@ export default function TeamUsers() {
       },
       {
         name: "Sarah Johnson",
+        email: "sarah@example.com",
         login: "sarah.j",
         telegram: "@sarahj",
         campaign_limit: 3,

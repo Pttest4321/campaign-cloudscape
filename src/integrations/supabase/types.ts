@@ -175,9 +175,9 @@ export type Database = {
           available: boolean | null
           campaign_limit: number | null
           created_at: string
-          editing_allowed: boolean | null
           email: string
           id: string
+          login: string
           name: string
           telegram: string | null
           updated_at: string
@@ -187,9 +187,9 @@ export type Database = {
           available?: boolean | null
           campaign_limit?: number | null
           created_at?: string
-          editing_allowed?: boolean | null
           email: string
           id?: string
+          login: string
           name: string
           telegram?: string | null
           updated_at?: string
@@ -199,9 +199,9 @@ export type Database = {
           available?: boolean | null
           campaign_limit?: number | null
           created_at?: string
-          editing_allowed?: boolean | null
           email?: string
           id?: string
+          login?: string
           name?: string
           telegram?: string | null
           updated_at?: string
