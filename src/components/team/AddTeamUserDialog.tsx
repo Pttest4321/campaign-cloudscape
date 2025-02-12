@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
   DialogContent,
@@ -21,7 +19,6 @@ interface AddTeamUserDialogProps {
 
 export function AddTeamUserDialog({ open, onOpenChange }: AddTeamUserDialogProps) {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -50,27 +47,27 @@ export function AddTeamUserDialog({ open, onOpenChange }: AddTeamUserDialogProps
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) throw new Error("No user logged in");
-
-      const { error } = await supabase.from("team_users").insert({
+      const existingUsers = JSON.parse(localStorage.getItem("teamUsers") || "[]");
+      const newUser = {
+        id: crypto.randomUUID(),
         name: formData.name,
         email: formData.email,
+        login: formData.email.split("@")[0],
         telegram: formData.telegram,
         campaign_limit: parseInt(formData.campaign_limit) || 0,
-        editing_allowed: formData.editing_allowed,
-        user_id: user.id,
-      });
-
-      if (error) throw error;
+        available: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        user_id: crypto.randomUUID(),
+      };
+      
+      localStorage.setItem("teamUsers", JSON.stringify([...existingUsers, newUser]));
 
       toast({
         title: "Team member added",
         description: "The team member has been added successfully.",
       });
 
-      queryClient.invalidateQueries({ queryKey: ["team-users"] });
       onOpenChange(false);
       setFormData({
         name: "",

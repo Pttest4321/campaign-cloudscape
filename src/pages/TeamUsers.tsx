@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -18,69 +16,59 @@ import { format } from "date-fns";
 export default function TeamUsers() {
   const { toast } = useToast();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [teamUsers, setTeamUsers] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Add example team users if none exist
-  const addExampleUsers = async () => {
-    const exampleUsers = [
-      {
-        name: "John Smith",
-        email: "john@example.com",
-        login: "john.smith",
-        telegram: "@johnsmith",
-        campaign_limit: 5,
-        available: true,
-        user_id: "example-1",
-      },
-      {
-        name: "Sarah Johnson",
-        email: "sarah@example.com",
-        login: "sarah.j",
-        telegram: "@sarahj",
-        campaign_limit: 3,
-        available: false,
-        user_id: "example-2",
-      },
-    ];
-
-    try {
-      const { data: existingUsers } = await supabase
-        .from("team_users")
-        .select("*");
-
-      if (!existingUsers || existingUsers.length === 0) {
-        const { error } = await supabase
-          .from("team_users")
-          .insert(exampleUsers);
-
-        if (error) throw error;
-      }
-    } catch (error) {
-      console.error("Error adding example users:", error);
-    }
-  };
-
-  const { data: teamUsers, isLoading } = useQuery({
-    queryKey: ["team-users"],
-    queryFn: async () => {
-      await addExampleUsers();
-
-      const { data, error } = await supabase
-        .from("team_users")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
+  useEffect(() => {
+    const loadUsers = () => {
+      try {
+        const storedUsers = JSON.parse(localStorage.getItem("teamUsers") || "[]");
+        if (storedUsers.length === 0) {
+          const exampleUsers = [
+            {
+              id: "example-1",
+              name: "John Smith",
+              email: "john@example.com",
+              login: "john.smith",
+              telegram: "@johnsmith",
+              campaign_limit: 5,
+              available: true,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+              user_id: "example-1",
+            },
+            {
+              id: "example-2",
+              name: "Sarah Johnson",
+              email: "sarah@example.com",
+              login: "sarah.j",
+              telegram: "@sarahj",
+              campaign_limit: 3,
+              available: false,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+              user_id: "example-2",
+            },
+          ];
+          localStorage.setItem("teamUsers", JSON.stringify(exampleUsers));
+          setTeamUsers(exampleUsers);
+        } else {
+          setTeamUsers(storedUsers);
+        }
+      } catch (error) {
+        console.error("Error loading team users:", error);
         toast({
-          title: "Error fetching team users",
-          description: error.message,
+          title: "Error loading team users",
+          description: "There was a problem loading the team users.",
           variant: "destructive",
         });
-        throw error;
+      } finally {
+        setIsLoading(false);
       }
+    };
 
-      return data;
-    },
-  });
+    loadUsers();
+  }, [toast]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -114,7 +102,7 @@ export default function TeamUsers() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {teamUsers?.length === 0 ? (
+            {teamUsers.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-8">
                   <div className="flex flex-col items-center justify-center text-muted-foreground">
@@ -128,7 +116,7 @@ export default function TeamUsers() {
                 </TableCell>
               </TableRow>
             ) : (
-              teamUsers?.map((user) => (
+              teamUsers.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell className="font-medium">{user.name}</TableCell>
                   <TableCell>{user.login}</TableCell>
