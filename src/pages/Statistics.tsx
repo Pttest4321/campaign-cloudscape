@@ -285,62 +285,64 @@ export default function Statistics() {
           </div>
 
           {/* Right Column - Charts */}
-          <div className="md:col-span-2 space-y-6">
-            <div className="h-[300px] p-4 sm:p-6 rounded-lg border bg-card">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={lineData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line
-                    type="monotone"
-                    dataKey="clicks"
-                    stroke="#2563eb"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="users"
-                    stroke="#4ade80"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-            
-            <div className="h-[300px] p-4 sm:p-6 rounded-lg border bg-card">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    dataKey="value"
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <text
-                    x="50%"
-                    y="50%"
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                  >
-                    <tspan x="50%" dy="-0.5em" className="text-lg font-bold">
-                      Total
-                    </tspan>
-                    <tspan x="50%" dy="1.5em" className="text-2xl font-bold">
-                      76
-                    </tspan>
-                  </text>
-                </PieChart>
-              </ResponsiveContainer>
+          <div className="md:col-span-2">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="h-[300px] p-4 sm:p-6 rounded-lg border bg-card">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={lineData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line
+                      type="monotone"
+                      dataKey="clicks"
+                      stroke="#2563eb"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="users"
+                      stroke="#4ade80"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+              
+              <div className="h-[300px] p-4 sm:p-6 rounded-lg border bg-card">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={80}
+                      dataKey="value"
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <text
+                      x="50%"
+                      y="50%"
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                    >
+                      <tspan x="50%" dy="-0.5em" className="text-lg font-bold">
+                        Total
+                      </tspan>
+                      <tspan x="50%" dy="1.5em" className="text-2xl font-bold">
+                        76
+                      </tspan>
+                    </text>
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
         </div>
