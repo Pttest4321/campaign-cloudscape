@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Users - Campaign Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-background text-foreground">
+    <div class="space-y-4 fade-in">
+        <div class="flex justify-between items-center">
+            <h1 class="text-2xl font-semibold">Team Users</h1>
+            <button 
+                onclick="openAddUserDialog()"
+                class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                Add User
+            </button>
+        </div>
+
+        <div class="rounded-md border">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b bg-muted/50">
+                        <th class="h-12 px-4 text-left align-middle font-medium">Name</th>
+                        <th class="h-12 px-4 text-left align-middle font-medium">Login</th>
+                        <th class="h-12 px-4 text-left align-middle font-medium">Telegram</th>
+                        <th class="h-12 px-4 text-left align-middle font-medium">Campaign Limit</th>
+                        <th class="h-12 px-4 text-left align-middle font-medium">Status</th>
+                        <th class="h-12 px-4 text-left align-middle font-medium">Created</th>
+                    </tr>
+                </thead>
+                <tbody id="teamUsersTableBody">
+                    <!-- Table rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add User Dialog -->
+    <div id="addUserDialog" class="hidden fixed inset-0 bg-black/80 z-50">
+        <div class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 rounded-lg">
+            <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+                <h2 class="text-lg font-semibold leading-none tracking-tight">Add Team User</h2>
+                <p class="text-sm text-muted-foreground">Add a new user to your team</p>
+            </div>
+            <form id="addUserForm" class="space-y-4">
+                <div class="space-y-2">
+                    <label class="text-sm font-medium leading-none" for="name">Name</label>
+                    <input required type="text" id="name" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background" />
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-medium leading-none" for="email">Email</label>
+                    <input required type="email" id="email" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background" />
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-medium leading-none" for="telegram">Telegram</label>
+                    <input required type="text" id="telegram" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background" />
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-medium leading-none" for="campaignLimit">Campaign Limit</label>
+                    <input required type="number" id="campaignLimit" min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background" />
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button 
+                        type="button" 
+                        onclick="closeAddUserDialog()"
+                        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        type="submit"
+                        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                    >
+                        Add User
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize team users from localStorage or set default empty array
+        let teamUsers = JSON.parse(localStorage.getItem('teamUsers') || '[]');
+
+        // Format date helper function
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        // Render team users table
+        function renderTeamUsers() {
+            const tbody = document.getElementById('teamUsersTableBody');
+            tbody.innerHTML = '';
+
+            teamUsers.forEach(user => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b';
+                tr.innerHTML = `
+                    <td class="p-4">${user.name}</td>
+                    <td class="p-4">${user.login}</td>
+                    <td class="p-4">${user.telegram}</td>
+                    <td class="p-4">${user.campaign_limit}</td>
+                    <td class="p-4">
+                        <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${user.available ? 'bg-primary/10 text-primary' : 'bg-secondary text-secondary-foreground'}">
+                            ${user.available ? 'Available' : 'Unavailable'}
+                        </span>
+                    </td>
+                    <td class="p-4">${formatDate(user.created_at)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Dialog management
+        function openAddUserDialog() {
+            document.getElementById('addUserDialog').classList.remove('hidden');
+        }
+
+        function closeAddUserDialog() {
+            document.getElementById('addUserDialog').classList.add('hidden');
+            document.getElementById('addUserForm').reset();
+        }
+
+        // Handle form submission
+        document.getElementById('addUserForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const newUser = {
+                id: crypto.randomUUID(),
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                login: document.getElementById('email').value.split('@')[0],
+                telegram: document.getElementById('telegram').value,
+                campaign_limit: parseInt(document.getElementById('campaignLimit').value),
+                available: true,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                user_id: crypto.randomUUID()
+            };
+
+            teamUsers.push(newUser);
+            localStorage.setItem('teamUsers', JSON.stringify(teamUsers));
+            
+            renderTeamUsers();
+            closeAddUserDialog();
+
+            // Show toast notification (you might want to implement a proper toast component)
+            alert('User added successfully');
+        });
+
+        // Initial render
+        renderTeamUsers();
+    </script>
+</body>
+</html>
