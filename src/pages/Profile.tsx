@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { Bell, User } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
@@ -136,10 +135,9 @@ export default function Profile() {
               </p>
             </div>
           </div>
-          <Separator />
           
           <Tabs defaultValue="info" className="w-full">
-            <TabsList className="w-full justify-start border-b rounded-none h-12 bg-transparent p-0">
+            <TabsList className="w-full justify-start h-12 bg-transparent p-0">
               <TabsTrigger 
                 value="info"
                 className="data-[state=active]:bg-background data-[state=active]:shadow-none data-[state=active]:border-primary data-[state=active]:border-b-2 rounded-none px-4"
@@ -158,27 +156,35 @@ export default function Profile() {
               <div className="grid gap-4 w-full max-w-4xl">
                 <div className="grid gap-2">
                   <Label htmlFor="email">E-Mail</Label>
-                  <Input id="email" value={profile.email} readOnly />
+                  <span className="px-3 py-2 text-base md:text-sm">{profile.email}</span>
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="created">Date from create account</Label>
-                  <Input id="created" value={profile.createdAt} readOnly />
+                  <span className="px-3 py-2 text-base md:text-sm">{profile.createdAt}</span>
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="paid">Paid until</Label>
-                  <Input id="paid" value={profile.paidUntil} readOnly />
+                  <span className="px-3 py-2 text-base md:text-sm">{profile.paidUntil}</span>
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="tariff">Active tariff</Label>
-                  <Input id="tariff" value={profile.activeTariff} readOnly />
+                  <span className="px-3 py-2 text-base md:text-sm">{profile.activeTariff}</span>
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="campaigns">Number of created campaigns</Label>
-                  <Input id="campaigns" value={profile.campaignsCount.toString()} readOnly />
+                  <span className="px-3 py-2 text-base md:text-sm">{profile.campaignsCount}</span>
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="clicks">Clicks Used</Label>
-                  <Input id="clicks" value={profile.clicksUsed.toString()} readOnly />
+                  <span className="px-3 py-2 text-base md:text-sm">{profile.clicksUsed}</span>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="timezone">Time Zone</Label>
+                  <Input 
+                    id="timezone"
+                    value={profile.timeZone} 
+                    onChange={(e) => handleTimeZoneChange(e.target.value)}
+                  />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="telegram">Telegram</Label>
