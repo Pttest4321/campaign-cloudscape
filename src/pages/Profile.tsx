@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Bell, User } from "lucide-react";
+import { Bell, User, Save } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Time zones list - using a static list of common time zones
 const timeZones = [
   "UTC",
   "America/New_York",
@@ -115,25 +115,60 @@ export default function Profile() {
     }));
   };
 
+  const handleSaveSettings = () => {
+    toast({
+      title: "Success",
+      description: "Settings have been saved.",
+    });
+  };
+
   return (
     <main className="flex w-full min-h-screen bg-background">
       <div className="flex-1 space-y-6 p-8">
         <div className="space-y-4">
-          <div className="flex items-start gap-4">
-            <Avatar className="h-20 w-20">
-              <AvatarImage src="/placeholder.svg" alt="Profile picture" />
-              <AvatarFallback>
-                <User className="h-10 w-10" />
-              </AvatarFallback>
-            </Avatar>
-            <div className="space-y-1">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                {profile.email}
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Member since {profile.createdAt}
-              </p>
+          <div className="flex flex-col gap-6">
+            <div className="flex items-start gap-4">
+              <Avatar className="h-20 w-20">
+                <AvatarImage src="/placeholder.svg" alt="Profile picture" />
+                <AvatarFallback>
+                  <User className="h-10 w-10" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="space-y-1">
+                <h1 className="text-2xl font-semibold tracking-tight">
+                  {profile.email}
+                </h1>
+              </div>
             </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Settings</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="timezone">Time Zone</Label>
+                  <Input 
+                    id="timezone"
+                    value={profile.timeZone} 
+                    onChange={(e) => handleTimeZoneChange(e.target.value)}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="telegram">Telegram</Label>
+                  <Input 
+                    id="telegram"
+                    value={profile.telegram} 
+                    onChange={handleTelegramChange}
+                    placeholder="Enter your Telegram handle"
+                  />
+                </div>
+                <Button onClick={handleSaveSettings} className="w-full">
+                  <Save className="w-4 h-4 mr-2" />
+                  Save Settings
+                </Button>
+              </CardContent>
+            </Card>
           </div>
           
           <Tabs defaultValue="info" className="w-full">
@@ -155,18 +190,6 @@ export default function Profile() {
             <TabsContent value="info" className="mt-6 space-y-6">
               <div className="grid gap-4 w-full max-w-4xl">
                 <div className="grid gap-2">
-                  <Label htmlFor="email">E-Mail</Label>
-                  <span className="px-3 py-2 text-base md:text-sm">{profile.email}</span>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="created">Date from create account</Label>
-                  <span className="px-3 py-2 text-base md:text-sm">{profile.createdAt}</span>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="paid">Paid until</Label>
-                  <span className="px-3 py-2 text-base md:text-sm">{profile.paidUntil}</span>
-                </div>
-                <div className="grid gap-2">
                   <Label htmlFor="tariff">Active tariff</Label>
                   <span className="px-3 py-2 text-base md:text-sm">{profile.activeTariff}</span>
                 </div>
@@ -177,23 +200,6 @@ export default function Profile() {
                 <div className="grid gap-2">
                   <Label htmlFor="clicks">Clicks Used</Label>
                   <span className="px-3 py-2 text-base md:text-sm">{profile.clicksUsed}</span>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="timezone">Time Zone</Label>
-                  <Input 
-                    id="timezone"
-                    value={profile.timeZone} 
-                    onChange={(e) => handleTimeZoneChange(e.target.value)}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="telegram">Telegram</Label>
-                  <Input 
-                    id="telegram"
-                    value={profile.telegram} 
-                    onChange={handleTelegramChange}
-                    placeholder="Enter your Telegram handle"
-                  />
                 </div>
               </div>
             </TabsContent>
