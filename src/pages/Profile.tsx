@@ -163,76 +163,66 @@ export default function Profile() {
           </div>
 
           <div className="space-y-4 max-w-2xl">
-            <div className="flex items-center justify-between gap-4">
-              <div className="space-y-0.5 flex-grow">
-                <Label>All Notification</Label>
-                <Input
-                  value={notificationTexts.all}
-                  onChange={(e) => handleTextChange("all", e.target.value)}
-                  placeholder="Add note for all notifications..."
-                  className="mt-1"
-                />
-              </div>
+            <div className="flex items-center gap-4">
+              <Label className="w-40">All Notification</Label>
+              <Input
+                value={notificationTexts.all}
+                onChange={(e) => handleTextChange("all", e.target.value)}
+                placeholder="Add note..."
+                className="w-64"
+              />
               <Switch
                 checked={profile.notifications.all}
                 onCheckedChange={() => handleNotificationChange("all")}
               />
             </div>
-            <div className="flex items-center justify-between gap-4">
-              <div className="space-y-0.5 flex-grow">
-                <Label>Payment Notification</Label>
-                <Input
-                  value={notificationTexts.payment}
-                  onChange={(e) => handleTextChange("payment", e.target.value)}
-                  placeholder="Add note for payment notifications..."
-                  className="mt-1"
-                />
-              </div>
+            <div className="flex items-center gap-4">
+              <Label className="w-40">Payment Notification</Label>
+              <Input
+                value={notificationTexts.payment}
+                onChange={(e) => handleTextChange("payment", e.target.value)}
+                placeholder="Add note..."
+                className="w-64"
+              />
               <Switch
                 checked={profile.notifications.payment}
                 onCheckedChange={() => handleNotificationChange("payment")}
               />
             </div>
-            <div className="flex items-center justify-between gap-4">
-              <div className="space-y-0.5 flex-grow">
-                <Label>Moderation Notification</Label>
-                <Input
-                  value={notificationTexts.moderation}
-                  onChange={(e) => handleTextChange("moderation", e.target.value)}
-                  placeholder="Add note for moderation notifications..."
-                  className="mt-1"
-                />
-              </div>
+            <div className="flex items-center gap-4">
+              <Label className="w-40">Moderation Notification</Label>
+              <Input
+                value={notificationTexts.moderation}
+                onChange={(e) => handleTextChange("moderation", e.target.value)}
+                placeholder="Add note..."
+                className="w-64"
+              />
               <Switch
                 checked={profile.notifications.moderation}
                 onCheckedChange={() => handleNotificationChange("moderation")}
               />
             </div>
-            <div className="flex items-center justify-between gap-4">
-              <div className="space-y-0.5 flex-grow">
-                <Label>Clicks Fraud</Label>
-                <Input
-                  value={notificationTexts.clicksFraud}
-                  onChange={(e) => handleTextChange("clicksFraud", e.target.value)}
-                  placeholder="Add note for clicks fraud notifications..."
-                  className="mt-1"
-                />
-              </div>
+            <div className="flex items-center gap-4">
+              <Label className="w-40">Clicks Fraud</Label>
+              <Input
+                value={notificationTexts.clicksFraud}
+                onChange={(e) => handleTextChange("clicksFraud", e.target.value)}
+                placeholder="Add note..."
+                className="w-64"
+              />
               <Switch
                 checked={profile.notifications.clicksFraud}
                 onCheckedChange={() => handleNotificationChange("clicksFraud")}
               />
             </div>
-            <div className="flex items-center justify-between gap-4">
-              <div className="space-y-0.5 flex-grow">
-                <Label>DDoS</Label>
-                <Input
-                  value={notificationTexts.ddos}
-                  onChange={(e) => handleTextChange("ddos", e.target.value)}
-                  placeholder="Add note for DDoS notifications..."
-                  className="mt-1"
-                />
-              </div>
+            <div className="flex items-center gap-4">
+              <Label className="w-40">DDoS</Label>
+              <Input
+                value={notificationTexts.ddos}
+                onChange={(e) => handleTextChange("ddos", e.target.value)}
+                placeholder="Add note..."
+                className="w-64"
+              />
               <Switch
                 checked={profile.notifications.ddos}
                 onCheckedChange={() => handleNotificationChange("ddos")}
@@ -240,12 +230,11 @@ export default function Profile() {
             </div>
           </div>
 
-          <Button 
-            className="w-full"
-            onClick={handleSaveNotifications}
-          >
-            Save
-          </Button>
+          <div className="flex justify-end">
+            <Button onClick={handleSaveNotifications}>
+              Save
+            </Button>
+          </div>
         </div>
       )}
     </div>
