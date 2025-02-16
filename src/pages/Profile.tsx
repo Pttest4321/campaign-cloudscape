@@ -65,6 +65,21 @@ export default function Profile() {
     });
   };
 
+  const [notificationTexts, setNotificationTexts] = useState({
+    all: "",
+    payment: "",
+    moderation: "",
+    clicksFraud: "",
+    ddos: ""
+  });
+
+  const handleTextChange = (key: keyof typeof notificationTexts, value: string) => {
+    setNotificationTexts(prev => ({
+      ...prev,
+      [key]: value
+    }));
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 max-w-4xl">
       <div className="flex items-center gap-8 mb-8">
@@ -148,45 +163,75 @@ export default function Profile() {
           </div>
 
           <div className="space-y-4 max-w-2xl">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
+            <div className="flex items-center justify-between gap-4">
+              <div className="space-y-0.5 flex-grow">
                 <Label>All Notification</Label>
+                <Input
+                  value={notificationTexts.all}
+                  onChange={(e) => handleTextChange("all", e.target.value)}
+                  placeholder="Add note for all notifications..."
+                  className="mt-1"
+                />
               </div>
               <Switch
                 checked={profile.notifications.all}
                 onCheckedChange={() => handleNotificationChange("all")}
               />
             </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
+            <div className="flex items-center justify-between gap-4">
+              <div className="space-y-0.5 flex-grow">
                 <Label>Payment Notification</Label>
+                <Input
+                  value={notificationTexts.payment}
+                  onChange={(e) => handleTextChange("payment", e.target.value)}
+                  placeholder="Add note for payment notifications..."
+                  className="mt-1"
+                />
               </div>
               <Switch
                 checked={profile.notifications.payment}
                 onCheckedChange={() => handleNotificationChange("payment")}
               />
             </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
+            <div className="flex items-center justify-between gap-4">
+              <div className="space-y-0.5 flex-grow">
                 <Label>Moderation Notification</Label>
+                <Input
+                  value={notificationTexts.moderation}
+                  onChange={(e) => handleTextChange("moderation", e.target.value)}
+                  placeholder="Add note for moderation notifications..."
+                  className="mt-1"
+                />
               </div>
               <Switch
                 checked={profile.notifications.moderation}
                 onCheckedChange={() => handleNotificationChange("moderation")}
               />
             </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
+            <div className="flex items-center justify-between gap-4">
+              <div className="space-y-0.5 flex-grow">
                 <Label>Clicks Fraud</Label>
+                <Input
+                  value={notificationTexts.clicksFraud}
+                  onChange={(e) => handleTextChange("clicksFraud", e.target.value)}
+                  placeholder="Add note for clicks fraud notifications..."
+                  className="mt-1"
+                />
               </div>
               <Switch
                 checked={profile.notifications.clicksFraud}
                 onCheckedChange={() => handleNotificationChange("clicksFraud")}
               />
             </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
+            <div className="flex items-center justify-between gap-4">
+              <div className="space-y-0.5 flex-grow">
                 <Label>DDoS</Label>
+                <Input
+                  value={notificationTexts.ddos}
+                  onChange={(e) => handleTextChange("ddos", e.target.value)}
+                  placeholder="Add note for DDoS notifications..."
+                  className="mt-1"
+                />
               </div>
               <Switch
                 checked={profile.notifications.ddos}
