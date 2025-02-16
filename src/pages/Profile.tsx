@@ -20,8 +20,23 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-// Time zones list
-const timeZones = Intl.supportedValuesOf('timeZone');
+// Time zones list - using a static list of common time zones
+const timeZones = [
+  "UTC",
+  "America/New_York",
+  "America/Chicago",
+  "America/Denver",
+  "America/Los_Angeles",
+  "Europe/London",
+  "Europe/Paris",
+  "Europe/Berlin",
+  "Asia/Tokyo",
+  "Asia/Shanghai",
+  "Asia/Dubai",
+  "Australia/Sydney",
+  "Pacific/Auckland",
+  "Indian/Mayotte"
+];
 
 interface UserProfile {
   email: string;
