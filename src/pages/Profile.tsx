@@ -105,7 +105,6 @@ export default function Profile() {
   };
 
   const handleSaveNotifications = () => {
-    // Here you would typically save to your backend
     toast({
       title: "Success",
       description: "Notification settings have been saved.",
@@ -128,17 +127,15 @@ export default function Profile() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-4xl">
-      <div className="flex items-center gap-8 mb-8">
+    <main className="container mx-auto px-4 py-6 max-w-4xl">
+      <header className="flex items-center gap-8 mb-8">
         <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
           <User className="w-8 h-8 text-primary" />
         </div>
-        <div>
-          <h1 className="text-2xl font-semibold">{profile.email}</h1>
-        </div>
-      </div>
+        <h1 className="text-2xl font-semibold">{profile.email}</h1>
+      </header>
 
-      <div className="flex gap-4 mb-6">
+      <nav className="flex gap-4 mb-6">
         <Button
           variant={activeTab === "info" ? "default" : "ghost"}
           onClick={() => setActiveTab("info")}
@@ -155,39 +152,39 @@ export default function Profile() {
           <Bell className="w-4 h-4" />
           Notifications
         </Button>
-      </div>
+      </nav>
 
       <Separator className="mb-6" />
 
       {activeTab === "info" ? (
-        <div className="space-y-6">
+        <section className="space-y-6">
           <div className="grid gap-4 max-w-2xl">
             <div className="grid gap-2">
-              <Label>E-Mail</Label>
-              <Input value={profile.email} readOnly />
+              <Label htmlFor="email">E-Mail</Label>
+              <Input id="email" value={profile.email} readOnly />
             </div>
             <div className="grid gap-2">
-              <Label>Date from create account</Label>
-              <Input value={profile.createdAt} readOnly />
+              <Label htmlFor="created">Date from create account</Label>
+              <Input id="created" value={profile.createdAt} readOnly />
             </div>
             <div className="grid gap-2">
-              <Label>Paid until</Label>
-              <Input value={profile.paidUntil} readOnly />
+              <Label htmlFor="paid">Paid until</Label>
+              <Input id="paid" value={profile.paidUntil} readOnly />
             </div>
             <div className="grid gap-2">
-              <Label>Active tariff</Label>
-              <Input value={profile.activeTariff} readOnly />
+              <Label htmlFor="tariff">Active tariff</Label>
+              <Input id="tariff" value={profile.activeTariff} readOnly />
             </div>
             <div className="grid gap-2">
-              <Label>Number of created campaigns</Label>
-              <Input value={profile.campaignsCount.toString()} readOnly />
+              <Label htmlFor="campaigns">Number of created campaigns</Label>
+              <Input id="campaigns" value={profile.campaignsCount.toString()} readOnly />
             </div>
             <div className="grid gap-2">
-              <Label>Clicks Used</Label>
-              <Input value={profile.clicksUsed.toString()} readOnly />
+              <Label htmlFor="clicks">Clicks Used</Label>
+              <Input id="clicks" value={profile.clicksUsed.toString()} readOnly />
             </div>
             <div className="grid gap-2">
-              <Label>Time Zone</Label>
+              <Label htmlFor="timezone">Time Zone</Label>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
@@ -219,17 +216,18 @@ export default function Profile() {
               </Popover>
             </div>
             <div className="grid gap-2">
-              <Label>Telegram</Label>
+              <Label htmlFor="telegram">Telegram</Label>
               <Input 
+                id="telegram"
                 value={profile.telegram} 
                 onChange={handleTelegramChange}
                 placeholder="Enter your Telegram handle"
               />
             </div>
           </div>
-        </div>
+        </section>
       ) : (
-        <div className="space-y-6">
+        <section className="space-y-6">
           <p className="text-muted-foreground">
             In order to get notifications go to @PalladiumNotificationBot. Type /start and hit "Subscribe" button.
           </p>
@@ -243,8 +241,9 @@ export default function Profile() {
 
           <div className="space-y-4 max-w-2xl">
             <div className="flex items-center gap-4">
-              <Label className="w-40">All Notification</Label>
+              <Label htmlFor="all-notif" className="w-40">All Notification</Label>
               <Input
+                id="all-notif"
                 value={notificationTexts.all}
                 onChange={(e) => handleTextChange("all", e.target.value)}
                 placeholder="Add note..."
@@ -256,8 +255,9 @@ export default function Profile() {
               />
             </div>
             <div className="flex items-center gap-4">
-              <Label className="w-40">Payment Notification</Label>
+              <Label htmlFor="payment-notif" className="w-40">Payment Notification</Label>
               <Input
+                id="payment-notif"
                 value={notificationTexts.payment}
                 onChange={(e) => handleTextChange("payment", e.target.value)}
                 placeholder="Add note..."
@@ -269,8 +269,9 @@ export default function Profile() {
               />
             </div>
             <div className="flex items-center gap-4">
-              <Label className="w-40">Moderation Notification</Label>
+              <Label htmlFor="moderation-notif" className="w-40">Moderation Notification</Label>
               <Input
+                id="moderation-notif"
                 value={notificationTexts.moderation}
                 onChange={(e) => handleTextChange("moderation", e.target.value)}
                 placeholder="Add note..."
@@ -282,8 +283,9 @@ export default function Profile() {
               />
             </div>
             <div className="flex items-center gap-4">
-              <Label className="w-40">Clicks Fraud</Label>
+              <Label htmlFor="fraud-notif" className="w-40">Clicks Fraud</Label>
               <Input
+                id="fraud-notif"
                 value={notificationTexts.clicksFraud}
                 onChange={(e) => handleTextChange("clicksFraud", e.target.value)}
                 placeholder="Add note..."
@@ -295,8 +297,9 @@ export default function Profile() {
               />
             </div>
             <div className="flex items-center gap-4">
-              <Label className="w-40">DDoS</Label>
+              <Label htmlFor="ddos-notif" className="w-40">DDoS</Label>
               <Input
+                id="ddos-notif"
                 value={notificationTexts.ddos}
                 onChange={(e) => handleTextChange("ddos", e.target.value)}
                 placeholder="Add note..."
@@ -314,8 +317,8 @@ export default function Profile() {
               Save
             </Button>
           </div>
-        </div>
+        </section>
       )}
-    </div>
+    </main>
   );
 }
