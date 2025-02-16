@@ -4,21 +4,11 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Bell, User, Search } from "lucide-react";
+import { Bell, User } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Time zones list - using a static list of common time zones
 const timeZones = [
@@ -58,7 +48,7 @@ interface UserProfile {
 
 export default function Profile() {
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState<"info" | "notifications">("info");
+  const [activeTab, setActiveTab] = useState<"info" | "updates">("info");
   
   const [profile, setProfile] = useState<UserProfile>({
     email: "affbeat@proton.me",
@@ -79,6 +69,13 @@ export default function Profile() {
   });
 
   const [open, setOpen] = useState(false);
+  const [notificationTexts, setNotificationTexts] = useState({
+    all: "",
+    payment: "",
+    moderation: "",
+    clicksFraud: "",
+    ddos: ""
+  });
 
   const handleTimeZoneChange = (timezone: string) => {
     setProfile(prev => ({
@@ -112,14 +109,6 @@ export default function Profile() {
     });
   };
 
-  const [notificationTexts, setNotificationTexts] = useState({
-    all: "",
-    payment: "",
-    moderation: "",
-    clicksFraud: "",
-    ddos: ""
-  });
-
   const handleTextChange = (key: keyof typeof notificationTexts, value: string) => {
     setNotificationTexts(prev => ({
       ...prev,
@@ -128,199 +117,124 @@ export default function Profile() {
   };
 
   return (
-    <main className="w-full min-h-screen">
-      <div className="max-w-[1400px] mx-auto px-4 py-6">
-        <header className="flex items-center gap-8 mb-8">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-            <User className="w-8 h-8 text-primary" />
+    <main className="flex w-full min-h-screen bg-background">
+      <div className="flex-1 space-y-6 p-8">
+        <div className="space-y-4">
+          <div className="flex items-start gap-4">
+            <Avatar className="h-20 w-20">
+              <AvatarImage src="/placeholder.svg" alt="Profile picture" />
+              <AvatarFallback>
+                <User className="h-10 w-10" />
+              </AvatarFallback>
+            </Avatar>
+            <div className="space-y-1">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                {profile.email}
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Member since {profile.createdAt}
+              </p>
+            </div>
           </div>
-          <h1 className="text-2xl font-semibold">{profile.email}</h1>
-        </header>
+          <Separator />
+          
+          <Tabs defaultValue="info" className="w-full">
+            <TabsList className="w-full justify-start border-b rounded-none h-12 bg-transparent p-0">
+              <TabsTrigger 
+                value="info"
+                className="data-[state=active]:bg-background data-[state=active]:shadow-none data-[state=active]:border-primary data-[state=active]:border-b-2 rounded-none px-4"
+              >
+                Personal Information
+              </TabsTrigger>
+              <TabsTrigger 
+                value="updates"
+                className="data-[state=active]:bg-background data-[state=active]:shadow-none data-[state=active]:border-primary data-[state=active]:border-b-2 rounded-none px-4"
+              >
+                Updates
+              </TabsTrigger>
+            </TabsList>
 
-        <nav className="flex gap-4 mb-6">
-          <Button
-            variant={activeTab === "info" ? "default" : "ghost"}
-            onClick={() => setActiveTab("info")}
-            className="gap-2"
-          >
-            <User className="w-4 h-4" />
-            Personal Information
-          </Button>
-          <Button
-            variant={activeTab === "notifications" ? "default" : "ghost"}
-            onClick={() => setActiveTab("notifications")}
-            className="gap-2"
-          >
-            <Bell className="w-4 h-4" />
-            Notifications
-          </Button>
-        </nav>
+            <TabsContent value="info" className="mt-6 space-y-6">
+              <div className="grid gap-4 w-full max-w-4xl">
+                <div className="grid gap-2">
+                  <Label htmlFor="email">E-Mail</Label>
+                  <Input id="email" value={profile.email} readOnly />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="created">Date from create account</Label>
+                  <Input id="created" value={profile.createdAt} readOnly />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="paid">Paid until</Label>
+                  <Input id="paid" value={profile.paidUntil} readOnly />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="tariff">Active tariff</Label>
+                  <Input id="tariff" value={profile.activeTariff} readOnly />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="campaigns">Number of created campaigns</Label>
+                  <Input id="campaigns" value={profile.campaignsCount.toString()} readOnly />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="clicks">Clicks Used</Label>
+                  <Input id="clicks" value={profile.clicksUsed.toString()} readOnly />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="telegram">Telegram</Label>
+                  <Input 
+                    id="telegram"
+                    value={profile.telegram} 
+                    onChange={handleTelegramChange}
+                    placeholder="Enter your Telegram handle"
+                  />
+                </div>
+              </div>
+            </TabsContent>
 
-        <Separator className="mb-6" />
+            <TabsContent value="updates" className="mt-6 space-y-6">
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  In order to get notifications go to @PalladiumNotificationBot. Type /start and hit "Subscribe" button.
+                </p>
+                
+                <div className="space-y-4">
+                  <Textarea
+                    placeholder="Enter your notification preferences or additional notes here..."
+                    className="min-h-[100px] resize-none"
+                  />
+                </div>
 
-        {activeTab === "info" ? (
-          <section className="space-y-6">
-            <div className="grid gap-4 w-full max-w-4xl">
-              <div className="grid gap-2">
-                <Label htmlFor="email">E-Mail</Label>
-                <Input id="email" value={profile.email} readOnly />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="created">Date from create account</Label>
-                <Input id="created" value={profile.createdAt} readOnly />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="paid">Paid until</Label>
-                <Input id="paid" value={profile.paidUntil} readOnly />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="tariff">Active tariff</Label>
-                <Input id="tariff" value={profile.activeTariff} readOnly />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="campaigns">Number of created campaigns</Label>
-                <Input id="campaigns" value={profile.campaignsCount.toString()} readOnly />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="clicks">Clicks Used</Label>
-                <Input id="clicks" value={profile.clicksUsed.toString()} readOnly />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="timezone">Time Zone</Label>
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                      className="w-full justify-between"
-                    >
-                      {profile.timeZone}
-                      <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[400px] p-0">
-                    <Command>
-                      <CommandInput placeholder="Search time zone..." />
-                      <CommandEmpty>No time zone found.</CommandEmpty>
-                      <CommandGroup className="max-h-[300px] overflow-auto">
-                        {timeZones.map((timezone) => (
-                          <CommandItem
-                            key={timezone}
-                            onSelect={() => handleTimeZoneChange(timezone)}
-                          >
-                            {timezone}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="telegram">Telegram</Label>
-                <Input 
-                  id="telegram"
-                  value={profile.telegram} 
-                  onChange={handleTelegramChange}
-                  placeholder="Enter your Telegram handle"
-                />
-              </div>
-            </div>
-          </section>
-        ) : (
-          <section className="space-y-6 w-full max-w-4xl">
-            <p className="text-muted-foreground">
-              In order to get notifications go to @PalladiumNotificationBot. Type /start and hit "Subscribe" button.
-            </p>
-            
-            <div className="space-y-4">
-              <Textarea
-                placeholder="Enter your notification preferences or additional notes here..."
-                className="min-h-[100px] resize-none"
-              />
-            </div>
+                <div className="space-y-4">
+                  {Object.entries(profile.notifications).map(([key, value]) => (
+                    <div key={key} className="flex items-center gap-4">
+                      <Label htmlFor={`${key}-notif`} className="w-40 capitalize">
+                        {key.replace(/([A-Z])/g, ' $1').trim()} Notification
+                      </Label>
+                      <Input
+                        id={`${key}-notif`}
+                        value={notificationTexts[key as keyof typeof notificationTexts]}
+                        onChange={(e) => handleTextChange(key as keyof typeof notificationTexts, e.target.value)}
+                        placeholder="Add note..."
+                        className="w-64"
+                      />
+                      <Switch
+                        checked={value}
+                        onCheckedChange={() => handleNotificationChange(key as keyof UserProfile["notifications"])}
+                      />
+                    </div>
+                  ))}
+                </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <Label htmlFor="all-notif" className="w-40">All Notification</Label>
-                <Input
-                  id="all-notif"
-                  value={notificationTexts.all}
-                  onChange={(e) => handleTextChange("all", e.target.value)}
-                  placeholder="Add note..."
-                  className="w-64"
-                />
-                <Switch
-                  checked={profile.notifications.all}
-                  onCheckedChange={() => handleNotificationChange("all")}
-                />
+                <div className="flex justify-end">
+                  <Button onClick={handleSaveNotifications}>
+                    Save
+                  </Button>
+                </div>
               </div>
-              <div className="flex items-center gap-4">
-                <Label htmlFor="payment-notif" className="w-40">Payment Notification</Label>
-                <Input
-                  id="payment-notif"
-                  value={notificationTexts.payment}
-                  onChange={(e) => handleTextChange("payment", e.target.value)}
-                  placeholder="Add note..."
-                  className="w-64"
-                />
-                <Switch
-                  checked={profile.notifications.payment}
-                  onCheckedChange={() => handleNotificationChange("payment")}
-                />
-              </div>
-              <div className="flex items-center gap-4">
-                <Label htmlFor="moderation-notif" className="w-40">Moderation Notification</Label>
-                <Input
-                  id="moderation-notif"
-                  value={notificationTexts.moderation}
-                  onChange={(e) => handleTextChange("moderation", e.target.value)}
-                  placeholder="Add note..."
-                  className="w-64"
-                />
-                <Switch
-                  checked={profile.notifications.moderation}
-                  onCheckedChange={() => handleNotificationChange("moderation")}
-                />
-              </div>
-              <div className="flex items-center gap-4">
-                <Label htmlFor="fraud-notif" className="w-40">Clicks Fraud</Label>
-                <Input
-                  id="fraud-notif"
-                  value={notificationTexts.clicksFraud}
-                  onChange={(e) => handleTextChange("clicksFraud", e.target.value)}
-                  placeholder="Add note..."
-                  className="w-64"
-                />
-                <Switch
-                  checked={profile.notifications.clicksFraud}
-                  onCheckedChange={() => handleNotificationChange("clicksFraud")}
-                />
-              </div>
-              <div className="flex items-center gap-4">
-                <Label htmlFor="ddos-notif" className="w-40">DDoS</Label>
-                <Input
-                  id="ddos-notif"
-                  value={notificationTexts.ddos}
-                  onChange={(e) => handleTextChange("ddos", e.target.value)}
-                  placeholder="Add note..."
-                  className="w-64"
-                />
-                <Switch
-                  checked={profile.notifications.ddos}
-                  onCheckedChange={() => handleNotificationChange("ddos")}
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end">
-              <Button onClick={handleSaveNotifications}>
-                Save
-              </Button>
-            </div>
-          </section>
-        )}
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </main>
   );
