@@ -4,9 +4,24 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Bell, User } from "lucide-react";
+import { Bell, User, Search } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+// Time zones list
+const timeZones = Intl.supportedValuesOf('timeZone');
 
 interface UserProfile {
   email: string;
@@ -46,6 +61,23 @@ export default function Profile() {
       ddos: true,
     },
   });
+
+  const [open, setOpen] = useState(false);
+
+  const handleTimeZoneChange = (timezone: string) => {
+    setProfile(prev => ({
+      ...prev,
+      timeZone: timezone
+    }));
+    setOpen(false);
+  };
+
+  const handleTelegramChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setProfile(prev => ({
+      ...prev,
+      telegram: e.target.value
+    }));
+  };
 
   const handleNotificationChange = (key: keyof UserProfile["notifications"]) => {
     setProfile((prev) => ({
@@ -141,11 +173,43 @@ export default function Profile() {
             </div>
             <div className="grid gap-2">
               <Label>Time Zone</Label>
-              <Input value={profile.timeZone} readOnly />
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className="w-full justify-between"
+                  >
+                    {profile.timeZone}
+                    <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[400px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search time zone..." />
+                    <CommandEmpty>No time zone found.</CommandEmpty>
+                    <CommandGroup className="max-h-[300px] overflow-auto">
+                      {timeZones.map((timezone) => (
+                        <CommandItem
+                          key={timezone}
+                          onSelect={() => handleTimeZoneChange(timezone)}
+                        >
+                          {timezone}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
             <div className="grid gap-2">
               <Label>Telegram</Label>
-              <Input value={profile.telegram} readOnly />
+              <Input 
+                value={profile.telegram} 
+                onChange={handleTelegramChange}
+                placeholder="Enter your Telegram handle"
+              />
             </div>
           </div>
         </div>
