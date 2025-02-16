@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Bell, User } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { Textarea } from "@/components/ui/textarea";
 
 interface UserProfile {
   email: string;
@@ -139,6 +140,13 @@ export default function Profile() {
             In order to get notifications go to @PalladiumNotificationBot. Type /start and hit "Subscribe" button.
           </p>
           
+          <div className="space-y-4">
+            <Textarea
+              placeholder="Enter your notification preferences or additional notes here..."
+              className="min-h-[100px] resize-none"
+            />
+          </div>
+
           <div className="space-y-4 max-w-2xl">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
