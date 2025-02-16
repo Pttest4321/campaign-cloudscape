@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 
 // Time zones list - using a static list of common time zones
 const timeZones = [
@@ -178,6 +179,11 @@ export default function Profile() {
                   <Label htmlFor="clicks">Clicks Used</Label>
                   <span className="px-3 py-2 text-base md:text-sm">{profile.clicksUsed}</span>
                 </div>
+
+                <div className="my-6">
+                  <Separator className="my-4" />
+                </div>
+
                 <div className="grid gap-2">
                   <Label htmlFor="timezone">Time Zone</Label>
                   <Input 
