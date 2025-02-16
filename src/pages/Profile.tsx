@@ -1,171 +1,200 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
-import { useState, useEffect } from "react";
+import { Bell, User } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
-interface Profile {
-  id: string;
-  name: string;
+interface UserProfile {
   email: string;
-  bio: string;
-  company: string;
-  role: string;
-  location: string;
+  createdAt: string;
+  paidUntil: string;
+  activeTariff: string;
+  campaignsCount: number;
+  clicksUsed: number;
+  timeZone: string;
+  telegram: string;
+  notifications: {
+    all: boolean;
+    payment: boolean;
+    moderation: boolean;
+    clicksFraud: boolean;
+    ddos: boolean;
+  };
 }
 
 export default function Profile() {
   const { toast } = useToast();
-  const [formData, setFormData] = useState<Profile>({
-    id: '',
-    name: "",
-    email: "",
-    bio: "",
-    company: "",
-    role: "",
-    location: ""
+  const [activeTab, setActiveTab] = useState<"info" | "notifications">("info");
+  const [profile, setProfile] = useState<UserProfile>({
+    email: "affbeat@proton.me",
+    createdAt: "2024-09-04",
+    paidUntil: "2025-02-04",
+    activeTariff: "SMALL",
+    campaignsCount: 3,
+    clicksUsed: 45571,
+    timeZone: "Indian/Mayotte",
+    telegram: "@tryharder0x01",
+    notifications: {
+      all: true,
+      payment: true,
+      moderation: true,
+      clicksFraud: true,
+      ddos: true,
+    },
   });
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    getProfile();
-  }, []);
-
-  function getProfile() {
-    try {
-      const userId = localStorage.getItem('userId');
-      if (!userId) throw new Error('No user logged in');
-
-      const profileData = localStorage.getItem(`profile_${userId}`);
-      if (profileData) {
-        setFormData(JSON.parse(profileData));
-      }
-    } catch (error) {
-      console.error('Error loading profile:', error);
-      toast({
-        title: "Error loading profile",
-        description: "There was a problem loading your profile.",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const userId = localStorage.getItem('userId');
-      if (!userId) throw new Error('No user logged in');
-
-      const updatedProfile = {
-        ...formData,
-        id: userId,
-        updated_at: new Date().toISOString(),
-      };
-
-      localStorage.setItem(`profile_${userId}`, JSON.stringify(updatedProfile));
-
-      toast({
-        title: "Profile updated",
-        description: "Your profile has been successfully updated.",
-      });
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      toast({
-        title: "Error updating profile",
-        description: "There was a problem updating your profile.",
-        variant: "destructive"
-      });
-    }
+  const handleNotificationChange = (key: keyof UserProfile["notifications"]) => {
+    setProfile((prev) => ({
+      ...prev,
+      notifications: {
+        ...prev.notifications,
+        [key]: !prev.notifications[key],
+      },
+    }));
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const handleSaveNotifications = () => {
+    // Here you would typically save to your backend
+    toast({
+      title: "Success",
+      description: "Notification settings have been saved.",
+    });
+  };
 
   return (
-    <div className="space-y-6 fade-in">
-      <div>
-        <h1 className="text-3xl font-bold">Profile Settings</h1>
-        <p className="text-muted-foreground">Manage your account settings and preferences.</p>
+    <div className="container mx-auto px-4 py-6 max-w-4xl">
+      <div className="flex items-center gap-8 mb-8">
+        <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+          <User className="w-8 h-8 text-primary" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-semibold">{profile.email}</h1>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <div className="flex gap-4 mb-6">
+        <Button
+          variant={activeTab === "info" ? "default" : "ghost"}
+          onClick={() => setActiveTab("info")}
+          className="gap-2"
+        >
+          <User className="w-4 h-4" />
+          Personal Information
+        </Button>
+        <Button
+          variant={activeTab === "notifications" ? "default" : "ghost"}
+          onClick={() => setActiveTab("notifications")}
+          className="gap-2"
+        >
+          <Bell className="w-4 h-4" />
+          Notifications
+        </Button>
+      </div>
+
+      <Separator className="mb-6" />
+
+      {activeTab === "info" ? (
         <div className="space-y-6">
-          <div className="flex items-center gap-6">
-            <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center">
-              <span className="text-2xl font-semibold">
-                {formData.name.split(" ").map(n => n[0]).join("")}
-              </span>
-            </div>
-            <Button variant="outline">Change Avatar</Button>
-          </div>
-
-          <Separator />
-
-          <div className="grid gap-4">
+          <div className="grid gap-4 max-w-2xl">
             <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              />
+              <Label>E-Mail</Label>
+              <Input value={profile.email} readOnly />
             </div>
-
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              />
+              <Label>Date from create account</Label>
+              <Input value={profile.createdAt} readOnly />
             </div>
-
             <div className="grid gap-2">
-              <Label htmlFor="bio">Bio</Label>
-              <Textarea
-                id="bio"
-                value={formData.bio}
-                onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-              />
+              <Label>Paid until</Label>
+              <Input value={profile.paidUntil} readOnly />
             </div>
-
             <div className="grid gap-2">
-              <Label htmlFor="company">Company</Label>
-              <Input
-                id="company"
-                value={formData.company}
-                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-              />
+              <Label>Active tariff</Label>
+              <Input value={profile.activeTariff} readOnly />
             </div>
-
             <div className="grid gap-2">
-              <Label htmlFor="role">Role</Label>
-              <Input
-                id="role"
-                value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-              />
+              <Label>Number of created campaigns</Label>
+              <Input value={profile.campaignsCount.toString()} readOnly />
             </div>
-
             <div className="grid gap-2">
-              <Label htmlFor="location">Location</Label>
-              <Input
-                id="location"
-                value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              />
+              <Label>Clicks Used</Label>
+              <Input value={profile.clicksUsed.toString()} readOnly />
+            </div>
+            <div className="grid gap-2">
+              <Label>Time Zone</Label>
+              <Input value={profile.timeZone} readOnly />
+            </div>
+            <div className="grid gap-2">
+              <Label>Telegram</Label>
+              <Input value={profile.telegram} readOnly />
             </div>
           </div>
         </div>
+      ) : (
+        <div className="space-y-6">
+          <p className="text-muted-foreground">
+            In order to get notifications go to @PalladiumNotificationBot. Type /start and hit "Subscribe" button.
+          </p>
+          
+          <div className="space-y-4 max-w-2xl">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label>All Notification</Label>
+              </div>
+              <Switch
+                checked={profile.notifications.all}
+                onCheckedChange={() => handleNotificationChange("all")}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label>Payment Notification</Label>
+              </div>
+              <Switch
+                checked={profile.notifications.payment}
+                onCheckedChange={() => handleNotificationChange("payment")}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label>Moderation Notification</Label>
+              </div>
+              <Switch
+                checked={profile.notifications.moderation}
+                onCheckedChange={() => handleNotificationChange("moderation")}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label>Clicks Fraud</Label>
+              </div>
+              <Switch
+                checked={profile.notifications.clicksFraud}
+                onCheckedChange={() => handleNotificationChange("clicksFraud")}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label>DDoS</Label>
+              </div>
+              <Switch
+                checked={profile.notifications.ddos}
+                onCheckedChange={() => handleNotificationChange("ddos")}
+              />
+            </div>
+          </div>
 
-        <Button type="submit">Save Changes</Button>
-      </form>
+          <Button 
+            className="w-full"
+            onClick={handleSaveNotifications}
+          >
+            Save
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

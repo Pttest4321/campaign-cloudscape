@@ -9,7 +9,6 @@ import Campaigns from "./pages/Campaigns";
 import NewCampaign from "./pages/NewCampaign";
 import Statistics from "./pages/Statistics";
 import Profile from "./pages/Profile";
-import TeamUsers from "./pages/TeamUsers";
 import Error404 from "./pages/errors/Error404";
 import Error403 from "./pages/errors/Error403";
 import Error401 from "./pages/errors/Error401";
@@ -34,7 +33,6 @@ const App = () => (
               <Route path="/campaigns" element={<Campaigns />} />
               <Route path="/campaigns/new" element={<NewCampaign />} />
               <Route path="/statistics" element={<Statistics />} />
-              <Route path="/team-users" element={<TeamUsers />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<Error404 />} />
             </Route>
