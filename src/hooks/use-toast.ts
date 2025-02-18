@@ -156,7 +156,6 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
-      className: `${props.variant === 'success' ? 'bg-[#E5DEFF] border-[#9b87f5] text-[#9b87f5]' : ''} ${props.className || ''}`,
       onOpenChange: (open) => {
         if (!open) dismiss()
       },
