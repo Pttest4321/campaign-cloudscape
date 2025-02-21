@@ -6,6 +6,7 @@ import { Outlet } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 export function AppLayout() {
   const isMobile = useIsMobile();
@@ -32,6 +33,7 @@ export function AppLayout() {
             <Outlet />
           </div>
         </main>
+        <ScrollToTop />
       </div>
     </SidebarProvider>
   );

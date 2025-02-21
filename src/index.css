@@ -64,6 +64,31 @@
   body {
     @apply bg-background text-foreground antialiased;
   }
+
+  /* Webkit scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 14px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted border-4 border-solid border-background rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted/80;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-muted/25 border-background;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted/40;
+  }
 }
 
 .glass-card {
