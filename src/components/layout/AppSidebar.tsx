@@ -11,9 +11,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useTheme } from "@/hooks/use-theme";
 
 const menuItems = [
   { icon: Home, label: "Dashboard", path: "/" },
@@ -28,6 +29,14 @@ export function AppSidebar() {
   const location = useLocation();
   const isMobile = useIsMobile();
   const { setOpenMobile } = useSidebar();
+  const { theme } = useTheme();
+
+  // Generate UI Avatar URL with theme-appropriate colors
+  const avatarUrl = `https://ui-avatars.com/api/?name=John+Doe&background=${
+    theme === 'dark' ? '374151' : 'E5E7EB'
+  }&color=${
+    theme === 'dark' ? 'FFFFFF' : '374151'
+  }&bold=true`;
 
   return (
     <Sidebar>
@@ -48,7 +57,7 @@ export function AppSidebar() {
           <h1 className="text-2xl font-bold text-primary">Campaign Hub</h1>
           <div className="mt-4 flex items-center space-x-3 px-1">
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
+              <img src={avatarUrl} alt="JD" className="h-full w-full object-cover" />
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
             <div>
