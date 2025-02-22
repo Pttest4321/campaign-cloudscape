@@ -34,11 +34,54 @@
                 </p>
             </div>
             <div class="grid gap-2">
+                <button id="resendButton" 
+                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                    disabled>
+                    Resend email (60s)
+                </button>
                 <a href="/auth/login" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
                     Back to login
                 </a>
             </div>
         </div>
     </div>
+
+    <script>
+        let timeLeft = 60;
+        const resendButton = document.getElementById('resendButton');
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                resendButton.disabled = false;
+                resendButton.textContent = 'Resend email';
+            } else {
+                resendButton.textContent = `Resend email (${timeLeft}s)`;
+            }
+        }, 1000);
+
+        resendButton.addEventListener('click', () => {
+            // Reset the countdown
+            timeLeft = 60;
+            resendButton.disabled = true;
+            resendButton.textContent = `Resend email (${timeLeft}s)`;
+            
+            // Start the countdown again
+            const newCountdown = setInterval(() => {
+                timeLeft--;
+                if (timeLeft <= 0) {
+                    clearInterval(newCountdown);
+                    resendButton.disabled = false;
+                    resendButton.textContent = 'Resend email';
+                } else {
+                    resendButton.textContent = `Resend email (${timeLeft}s)`;
+                }
+            }, 1000);
+
+            // Here you would typically make an API call to resend the verification email
+            console.log('Resending verification email...');
+        });
+    </script>
 </body>
 </html>
