@@ -1,4 +1,5 @@
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -7,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Globe, Target, Users, Tag } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import {
@@ -18,7 +20,6 @@ import {
 } from "@/components/ui/form";
 import { MultiSelect, Option } from "@/components/ui/multi-select";
 import { useState } from "react";
-import { IntegrationSwitches } from "./IntegrationSwitches";
 
 interface CampaignSettingsFormProps {
   isReverseIntegration: boolean;
@@ -139,12 +140,30 @@ export const CampaignSettingsForm = ({
         />
       </div>
 
-      <IntegrationSwitches 
-        isReverseIntegration={isReverseIntegration}
-        setIsReverseIntegration={setIsReverseIntegration}
-        isBlockIntegration={isBlockIntegration}
-        setIsBlockIntegration={setIsBlockIntegration}
-      />
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="flex items-center justify-between">
+          <FormLabel htmlFor="reverse-integration">Reverse Integration</FormLabel>
+          <Switch
+            id="reverse-integration"
+            checked={isReverseIntegration}
+            onCheckedChange={setIsReverseIntegration}
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <FormLabel htmlFor="block-integration">Block Integration</FormLabel>
+          <Switch
+            id="block-integration"
+            checked={isBlockIntegration}
+            onCheckedChange={setIsBlockIntegration}
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <FormLabel>Passing labels</FormLabel>
+          <Switch />
+        </div>
+      </div>
     </div>
   );
 };
