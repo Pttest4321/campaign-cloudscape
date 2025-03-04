@@ -1,12 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { Link, Users } from "lucide-react";
 import { useState } from "react";
@@ -38,11 +31,12 @@ export default function NewCampaign() {
     resolver: zodResolver(campaignSchema),
     defaultValues: {
       name: "",
-      country: "",
-      language: "",
+      country: [],
+      language: [],
       target_url: "",
       bot_url: "",
       team: "",
+      tags: [],
     },
   });
 
@@ -120,6 +114,7 @@ export default function NewCampaign() {
         offer_url: data.bot_url,
         status: 'active',
         split_urls: selectedLogic === 'split' ? splitUrls : [],
+        tags: data.tags,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
@@ -248,17 +243,9 @@ export default function NewCampaign() {
                     <Users className="h-4 w-4" />
                     Team Users
                   </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select team members" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="team1">Team 1</SelectItem>
-                      <SelectItem value="team2">Team 2</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <Input {...field} placeholder="Select or enter team members" />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
