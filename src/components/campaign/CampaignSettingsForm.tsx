@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Globe, Target, Users } from "lucide-react";
+import { Globe, Target, Users, Tag } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import {
   FormField,
@@ -18,6 +18,8 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { MultiSelect, Option } from "@/components/ui/multi-select";
+import { useState } from "react";
 
 interface CampaignSettingsFormProps {
   isReverseIntegration: boolean;
@@ -26,6 +28,14 @@ interface CampaignSettingsFormProps {
   setIsBlockIntegration: (value: boolean) => void;
 }
 
+const tagOptions: Option[] = [
+  { label: "Tag 1", value: "tag1" },
+  { label: "Tag 2", value: "tag2" },
+  { label: "Tag 3", value: "tag3" },
+  { label: "Performance", value: "performance" },
+  { label: "Awareness", value: "awareness" },
+];
+
 export const CampaignSettingsForm = ({
   isReverseIntegration,
   setIsReverseIntegration,
@@ -33,6 +43,7 @@ export const CampaignSettingsForm = ({
   setIsBlockIntegration,
 }: CampaignSettingsFormProps) => {
   const form = useFormContext();
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   return (
     <div className="grid gap-6">
@@ -106,18 +117,27 @@ export const CampaignSettingsForm = ({
           )}
         />
 
-        <div className="space-y-2">
-          <FormLabel>Tag Select</FormLabel>
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder="Select tag" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="tag1">Tag 1</SelectItem>
-              <SelectItem value="tag2">Tag 2</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <FormField
+          control={form.control}
+          name="tags"
+          render={() => (
+            <FormItem>
+              <FormLabel className="flex items-center gap-1">
+                <Tag className="h-4 w-4" />
+                Tags
+              </FormLabel>
+              <FormControl>
+                <MultiSelect
+                  options={tagOptions}
+                  selected={selectedTags}
+                  onChange={setSelectedTags}
+                  placeholder="Select tags"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
