@@ -8,7 +8,6 @@ export const campaignSchema = z.object({
   target_url: z.string().url("Please enter a valid URL").optional(),
   bot_url: z.string().min(1, "Bot URL is required"),
   team: z.string().optional(),
-  tags: z.array(z.string()).optional(),
 });
 
 export type CampaignFormData = z.infer<typeof campaignSchema>;

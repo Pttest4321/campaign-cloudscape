@@ -1,4 +1,3 @@
-
 export type SplitUrl = {
   url: string;
   percentage: number;
@@ -13,5 +12,4 @@ export interface CampaignFormData {
   target_url?: string;
   bot_url: string;
   team?: string;
-  tags?: string[];
 }
