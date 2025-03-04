@@ -1,12 +1,15 @@
 
 import { Switch } from "@/components/ui/switch";
 import { FormLabel } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 
 interface IntegrationSwitchesProps {
   isReverseIntegration: boolean;
   setIsReverseIntegration: (value: boolean) => void;
   isBlockIntegration: boolean;
   setIsBlockIntegration: (value: boolean) => void;
+  passingLabels?: boolean;
+  setPassingLabels?: (value: boolean) => void;
 }
 
 export const IntegrationSwitches = ({
@@ -14,7 +17,15 @@ export const IntegrationSwitches = ({
   setIsReverseIntegration,
   isBlockIntegration,
   setIsBlockIntegration,
+  passingLabels = false,
+  setPassingLabels,
 }: IntegrationSwitchesProps) => {
+  const handlePassingLabelsChange = (checked: boolean) => {
+    if (setPassingLabels) {
+      setPassingLabels(checked);
+    }
+  };
+
   return (
     <div className="grid md:grid-cols-3 gap-6">
       <div className="flex items-center justify-between">
@@ -36,8 +47,12 @@ export const IntegrationSwitches = ({
       </div>
 
       <div className="flex items-center justify-between">
-        <FormLabel>Passing labels</FormLabel>
-        <Switch />
+        <Label htmlFor="passing-labels">Passing labels</Label>
+        <Switch
+          id="passing-labels"
+          checked={passingLabels}
+          onCheckedChange={handlePassingLabelsChange}
+        />
       </div>
     </div>
   );
