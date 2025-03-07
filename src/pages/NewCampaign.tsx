@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
@@ -277,17 +276,17 @@ export default function NewCampaign() {
           {/* Section 5: Tracking Parameters */}
           <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
             <h2 className="text-xl font-medium mb-4">Tracking Configuration</h2>
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="tracking_id"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      To track conversions, specify the PP (partner program) click identifier. For example: clickid, subid, etc
+                      To track conversions, specify the PP (partner program) click identifier
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Enter tracking ID" />
+                      <Input {...field} placeholder="Enter tracking ID (e.g. clickid, subid)" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
