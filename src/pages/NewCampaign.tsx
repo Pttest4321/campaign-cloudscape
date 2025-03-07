@@ -217,7 +217,7 @@ export default function NewCampaign() {
               />
               
               <Tabs defaultValue="iframe" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="iframe">iFrame</TabsTrigger>
                   <TabsTrigger value="redirect">Redirect</TabsTrigger>
                   <TabsTrigger value="content">Content</TabsTrigger>
