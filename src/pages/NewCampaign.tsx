@@ -18,6 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export default function NewCampaign() {
   const { toast } = useToast();
@@ -193,7 +194,7 @@ export default function NewCampaign() {
           {/* Section 2: Target URL */}
           <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
             <h2 className="text-xl font-medium mb-4">Target URL Configuration</h2>
-            <div className="space-y-2">
+            <div className="space-y-4">
               <FormField
                 control={form.control}
                 name="target_url"
@@ -201,29 +202,36 @@ export default function NewCampaign() {
                   <FormItem>
                     <FormLabel className="flex items-center gap-2">
                       <Link className="h-4 w-4" />
-                      {selectedLogic === 'split' ? 'Split URLs' : 'Link to the target page'}
+                      Link to the target page
                     </FormLabel>
-                    {selectedLogic === 'split' ? (
-                      <SplitUrlInput
-                        splitUrls={splitUrls}
-                        onSplitUrlChange={handleSplitUrlChange}
-                        onSplitPercentageChange={handleSplitPercentageChange}
-                        onAddSplitUrl={handleAddSplitUrl}
-                        onDeleteSplitUrl={handleDeleteSplitUrl}
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="url"
+                        placeholder="Enter target URL (e.g. https://offer.com/)"
                       />
-                    ) : (
-                      <FormControl>
-                        <Input
-                          {...field}
-                          type="url"
-                          placeholder="Enter target URL (e.g. https://offer.com/)"
-                        />
-                      </FormControl>
-                    )}
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              
+              <Tabs defaultValue="iframe" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
+                  <TabsTrigger value="iframe">iFrame</TabsTrigger>
+                  <TabsTrigger value="redirect">Redirect</TabsTrigger>
+                  <TabsTrigger value="content">Content</TabsTrigger>
+                </TabsList>
+                <TabsContent value="iframe">
+                  {/* iFrame specific settings will go here */}
+                </TabsContent>
+                <TabsContent value="redirect">
+                  {/* Redirect specific settings will go here */}
+                </TabsContent>
+                <TabsContent value="content">
+                  {/* Content specific settings will go here */}
+                </TabsContent>
+              </Tabs>
             </div>
           </div>
 
