@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Link, Users, Plus, Trash2, Copy } from "lucide-react";
+import { Link, Users, Plus, Trash2, Copy, Percent, Target, Globe, Tag, Hash, Link2 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SplitUrlInput } from "@/components/campaign/SplitUrlInput";
@@ -162,7 +162,7 @@ export default function NewCampaign() {
     }
   };
 
-  return (
+return (
     <div className="space-y-6 fade-in max-w-4xl mx-auto">
       <div>
         <h1 className="text-2xl font-semibold">Settings for campaign</h1>
@@ -181,7 +181,10 @@ export default function NewCampaign() {
             />
             
             <div className="mt-4 space-y-2">
-              <h3 className="text-sm font-medium">Campaign Logic Type</h3>
+              <h3 className="text-sm font-medium flex items-center gap-2">
+                <Target className="h-4 w-4" />
+                Campaign Logic Type
+              </h3>
               <div className="grid grid-cols-3 gap-2">
                 <Button
                   type="button"
@@ -213,7 +216,10 @@ export default function NewCampaign() {
 
           {/* Section 2: Target URL */}
           <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
-            <h2 className="text-xl font-medium mb-4">Target URL Configuration</h2>
+            <h2 className="text-xl font-medium mb-4 flex items-center gap-2">
+              <Link2 className="h-5 w-5" />
+              Target URL Configuration
+            </h2>
             <div className="space-y-4">
               <FormField
                 control={form.control}
@@ -252,10 +258,13 @@ export default function NewCampaign() {
                   {/* Content specific settings will go here */}
                 </TabsContent>
               </Tabs>
-                  
+
               {selectedLogic === 'multi' && (
                 <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Split settings for target link:</h3>
+                  <h3 className="text-sm font-medium flex items-center gap-2">
+                    <Percent className="h-4 w-4" />
+                    Split settings for target link:
+                  </h3>
                   {splitGroups.map((group, groupIndex) => (
                     <div key={groupIndex} className="space-y-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg">
                       <div className="flex items-center justify-between">
@@ -375,7 +384,10 @@ export default function NewCampaign() {
 
           {/* Section 3: Bot URL */}
           <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
-            <h2 className="text-xl font-medium mb-4">Bot Configuration</h2>
+            <h2 className="text-xl font-medium mb-4 flex items-center gap-2">
+              <Globe className="h-5 w-5" />
+              Bot Configuration
+            </h2>
             <div className="space-y-2">
               <FormField
                 control={form.control}
@@ -398,7 +410,10 @@ export default function NewCampaign() {
 
           {/* Section 4: Team Users */}
           <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
-            <h2 className="text-xl font-medium mb-4">Team Configuration</h2>
+            <h2 className="text-xl font-medium mb-4 flex items-center gap-2">
+              <Users className="h-5 w-5" />
+              Team Configuration
+            </h2>
             <div className="space-y-2">
               <FormField
                 control={form.control}
@@ -421,15 +436,19 @@ export default function NewCampaign() {
 
           {/* Section 5: Tracking Parameters */}
           <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
-            <h2 className="text-xl font-medium mb-4">Tracking Configuration</h2>
+            <h2 className="text-xl font-medium mb-4 flex items-center gap-2">
+              <Hash className="h-5 w-5" />
+              Tracking Configuration
+            </h2>
             <div className="space-y-4">
               <FormField
                 control={form.control}
                 name="tracking_id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      To track conversions, specify the PP (partner program) click identifier. For example: clickid, subid, etc
+                    <FormLabel className="flex items-center gap-2">
+                      <Tag className="h-4 w-4" />
+                      To track conversions, specify the PP (partner program) click identifier
                     </FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Enter tracking ID" />
@@ -455,3 +474,5 @@ export default function NewCampaign() {
     </div>
   );
 }
+
+export default NewCampaign;
