@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Campaign</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://cdn.jsdelivr.net/npm/lucide-icons@0.309.0/dist/umd/lucide-icons.min.js" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -32,146 +33,214 @@
 <body class="bg-background text-foreground">
     <div class="max-w-4xl mx-auto p-6 space-y-6 fade-in">
         <div>
-            <h1 class="text-2xl font-semibold">Settings for campaign</h1>
+            <h1 class="text-2xl font-semibold flex items-center gap-2">
+                <i data-lucide="settings"></i>
+                Settings for campaign
+            </h1>
         </div>
 
         <form id="campaignForm" class="space-y-8">
             <!-- Campaign Settings -->
-            <div class="grid gap-6">
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium">
-                        Campaign Name <span class="text-red-500">*</span>
-                    </label>
-                    <input 
-                        type="text" 
-                        name="name" 
-                        required
-                        placeholder="Enter campaign name"
-                        class="w-full px-3 py-2 border rounded-md"
-                    >
-                </div>
-
-                <div class="grid md:grid-cols-3 gap-6">
-                    <!-- Country Selection -->
+            <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
+                <h2 class="text-xl font-medium mb-4 flex items-center gap-2">
+                    <i data-lucide="file-text"></i>
+                    Campaign Details
+                </h2>
+                <div class="grid gap-6">
                     <div class="space-y-2">
-                        <label class="block text-sm font-medium">
-                            <i data-lucide="target"></i>
-                            Target geolocation <span class="text-red-500">*</span>
+                        <label class="block text-sm font-medium flex items-center gap-2">
+                            <i data-lucide="type"></i>
+                            Campaign Name <span class="text-red-500">*</span>
                         </label>
-                        <select 
-                            name="country" 
+                        <input 
+                            type="text" 
+                            name="name" 
                             required
+                            placeholder="Enter campaign name"
                             class="w-full px-3 py-2 border rounded-md"
                         >
-                            <option value="">Select country</option>
-                            <option value="all">All Countries</option>
-                            <option value="us">United States</option>
-                            <option value="uk">United Kingdom</option>
-                            <option value="ca">Canada</option>
-                        </select>
                     </div>
 
-                    <!-- Language Selection -->
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium">
-                            <i data-lucide="globe"></i>
-                            Language (optional)
-                        </label>
-                        <select 
-                            name="language"
-                            class="w-full px-3 py-2 border rounded-md"
-                        >
-                            <option value="">Select language</option>
-                            <option value="en">English</option>
-                            <option value="es">Spanish</option>
-                            <option value="fr">French</option>
-                        </select>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- Country Selection -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium flex items-center gap-2">
+                                <i data-lucide="target"></i>
+                                Target geolocation <span class="text-red-500">*</span>
+                            </label>
+                            <select 
+                                name="country" 
+                                required
+                                class="w-full px-3 py-2 border rounded-md"
+                            >
+                                <option value="">Select country</option>
+                                <option value="all">All Countries</option>
+                                <option value="us">United States</option>
+                                <option value="uk">United Kingdom</option>
+                                <option value="ca">Canada</option>
+                            </select>
+                        </div>
+
+                        <!-- Language Selection -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium flex items-center gap-2">
+                                <i data-lucide="globe"></i>
+                                Language (optional)
+                            </label>
+                            <select 
+                                name="language"
+                                class="w-full px-3 py-2 border rounded-md"
+                            >
+                                <option value="">Select language</option>
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                            </select>
+                        </div>
+
+                        <!-- Tag Selection -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium flex items-center gap-2">
+                                <i data-lucide="tag"></i>
+                                Tag Select
+                            </label>
+                            <select class="w-full px-3 py-2 border rounded-md">
+                                <option value="">Select tag</option>
+                                <option value="tag1">Tag 1</option>
+                                <option value="tag2">Tag 2</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <!-- Tag Selection -->
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium">Tag Select</label>
-                        <select class="w-full px-3 py-2 border rounded-md">
-                            <option value="">Select tag</option>
-                            <option value="tag1">Tag 1</option>
-                            <option value="tag2">Tag 2</option>
-                        </select>
-                    </div>
-                </div>
+                    <!-- Integration Options -->
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm font-medium flex items-center gap-2">
+                                <i data-lucide="refresh-ccw"></i>
+                                Reverse Integration
+                            </label>
+                            <input type="checkbox" name="reverseIntegration" class="h-4 w-4">
+                        </div>
 
-                <!-- Integration Options -->
-                <div class="grid md:grid-cols-3 gap-6">
-                    <div class="flex items-center justify-between">
-                        <label class="text-sm font-medium">Reverse Integration</label>
-                        <input type="checkbox" name="reverseIntegration" class="h-4 w-4">
-                    </div>
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm font-medium flex items-center gap-2">
+                                <i data-lucide="shield"></i>
+                                Block Integration
+                            </label>
+                            <input type="checkbox" name="blockIntegration" class="h-4 w-4">
+                        </div>
 
-                    <div class="flex items-center justify-between">
-                        <label class="text-sm font-medium">Block Integration</label>
-                        <input type="checkbox" name="blockIntegration" class="h-4 w-4">
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <label class="text-sm font-medium">Passing labels</label>
-                        <input type="checkbox" name="passingLabels" class="h-4 w-4">
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm font-medium flex items-center gap-2">
+                                <i data-lucide="tag"></i>
+                                Passing labels
+                            </label>
+                            <input type="checkbox" name="passingLabels" class="h-4 w-4">
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- URL Settings -->
-            <div id="urlContainer" class="space-y-4">
-                <div class="flex gap-4 items-center">
-                    <div class="flex-1">
-                        <input 
-                            type="url" 
-                            name="targetUrl" 
-                            placeholder="Enter target URL"
-                            pattern="https?://.+"
-                            class="w-full px-3 py-2 border rounded-md"
-                        >
+            <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
+                <h2 class="text-xl font-medium mb-4 flex items-center gap-2">
+                    <i data-lucide="link"></i>
+                    Target URL Configuration
+                </h2>
+                <div id="urlContainer" class="space-y-4">
+                    <div class="flex gap-4 items-center">
+                        <div class="flex-1 relative">
+                            <input 
+                                type="url" 
+                                name="targetUrl" 
+                                placeholder="Enter target URL"
+                                pattern="https?://.+"
+                                class="w-full px-3 py-2 border rounded-md"
+                            >
+                            <button 
+                                type="button"
+                                class="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full"
+                                onclick="handleAddSplitUrl()"
+                            >
+                                <i data-lucide="plus"></i>
+                            </button>
+                        </div>
+                        <div class="w-24">
+                            <input 
+                                type="number" 
+                                name="percentage" 
+                                value="100"
+                                min="0" 
+                                max="100"
+                                class="w-full px-3 py-2 border rounded-md"
+                            >
+                        </div>
+                        <div class="w-8 text-sm">%</div>
                     </div>
-                    <div class="w-24">
-                        <input 
-                            type="number" 
-                            name="percentage" 
-                            value="100"
-                            min="0" 
-                            max="100"
-                            class="w-full px-3 py-2 border rounded-md"
-                        >
-                    </div>
-                    <div class="w-8 text-sm">%</div>
                 </div>
             </div>
 
             <!-- Bot URL -->
-            <div class="space-y-2">
-                <label class="block text-sm font-medium">
-                    <i data-lucide="link"></i>
-                    Link for bots
-                </label>
-                <input 
-                    type="text" 
-                    name="botUrl" 
-                    placeholder="redirect.php"
-                    class="w-full px-3 py-2 border rounded-md"
-                >
+            <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
+                <h2 class="text-xl font-medium mb-4 flex items-center gap-2">
+                    <i data-lucide="bot"></i>
+                    Bot Configuration
+                </h2>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium flex items-center gap-2">
+                        <i data-lucide="link"></i>
+                        Link for bots
+                    </label>
+                    <input 
+                        type="text" 
+                        name="botUrl" 
+                        placeholder="redirect.php"
+                        class="w-full px-3 py-2 border rounded-md"
+                    >
+                </div>
             </div>
 
             <!-- Team Selection -->
-            <div class="space-y-2">
-                <label class="block text-sm font-medium">
+            <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
+                <h2 class="text-xl font-medium mb-4 flex items-center gap-2">
                     <i data-lucide="users"></i>
-                    Team Users
-                </label>
-                <select 
-                    name="team"
-                    class="w-full px-3 py-2 border rounded-md"
-                >
-                    <option value="">Select team members</option>
-                    <option value="team1">Team 1</option>
-                    <option value="team2">Team 2</option>
-                </select>
+                    Team Configuration
+                </h2>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium flex items-center gap-2">
+                        <i data-lucide="users"></i>
+                        Team Users
+                    </label>
+                    <input 
+                        type="text" 
+                        name="team" 
+                        placeholder="Select or enter team members"
+                        class="w-full px-3 py-2 border rounded-md"
+                    >
+                </div>
+            </div>
+
+            <!-- Tracking Configuration -->
+            <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
+                <h2 class="text-xl font-medium mb-4 flex items-center gap-2">
+                    <i data-lucide="hash"></i>
+                    Tracking Configuration
+                </h2>
+                <div class="space-y-4">
+                    <label class="block text-sm font-medium flex items-center gap-2">
+                        <i data-lucide="tag"></i>
+                        To track conversions, specify the PP (partner program) click identifier
+                    </label>
+                    <input 
+                        type="text" 
+                        name="trackingId" 
+                        placeholder="Enter tracking ID"
+                        class="w-full px-3 py-2 border rounded-md"
+                    >
+                    <p class="text-sm text-gray-500 mt-2">
+                        Postback link [POST/GET]: https://api.example.expert/v1/postback
+                    </p>
+                </div>
             </div>
 
             <!-- Form Actions -->
@@ -197,45 +266,6 @@
         // Initialize Lucide icons
         lucide.createIcons();
 
-        // Form submission handler
-        document.getElementById('campaignForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const formData = new FormData(e.target);
-            const data = {
-                name: formData.get('name'),
-                country: formData.get('country'),
-                language: formData.get('language'),
-                reverseIntegration: formData.get('reverseIntegration') === 'on',
-                blockIntegration: formData.get('blockIntegration') === 'on',
-                passingLabels: formData.get('passingLabels') === 'on',
-                targetUrl: formData.get('targetUrl'),
-                botUrl: formData.get('botUrl'),
-                team: formData.get('team')
-            };
-
-            try {
-                const response = await fetch('/api/campaigns', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to create campaign');
-                }
-
-                // Show success message
-                alert('Campaign created successfully');
-                window.location.href = '/campaigns';
-            } catch (error) {
-                // Show error message
-                alert('Error creating campaign: ' + error.message);
-            }
-        });
-
         // Split URL handling
         let splitUrls = [{ url: '', percentage: 100 }];
         
@@ -243,7 +273,7 @@
             const container = document.getElementById('urlContainer');
             container.innerHTML = splitUrls.map((url, index) => `
                 <div class="flex gap-4 items-center">
-                    <div class="flex-1">
+                    <div class="flex-1 relative">
                         <input 
                             type="url" 
                             name="targetUrl${index}" 
@@ -253,6 +283,15 @@
                             class="w-full px-3 py-2 border rounded-md"
                             onchange="handleSplitUrlChange(${index}, this.value)"
                         >
+                        ${index === 0 ? `
+                            <button 
+                                type="button"
+                                class="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full"
+                                onclick="handleAddSplitUrl()"
+                            >
+                                <i data-lucide="plus"></i>
+                            </button>
+                        ` : ''}
                     </div>
                     <div class="w-24">
                         <input 
@@ -270,18 +309,9 @@
                         <button 
                             type="button"
                             onclick="handleDeleteSplitUrl(${index})"
-                            class="p-2 border rounded-md hover:bg-accent"
+                            class="p-1 hover:bg-gray-100 rounded-full"
                         >
                             <i data-lucide="trash-2"></i>
-                        </button>
-                    ` : ''}
-                    ${index === splitUrls.length - 1 ? `
-                        <button 
-                            type="button"
-                            onclick="handleAddSplitUrl()"
-                            class="p-2 border rounded-md hover:bg-accent"
-                        >
-                            <i data-lucide="plus"></i>
                         </button>
                     ` : ''}
                 </div>
@@ -348,6 +378,44 @@
             
             updateSplitUrls();
         }
+
+        // Form submission handler
+        document.getElementById('campaignForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {
+                name: formData.get('name'),
+                country: formData.get('country'),
+                language: formData.get('language'),
+                reverseIntegration: formData.get('reverseIntegration') === 'on',
+                blockIntegration: formData.get('blockIntegration') === 'on',
+                passingLabels: formData.get('passingLabels') === 'on',
+                splitUrls: splitUrls,
+                botUrl: formData.get('botUrl'),
+                team: formData.get('team'),
+                trackingId: formData.get('trackingId')
+            };
+
+            try {
+                const response = await fetch('/api/campaigns', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to create campaign');
+                }
+
+                alert('Campaign created successfully');
+                window.location.href = '/campaigns';
+            } catch (error) {
+                alert('Error creating campaign: ' + error.message);
+            }
+        });
     </script>
 </body>
 </html>
