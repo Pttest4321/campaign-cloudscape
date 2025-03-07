@@ -14,4 +14,6 @@ export interface CampaignFormData {
   bot_url: string;
   team?: string;
   tags?: string[];
+  tracking_id?: string;
+  postback_url?: string;
 }

@@ -38,6 +38,8 @@ export default function NewCampaign() {
       bot_url: "",
       team: "",
       tags: [],
+      tracking_id: "",
+      postback_url: "",
     },
   });
 
@@ -116,6 +118,8 @@ export default function NewCampaign() {
         status: 'active',
         split_urls: selectedLogic === 'split' ? splitUrls : [],
         tags: data.tags,
+        tracking_id: data.tracking_id,
+        postback_url: data.postback_url,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
@@ -262,6 +266,44 @@ export default function NewCampaign() {
                     </FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Select or enter team members" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          {/* Section 5: Tracking Parameters */}
+          <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
+            <h2 className="text-xl font-medium mb-4">Tracking Configuration</h2>
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="tracking_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      To track conversions, specify the PP (partner program) click identifier. For example: clickid, subid, etc
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Enter tracking ID" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="postback_url"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Postback link [POST/GET]:
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="https://api.example.com/v1/postback" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

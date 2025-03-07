@@ -9,6 +9,8 @@ export const campaignSchema = z.object({
   bot_url: z.string().min(1, "Bot URL is required"),
   team: z.string().optional(),
   tags: z.array(z.string()).optional(),
+  tracking_id: z.string().optional(),
+  postback_url: z.string().optional(),
 });
 
 export type CampaignFormData = z.infer<typeof campaignSchema>;
