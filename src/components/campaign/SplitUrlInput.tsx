@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2 } from "lucide-react";
@@ -19,11 +18,26 @@ export const SplitUrlInput = ({
   onAddSplitUrl,
   onDeleteSplitUrl,
 }: SplitUrlInputProps) => {
+  const handleAddSplitUrl = () => {
+    if (splitUrls.length >= 10) return;
+    
+    const newPercentage = Math.floor(100 / (splitUrls.length + 1));
+    const remainingPercentage = 100 - newPercentage;
+    
+    // Distribute remaining percentage among existing URLs
+    const distributedPercentage = Math.floor(remainingPercentage / splitUrls.length);
+    splitUrls.forEach((_, index) => {
+      onSplitPercentageChange(index, distributedPercentage.toString());
+    });
+    
+    onAddSplitUrl();
+  };
+
   return (
     <div className="space-y-4">
       {splitUrls.map((splitUrl, index) => (
         <div key={index} className="flex gap-4 items-center">
-          <div className="flex-1">
+          <div className="flex-1 relative">
             <Input
               value={splitUrl.url}
               onChange={(e) => onSplitUrlChange(index, e.target.value)}
@@ -31,6 +45,17 @@ export const SplitUrlInput = ({
               type="url"
               pattern="https?://.+"
             />
+            {index === 0 && splitUrls.length < 10 && (
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={handleAddSplitUrl}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2"
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            )}
           </div>
           <div className="w-24">
             <Input
@@ -51,17 +76,6 @@ export const SplitUrlInput = ({
               className="flex-shrink-0"
             >
               <Trash2 className="h-4 w-4" />
-            </Button>
-          )}
-          {index === splitUrls.length - 1 && (
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={onAddSplitUrl}
-              className="flex-shrink-0"
-            >
-              <Plus className="h-4 w-4" />
             </Button>
           )}
         </div>
