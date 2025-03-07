@@ -118,6 +118,10 @@ export default function NewCampaign() {
     setSplitGroups(newGroups);
   };
 
+  const handleDeleteSplitGroup = (indexToDelete: number) => {
+    setSplitGroups(splitGroups.filter((_, index) => index !== indexToDelete));
+  };
+
   const onSubmit = async (data: CampaignFormData) => {
     try {
       const userId = localStorage.getItem('userId');
@@ -252,6 +256,17 @@ export default function NewCampaign() {
                           >
                             <Link className="h-4 w-4" />
                           </Button>
+                          {groupIndex !== 0 && (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="icon"
+                              onClick={() => handleDeleteSplitGroup(groupIndex)}
+                              className="flex-shrink-0"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
                           <Button
                             type="button"
                             variant="outline"
