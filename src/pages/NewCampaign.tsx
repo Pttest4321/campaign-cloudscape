@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-export default function NewCampaign() {
+function NewCampaign() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isReverseIntegration, setIsReverseIntegration] = useState(false);
@@ -162,7 +162,7 @@ export default function NewCampaign() {
     }
   };
 
-return (
+  return (
     <div className="space-y-6 fade-in max-w-4xl mx-auto">
       <div>
         <h1 className="text-2xl font-semibold">Settings for campaign</h1>
