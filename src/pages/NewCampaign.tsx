@@ -309,6 +309,22 @@ export default function NewCampaign() {
                 )}
               />
             </div>
+
+            <div className="mt-4">
+              <FormLabel className="block mb-2">Attach Image</FormLabel>
+              <Input 
+                type="file" 
+                accept="image/*"
+                className="cursor-pointer"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    // Handle file upload here
+                    console.log('File selected:', file);
+                  }
+                }}
+              />
+            </div>
           </div>
 
           <div className="flex gap-4">
