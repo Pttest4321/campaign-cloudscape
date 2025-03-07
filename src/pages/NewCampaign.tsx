@@ -235,7 +235,24 @@ export default function NewCampaign() {
                   </FormItem>
                 )}
               />
-              
+
+              <Tabs defaultValue="iframe" className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="iframe">iFrame</TabsTrigger>
+                  <TabsTrigger value="redirect">Redirect</TabsTrigger>
+                  <TabsTrigger value="content">Content</TabsTrigger>
+                </TabsList>
+                <TabsContent value="iframe">
+                  {/* iFrame specific settings will go here */}
+                </TabsContent>
+                <TabsContent value="redirect">
+                  {/* Redirect specific settings will go here */}
+                </TabsContent>
+                <TabsContent value="content">
+                  {/* Content specific settings will go here */}
+                </TabsContent>
+              </Tabs>
+                  
               {selectedLogic === 'multi' && (
                 <div className="space-y-4">
                   <h3 className="text-sm font-medium">Split settings for target link:</h3>
@@ -305,6 +322,23 @@ export default function NewCampaign() {
                           setSplitGroups(newGroups);
                         }}
                       />
+
+                      <Tabs defaultValue="iframe" className="w-full">
+                        <TabsList className="grid w-full grid-cols-3">
+                          <TabsTrigger value="iframe">iFrame</TabsTrigger>
+                          <TabsTrigger value="redirect">Redirect</TabsTrigger>
+                          <TabsTrigger value="content">Content</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="iframe">
+                          {/* iFrame specific settings will go here */}
+                        </TabsContent>
+                        <TabsContent value="redirect">
+                          {/* Redirect specific settings will go here */}
+                        </TabsContent>
+                        <TabsContent value="content">
+                          {/* Content specific settings will go here */}
+                        </TabsContent>
+                      </Tabs>
                     </div>
                   ))}
                   
@@ -318,23 +352,6 @@ export default function NewCampaign() {
                   </Button>
                 </div>
               )}
-
-              <Tabs defaultValue="iframe" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="iframe">iFrame</TabsTrigger>
-                  <TabsTrigger value="redirect">Redirect</TabsTrigger>
-                  <TabsTrigger value="content">Content</TabsTrigger>
-                </TabsList>
-                <TabsContent value="iframe">
-                  {/* iFrame specific settings will go here */}
-                </TabsContent>
-                <TabsContent value="redirect">
-                  {/* Redirect specific settings will go here */}
-                </TabsContent>
-                <TabsContent value="content">
-                  {/* Content specific settings will go here */}
-                </TabsContent>
-              </Tabs>
             </div>
           </div>
 
