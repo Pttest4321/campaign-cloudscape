@@ -218,7 +218,7 @@ export default function NewCampaign() {
                   <FormItem>
                     <FormLabel className="flex items-center gap-2">
                       <Link className="h-4 w-4" />
-                      Link to the target page
+                      Default settings for target link <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -232,6 +232,78 @@ export default function NewCampaign() {
                 )}
               />
               
+              {selectedLogic === 'multi' && (
+                <div className="space-y-4">
+                  <h3 className="text-sm font-medium">Split settings for target link:</h3>
+                  {splitGroups.map((group, groupIndex) => (
+                    <div key={groupIndex} className="space-y-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <Input
+                          value={group.name}
+                          onChange={(e) => handleUpdateSplitGroupName(groupIndex, e.target.value)}
+                          className="max-w-xs"
+                        />
+                        <div className="flex gap-2">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            className="bg-orange-100 hover:bg-orange-200 dark:bg-orange-900/20 dark:hover:bg-orange-900/30"
+                          >
+                            <Link className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => {
+                              const newGroups = [...splitGroups];
+                              newGroups[groupIndex].urls.push({ url: '', percentage: 0 });
+                              setSplitGroups(newGroups);
+                            }}
+                          >
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <SplitUrlInput
+                        splitUrls={group.urls}
+                        onSplitUrlChange={(index, value) => {
+                          const newGroups = [...splitGroups];
+                          newGroups[groupIndex].urls[index].url = value;
+                          setSplitGroups(newGroups);
+                        }}
+                        onSplitPercentageChange={(index, value) => {
+                          const newGroups = [...splitGroups];
+                          newGroups[groupIndex].urls[index].percentage = parseInt(value) || 0;
+                          setSplitGroups(newGroups);
+                        }}
+                        onAddSplitUrl={() => {
+                          const newGroups = [...splitGroups];
+                          newGroups[groupIndex].urls.push({ url: '', percentage: 0 });
+                          setSplitGroups(newGroups);
+                        }}
+                        onDeleteSplitUrl={(index) => {
+                          const newGroups = [...splitGroups];
+                          newGroups[groupIndex].urls = newGroups[groupIndex].urls.filter((_, i) => i !== index);
+                          setSplitGroups(newGroups);
+                        }}
+                      />
+                    </div>
+                  ))}
+                  
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleAddSplitGroup}
+                    className="w-full"
+                  >
+                    Add Split Group
+                  </Button>
+                </div>
+              )}
+
               <Tabs defaultValue="iframe" className="w-full">
                 <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="iframe">iFrame</TabsTrigger>
@@ -321,78 +393,6 @@ export default function NewCampaign() {
               />
             </div>
           </div>
-
-          {selectedLogic === 'multi' && (
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium">Split settings for target link:</h3>
-              {splitGroups.map((group, groupIndex) => (
-                <div key={groupIndex} className="space-y-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <Input
-                      value={group.name}
-                      onChange={(e) => handleUpdateSplitGroupName(groupIndex, e.target.value)}
-                      className="max-w-xs"
-                    />
-                    <div className="flex gap-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        className="bg-orange-100 hover:bg-orange-200 dark:bg-orange-900/20 dark:hover:bg-orange-900/30"
-                      >
-                        <Link className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={() => {
-                          const newGroups = [...splitGroups];
-                          newGroups[groupIndex].urls.push({ url: '', percentage: 0 });
-                          setSplitGroups(newGroups);
-                        }}
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  <SplitUrlInput
-                    splitUrls={group.urls}
-                    onSplitUrlChange={(index, value) => {
-                      const newGroups = [...splitGroups];
-                      newGroups[groupIndex].urls[index].url = value;
-                      setSplitGroups(newGroups);
-                    }}
-                    onSplitPercentageChange={(index, value) => {
-                      const newGroups = [...splitGroups];
-                      newGroups[groupIndex].urls[index].percentage = parseInt(value) || 0;
-                      setSplitGroups(newGroups);
-                    }}
-                    onAddSplitUrl={() => {
-                      const newGroups = [...splitGroups];
-                      newGroups[groupIndex].urls.push({ url: '', percentage: 0 });
-                      setSplitGroups(newGroups);
-                    }}
-                    onDeleteSplitUrl={(index) => {
-                      const newGroups = [...splitGroups];
-                      newGroups[groupIndex].urls = newGroups[groupIndex].urls.filter((_, i) => i !== index);
-                      setSplitGroups(newGroups);
-                    }}
-                  />
-                </div>
-              ))}
-              
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleAddSplitGroup}
-                className="w-full"
-              >
-                Add Split Group
-              </Button>
-            </div>
-          )}
 
           <div className="flex gap-4">
             <Button type="submit">Save</Button>
