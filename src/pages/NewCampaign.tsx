@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Link, Users, Plus, Trash2 } from "lucide-react";
+import { Link, Users, Plus, Trash2, Copy } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SplitUrlInput } from "@/components/campaign/SplitUrlInput";
@@ -265,37 +265,55 @@ export default function NewCampaign() {
                           className="max-w-xs"
                         />
                         <div className="flex gap-2">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="icon"
-                            className="bg-orange-100 hover:bg-orange-200 dark:bg-orange-900/20 dark:hover:bg-orange-900/30"
-                          >
-                            <Link className="h-4 w-4" />
-                          </Button>
-                          {groupIndex !== 0 && (
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="icon"
-                              onClick={() => handleDeleteSplitGroup(groupIndex)}
-                              className="flex-shrink-0"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                          {groupIndex === 0 ? (
+                            <>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={handleAddSplitGroup}
+                                className="w-full"
+                              >
+                                <Plus className="h-4 w-4" />
+                                Add New
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => {
+                                  const lastGroup = splitGroups[splitGroups.length - 1];
+                                  setSplitGroups([...splitGroups, { ...lastGroup, name: `Split Group ${splitGroups.length + 1}` }]);
+                                }}
+                                className="w-full"
+                              >
+                                <Copy className="h-4 w-4" />
+                                Duplicate
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => {
+                                  const lastGroup = splitGroups[splitGroups.length - 1];
+                                  setSplitGroups([...splitGroups, { ...lastGroup, name: `Split Group ${splitGroups.length + 1}` }]);
+                                }}
+                                className="w-full"
+                              >
+                                <Copy className="h-4 w-4" />
+                                Duplicate
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => handleDeleteSplitGroup(splitGroups.length - 1)}
+                                className="w-full text-red-500 hover:text-red-600"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                                Delete
+                              </Button>
+                            </>
                           )}
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="icon"
-                            onClick={() => {
-                              const newGroups = [...splitGroups];
-                              newGroups[groupIndex].urls.push({ url: '', percentage: 0 });
-                              setSplitGroups(newGroups);
-                            }}
-                          >
-                            <Plus className="h-4 w-4" />
-                          </Button>
                         </div>
                       </div>
                       
