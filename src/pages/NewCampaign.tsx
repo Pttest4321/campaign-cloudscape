@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Link, Users } from "lucide-react";
+import { Link, Users, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SplitUrlInput } from "@/components/campaign/SplitUrlInput";
@@ -27,6 +27,9 @@ export default function NewCampaign() {
   const [isBlockIntegration, setIsBlockIntegration] = useState(false);
   const [selectedLogic, setSelectedLogic] = useState<CampaignLogicType>('default');
   const [splitUrls, setSplitUrls] = useState<SplitUrl[]>([{ url: '', percentage: 100 }]);
+  const [splitGroups, setSplitGroups] = useState<Array<{name: string, urls: SplitUrl[]}>>([
+    { name: 'Split Group 1', urls: [{ url: '', percentage: 100 }] }
+  ]);
 
   const form = useForm<CampaignFormData>({
     resolver: zodResolver(campaignSchema),
@@ -100,6 +103,19 @@ export default function NewCampaign() {
     }
     
     setSplitUrls(newUrls);
+  };
+
+  const handleAddSplitGroup = () => {
+    setSplitGroups([
+      ...splitGroups,
+      { name: `Split Group ${splitGroups.length + 1}`, urls: [{ url: '', percentage: 100 }] }
+    ]);
+  };
+
+  const handleUpdateSplitGroupName = (index: number, name: string) => {
+    const newGroups = [...splitGroups];
+    newGroups[index].name = name;
+    setSplitGroups(newGroups);
   };
 
   const onSubmit = async (data: CampaignFormData) => {
@@ -282,8 +298,6 @@ export default function NewCampaign() {
           </div>
 
           {/* Section 5: Tracking Parameters */}
-
-          {/* Section 5: Tracking Parameters */}
           <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
             <h2 className="text-xl font-medium mb-4">Tracking Configuration</h2>
             <div className="space-y-4">
@@ -308,6 +322,78 @@ export default function NewCampaign() {
             </div>
           </div>
 
+          {selectedLogic === 'multi' && (
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium">Split settings for target link:</h3>
+              {splitGroups.map((group, groupIndex) => (
+                <div key={groupIndex} className="space-y-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <Input
+                      value={group.name}
+                      onChange={(e) => handleUpdateSplitGroupName(groupIndex, e.target.value)}
+                      className="max-w-xs"
+                    />
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        className="bg-orange-100 hover:bg-orange-200 dark:bg-orange-900/20 dark:hover:bg-orange-900/30"
+                      >
+                        <Link className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => {
+                          const newGroups = [...splitGroups];
+                          newGroups[groupIndex].urls.push({ url: '', percentage: 0 });
+                          setSplitGroups(newGroups);
+                        }}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <SplitUrlInput
+                    splitUrls={group.urls}
+                    onSplitUrlChange={(index, value) => {
+                      const newGroups = [...splitGroups];
+                      newGroups[groupIndex].urls[index].url = value;
+                      setSplitGroups(newGroups);
+                    }}
+                    onSplitPercentageChange={(index, value) => {
+                      const newGroups = [...splitGroups];
+                      newGroups[groupIndex].urls[index].percentage = parseInt(value) || 0;
+                      setSplitGroups(newGroups);
+                    }}
+                    onAddSplitUrl={() => {
+                      const newGroups = [...splitGroups];
+                      newGroups[groupIndex].urls.push({ url: '', percentage: 0 });
+                      setSplitGroups(newGroups);
+                    }}
+                    onDeleteSplitUrl={(index) => {
+                      const newGroups = [...splitGroups];
+                      newGroups[groupIndex].urls = newGroups[groupIndex].urls.filter((_, i) => i !== index);
+                      setSplitGroups(newGroups);
+                    }}
+                  />
+                </div>
+              ))}
+              
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleAddSplitGroup}
+                className="w-full"
+              >
+                Add Split Group
+              </Button>
+            </div>
+          )}
+
           <div className="flex gap-4">
             <Button type="submit">Save</Button>
             <Button type="button" variant="outline" onClick={() => navigate('/campaigns')}>
@@ -319,4 +405,3 @@ export default function NewCampaign() {
     </div>
   );
 }
-
