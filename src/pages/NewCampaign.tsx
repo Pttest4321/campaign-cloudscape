@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
@@ -145,111 +146,128 @@ export default function NewCampaign() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <CampaignSettingsForm
-            isReverseIntegration={isReverseIntegration}
-            setIsReverseIntegration={setIsReverseIntegration}
-            isBlockIntegration={isBlockIntegration}
-            setIsBlockIntegration={setIsBlockIntegration}
-          />
-
-          <div className="space-y-2">
-            <div className="grid grid-cols-3 gap-2">
-              <Button
-                type="button"
-                variant={selectedLogic === 'default' ? 'default' : 'outline'}
-                onClick={() => setSelectedLogic('default')}
-                className="w-full"
-              >
-                Default Logic
-              </Button>
-              <Button
-                type="button"
-                variant={selectedLogic === 'split' ? 'default' : 'outline'}
-                onClick={() => setSelectedLogic('split')}
-                className="w-full"
-              >
-                Split logic
-              </Button>
-              <Button
-                type="button"
-                variant={selectedLogic === 'multi' ? 'default' : 'outline'}
-                onClick={() => setSelectedLogic('multi')}
-                className="w-full"
-              >
-                Split multi logic
-              </Button>
+          {/* Section 1: Campaign Settings */}
+          <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
+            <h2 className="text-xl font-medium mb-4">Campaign Details</h2>
+            <CampaignSettingsForm
+              isReverseIntegration={isReverseIntegration}
+              setIsReverseIntegration={setIsReverseIntegration}
+              isBlockIntegration={isBlockIntegration}
+              setIsBlockIntegration={setIsBlockIntegration}
+            />
+            
+            <div className="mt-4 space-y-2">
+              <h3 className="text-sm font-medium">Campaign Logic Type</h3>
+              <div className="grid grid-cols-3 gap-2">
+                <Button
+                  type="button"
+                  variant={selectedLogic === 'default' ? 'default' : 'outline'}
+                  onClick={() => setSelectedLogic('default')}
+                  className="w-full"
+                >
+                  Default Logic
+                </Button>
+                <Button
+                  type="button"
+                  variant={selectedLogic === 'split' ? 'default' : 'outline'}
+                  onClick={() => setSelectedLogic('split')}
+                  className="w-full"
+                >
+                  Split logic
+                </Button>
+                <Button
+                  type="button"
+                  variant={selectedLogic === 'multi' ? 'default' : 'outline'}
+                  onClick={() => setSelectedLogic('multi')}
+                  className="w-full"
+                >
+                  Split multi logic
+                </Button>
+              </div>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <FormField
-              control={form.control}
-              name="target_url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <Link className="h-4 w-4" />
-                    {selectedLogic === 'split' ? 'Split URLs' : 'Link to the target page'}
-                  </FormLabel>
-                  {selectedLogic === 'split' ? (
-                    <SplitUrlInput
-                      splitUrls={splitUrls}
-                      onSplitUrlChange={handleSplitUrlChange}
-                      onSplitPercentageChange={handleSplitPercentageChange}
-                      onAddSplitUrl={handleAddSplitUrl}
-                      onDeleteSplitUrl={handleDeleteSplitUrl}
-                    />
-                  ) : (
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="url"
-                        placeholder="Enter target URL (e.g. https://offer.com/)"
+          {/* Section 2: Target URL */}
+          <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
+            <h2 className="text-xl font-medium mb-4">Target URL Configuration</h2>
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="target_url"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center gap-2">
+                      <Link className="h-4 w-4" />
+                      {selectedLogic === 'split' ? 'Split URLs' : 'Link to the target page'}
+                    </FormLabel>
+                    {selectedLogic === 'split' ? (
+                      <SplitUrlInput
+                        splitUrls={splitUrls}
+                        onSplitUrlChange={handleSplitUrlChange}
+                        onSplitPercentageChange={handleSplitPercentageChange}
+                        onAddSplitUrl={handleAddSplitUrl}
+                        onDeleteSplitUrl={handleDeleteSplitUrl}
                       />
+                    ) : (
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="url"
+                          placeholder="Enter target URL (e.g. https://offer.com/)"
+                        />
+                      </FormControl>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          {/* Section 3: Bot URL */}
+          <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
+            <h2 className="text-xl font-medium mb-4">Bot Configuration</h2>
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="bot_url"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center gap-2">
+                      <Link className="h-4 w-4" />
+                      Link for bots
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="redirect.php" />
                     </FormControl>
-                  )}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <FormField
-              control={form.control}
-              name="bot_url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <Link className="h-4 w-4" />
-                    Link for bots
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="redirect.php" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <FormField
-              control={form.control}
-              name="team"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <Users className="h-4 w-4" />
-                    Team Users
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Select or enter team members" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          {/* Section 4: Team Users */}
+          <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
+            <h2 className="text-xl font-medium mb-4">Team Configuration</h2>
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="team"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center gap-2">
+                      <Users className="h-4 w-4" />
+                      Team Users
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Select or enter team members" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
 
           <div className="flex gap-4">
