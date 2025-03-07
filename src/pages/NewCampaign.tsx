@@ -284,14 +284,14 @@ export default function NewCampaign() {
           {/* Section 5: Tracking Parameters */}
           <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
             <h2 className="text-xl font-medium mb-4">Tracking Configuration</h2>
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="tracking_id"
                 render={({ field }) => (
-                  <FormItem className="flex-1">
+                  <FormItem>
                     <FormLabel>
-                      To track conversions, specify the PP (partner program) click identifier
+                      To track conversions, specify the PP (partner program) click identifier. For example, clicked, subid, etc.
                     </FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Enter tracking ID" />
@@ -305,9 +305,9 @@ export default function NewCampaign() {
                 control={form.control}
                 name="postback_url"
                 render={({ field }) => (
-                  <FormItem className="flex-1">
+                  <FormItem>
                     <FormLabel>
-                      Postback link [POST/GET]:
+                      Postback link [POST/GET]: https://api.example.com/v1/postback
                     </FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="https://api.example.com/v1/postback" />
