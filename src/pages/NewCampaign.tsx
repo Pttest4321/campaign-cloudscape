@@ -282,37 +282,26 @@ export default function NewCampaign() {
           </div>
 
           {/* Section 5: Tracking Parameters */}
+
+          {/* Section 5: Tracking Parameters */}
           <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
             <h2 className="text-xl font-medium mb-4">Tracking Configuration</h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4">
               <FormField
                 control={form.control}
                 name="tracking_id"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      To track conversions, specify the PP (partner program) click identifier. For example, clicked, subid, etc.
+                      To track conversions, specify the PP (partner program) click identifier. For example: clickid, subid, etc
                     </FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Enter tracking ID" />
                     </FormControl>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="postback_url"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Postback link [POST/GET]: https://api.example.com/v1/postback
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="https://api.example.com/v1/postback" />
-                    </FormControl>
-                    <FormMessage />
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Postback link [POST/GET]: https://api.example.expert/v1/postback
+                    </p>
                   </FormItem>
                 )}
               />
@@ -330,3 +319,4 @@ export default function NewCampaign() {
     </div>
   );
 }
+
