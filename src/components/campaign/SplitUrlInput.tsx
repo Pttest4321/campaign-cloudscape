@@ -1,22 +1,30 @@
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2 } from "lucide-react";
 import { SplitUrl } from "@/types/campaign";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface SplitUrlInputProps {
   splitUrls: SplitUrl[];
+  groupName?: string;
+  onGroupNameChange?: (value: string) => void;
   onSplitUrlChange: (index: number, value: string) => void;
   onSplitPercentageChange: (index: number, value: string) => void;
   onAddSplitUrl: () => void;
   onDeleteSplitUrl: (index: number) => void;
+  showTabs?: boolean;
 }
 
 export const SplitUrlInput = ({
   splitUrls,
+  groupName,
+  onGroupNameChange,
   onSplitUrlChange,
   onSplitPercentageChange,
   onAddSplitUrl,
   onDeleteSplitUrl,
+  showTabs = false,
 }: SplitUrlInputProps) => {
   const handleAddSplitUrl = () => {
     if (splitUrls.length >= 10) return;
@@ -35,6 +43,16 @@ export const SplitUrlInput = ({
 
   return (
     <div className="space-y-4">
+      {groupName !== undefined && onGroupNameChange && (
+        <div className="mb-2">
+          <Input
+            value={groupName}
+            onChange={(e) => onGroupNameChange(e.target.value)}
+            placeholder="Split Group 1"
+          />
+        </div>
+      )}
+      
       {splitUrls.map((splitUrl, index) => (
         <div key={index} className="flex gap-4 items-center">
           <div className="flex-1 relative">
@@ -80,6 +98,16 @@ export const SplitUrlInput = ({
           )}
         </div>
       ))}
+      
+      {showTabs && (
+        <Tabs defaultValue="iframe" className="w-full mt-4">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="iframe">iFrame</TabsTrigger>
+            <TabsTrigger value="redirect">Redirect</TabsTrigger>
+            <TabsTrigger value="content">Content</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      )}
     </div>
   );
 };

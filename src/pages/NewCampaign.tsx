@@ -30,6 +30,7 @@ function NewCampaign() {
   const [splitGroups, setSplitGroups] = useState<Array<{name: string, urls: SplitUrl[]}>>([
     { name: 'Split Group 1', urls: [{ url: '', percentage: 100 }] }
   ]);
+  const [splitGroupName, setSplitGroupName] = useState('Split Group 1');
 
   const form = useForm<CampaignFormData>({
     resolver: zodResolver(campaignSchema),
@@ -221,46 +222,114 @@ function NewCampaign() {
               Target URL Configuration
             </h2>
             <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="target_url"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2">
-                      <Link className="h-4 w-4" />
-                      Default settings for target link <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="url"
-                        placeholder="Enter target URL (e.g. https://offer.com/)"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {selectedLogic === 'default' && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="target_url"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-2">
+                          <Link className="h-4 w-4" />
+                          Default settings for target link <span className="text-red-500">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="url"
+                            placeholder="Enter target URL (e.g. https://offer.com/)"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              <Tabs defaultValue="iframe" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="iframe">iFrame</TabsTrigger>
-                  <TabsTrigger value="redirect">Redirect</TabsTrigger>
-                  <TabsTrigger value="content">Content</TabsTrigger>
-                </TabsList>
-                <TabsContent value="iframe">
-                  {/* iFrame specific settings will go here */}
-                </TabsContent>
-                <TabsContent value="redirect">
-                  {/* Redirect specific settings will go here */}
-                </TabsContent>
-                <TabsContent value="content">
-                  {/* Content specific settings will go here */}
-                </TabsContent>
-              </Tabs>
+                  <Tabs defaultValue="iframe" className="w-full">
+                    <TabsList className="grid w-full grid-cols-3">
+                      <TabsTrigger value="iframe">iFrame</TabsTrigger>
+                      <TabsTrigger value="redirect">Redirect</TabsTrigger>
+                      <TabsTrigger value="content">Content</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="iframe">
+                      {/* iFrame specific settings will go here */}
+                    </TabsContent>
+                    <TabsContent value="redirect">
+                      {/* Redirect specific settings will go here */}
+                    </TabsContent>
+                    <TabsContent value="content">
+                      {/* Content specific settings will go here */}
+                    </TabsContent>
+                  </Tabs>
+                </>
+              )}
+
+              {selectedLogic === 'split' && (
+                <>
+                  <div className="space-y-2 mb-4">
+                    <p className="text-sm text-gray-500">Link to the target page. Either full url or local file (e.g. target-page.php, https://offer.com/)</p>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="flex gap-2">
+                      <Input 
+                        value={splitGroupName}
+                        onChange={(e) => setSplitGroupName(e.target.value)}
+                        placeholder="Split Group 1"
+                        className="max-w-[300px]"
+                      />
+                      <Input 
+                        value={splitUrls[0]?.url || ''}
+                        onChange={(e) => {
+                          const newUrls = [...splitUrls];
+                          newUrls[0].url = e.target.value;
+                          setSplitUrls(newUrls);
+                        }}
+                        placeholder="Enter target URL"
+                        className="flex-1"
+                      />
+                      <Input 
+                        value={splitUrls[0]?.percentage || 100}
+                        onChange={(e) => {
+                          const newUrls = [...splitUrls];
+                          newUrls[0].percentage = parseInt(e.target.value) || 0;
+                          setSplitUrls(newUrls);
+                        }}
+                        type="number"
+                        className="w-24"
+                        min="0"
+                        max="100"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    
+                    <Tabs defaultValue="iframe" className="w-full">
+                      <TabsList className="grid w-full grid-cols-3">
+                        <TabsTrigger value="iframe">iFrame</TabsTrigger>
+                        <TabsTrigger value="redirect">Redirect</TabsTrigger>
+                        <TabsTrigger value="content">Content</TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="iframe">
+                        {/* iFrame specific settings will go here */}
+                      </TabsContent>
+                      <TabsContent value="redirect">
+                        {/* Redirect specific settings will go here */}
+                      </TabsContent>
+                      <TabsContent value="content">
+                        {/* Content specific settings will go here */}
+                      </TabsContent>
+                    </Tabs>
+                  </div>
+                </>
+              )}
 
               {selectedLogic === 'multi' && (
-                <div className="space-y-4">
+                <div>
                   <h3 className="text-sm font-medium flex items-center gap-2">
                     <Percent className="h-4 w-4" />
                     Split settings for target link:
