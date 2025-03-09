@@ -136,3 +136,18 @@
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
   }
 }
+
+/* Enhanced button states for light mode */
+@media (prefers-color-scheme: light), (:root:not(.dark)) {
+  .grid-cols-3 button[variant="default"] {
+    @apply transition-all !shadow-sm hover:!shadow-md;
+  }
+  
+  .grid-cols-3 button[variant="outline"] {
+    @apply transition-all hover:border-blue-300 hover:border-2;
+  }
+
+  .selected-logic {
+    @apply ring-2 ring-blue-400 ring-offset-2;
+  }
+}
