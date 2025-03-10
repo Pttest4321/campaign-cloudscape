@@ -101,7 +101,7 @@ export const SplitUrlInput = ({
       
       {showTabs && (
         <Tabs defaultValue="iframe" className="w-full mt-4">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-3 tabs-list">
             <TabsTrigger value="iframe">iFrame</TabsTrigger>
             <TabsTrigger value="redirect">Redirect</TabsTrigger>
             <TabsTrigger value="content">Content</TabsTrigger>

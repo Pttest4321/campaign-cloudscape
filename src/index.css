@@ -150,4 +150,25 @@
   .selected-logic {
     @apply ring-2 ring-blue-400 ring-offset-2;
   }
+  
+  /* Additional light mode specific button enhancements */
+  button {
+    @apply transition-all duration-200;
+  }
+  
+  button:hover {
+    @apply shadow-md;
+  }
+  
+  button:active {
+    @apply shadow-inner transform scale-95;
+  }
+  
+  .tabs-list button {
+    @apply hover:bg-blue-50 active:bg-blue-100;
+  }
+  
+  .tabs-list [data-state="active"] {
+    @apply bg-blue-100 text-blue-700 font-medium;
+  }
 }
